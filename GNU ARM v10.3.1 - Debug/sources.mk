@@ -32,4 +32,5 @@ gecko_sdk_4.1.1/platform/emlib/src \
 gecko_sdk_4.1.1/platform/service/device_init/src \
 gecko_sdk_4.1.1/platform/service/system/src \
 gecko_sdk_4.1.1/platform/service/udelay/src \
+tests \
 

@@ -66,14 +66,14 @@
     <property object="TIMER0" propertyId="ABModule.selectedRequirement" value="timer%T%SL_PWM_MOTOR1%T%fly_pwm_config.h"/>
     <property object="TIMER0" propertyId="ABPeripheral.included" value="true"/>
     <property object="TIMER0" propertyId="channel.0.name" value="OUTPUT"/>
-    <property object="TIMER0" propertyId="channel.1.name" value=""/>
-    <property object="TIMER0" propertyId="channel.2.name" value=""/>
+    <property object="TIMER0" propertyId="channel.1.name" value="OUTPUT"/>
+    <property object="TIMER0" propertyId="channel.2.name" value="OUTPUT"/>
     <property object="TIMER0" propertyId="peripheral.name" value=""/>
     <property object="TIMER1" propertyId="ABModule.selectedRequirement" value="timer%T%SL_PWM_MOTOR2%T%sl_pwm_init_motor2_config.h"/>
     <property object="TIMER1" propertyId="ABPeripheral.included" value="true"/>
     <property object="TIMER1" propertyId="channel.0.name" value="OUTPUT"/>
-    <property object="TIMER1" propertyId="channel.1.name" value=""/>
-    <property object="TIMER1" propertyId="channel.2.name" value=""/>
+    <property object="TIMER1" propertyId="channel.1.name" value="OUTPUT"/>
+    <property object="TIMER1" propertyId="channel.2.name" value="OUTPUT"/>
     <property object="TIMER1" propertyId="peripheral.name" value=""/>
   </mode>
   <modeTransition>
