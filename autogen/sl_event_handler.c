@@ -52,11 +52,7 @@ void sl_internal_app_init(void)
 
 void sl_platform_process_action(void)
 {
-  // Set duty cycle to 40%
-  sl_pwm_set_duty_cycle(&sl_pwm_motor1_ch0, 40);
 
-  // Enable PWM output
-  sl_pwm_start(&sl_pwm_motor1_ch0);
 }
 
 void sl_service_process_action(void)
