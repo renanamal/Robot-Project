@@ -1,6 +1,7 @@
 #include <src/motorsDB.h>
 #include "motorDriverMain.h"
 #include "generalDefines.h"
+#include "sl_pwm.h"
 #include "sl_emlib_gpio_init_PA6_config.h"
 #include "sl_emlib_gpio_init_PA7_config.h"
 #include "sl_emlib_gpio_init_PA8_config.h"
@@ -13,11 +14,20 @@
 #include "sl_emlib_gpio_init_PC4_config.h"
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
+#include "em_gpio.h"
 
 fctPtr pwmSetDutyCycle[] = {GPIO_motorPinPWMoutLow , GPIO_motorPinPWMoutHigh , GPIO_motorPinPWMoutDisable};
 S_fullMotorPhaseConfiguration motorPhaseConfiguration;
 uint8_t gCommotationState[3];
 SMotorsData motors[NUM_OF_MOTORS];
+
+extern sl_pwm_instance_t sl_pwm_motor1_ch0;
+extern sl_pwm_instance_t sl_pwm_motor1_ch1;
+extern sl_pwm_instance_t sl_pwm_motor1_ch2;
+extern sl_pwm_instance_t sl_pwm_motor2_ch0;
+extern sl_pwm_instance_t sl_pwm_motor2_ch1;
+extern sl_pwm_instance_t sl_pwm_motor2_ch2;
+
 
 // ========================================================= calc Motor Driver Command - START =======================================================================
 void calcMotorPWMpercet(EMotor motor)
@@ -28,10 +38,27 @@ void calcMotorPWMpercet(EMotor motor)
 
 
 void sendCommandToDriver(EMotor motor){
+  static sl_pwm_instance_t *motor_pwm_ch0;
+  static sl_pwm_instance_t *motor_pwm_ch1;
+  static sl_pwm_instance_t *motor_pwm_ch2;
+
+  switch(motor){
+    case left:
+      motor_pwm_ch0 = &sl_pwm_motor1_ch0;
+      motor_pwm_ch1 = &sl_pwm_motor1_ch1;
+      motor_pwm_ch2 = &sl_pwm_motor1_ch2;
+      break;
+
+    case right:
+      motor_pwm_ch0 = &sl_pwm_motor2_ch0;
+      motor_pwm_ch1 = &sl_pwm_motor2_ch1;
+      motor_pwm_ch2 = &sl_pwm_motor2_ch2;
+      break;
+  }
 	//-------------------------------- enable the needed motor 1 driver pins ---------------------------------------
-	(*pwmSetDutyCycle[motors[motor].commutation.Apolarity])(0);
-	(*pwmSetDutyCycle[motors[motor].commutation.Bpolarity])(1);
-	(*pwmSetDutyCycle[motors[motor].commutation.Cpolarity])(2);
+	(*pwmSetDutyCycle[motors[motor].commutation.Apolarity])(motor_pwm_ch0, motor);
+	(*pwmSetDutyCycle[motors[motor].commutation.Bpolarity])(motor_pwm_ch1, motor);
+	(*pwmSetDutyCycle[motors[motor].commutation.Cpolarity])(motor_pwm_ch2, motor);
 }
 
 
@@ -101,8 +128,7 @@ float PISpeedControl(EMotor motor)
 //      break;
 //  }
 
-	float SpeedError = motors[motor].refSpeed - motors[motor].speedControler.speedAverage; // TODO - speedAverage or speedFromHall
-	uint16_t antiWindup;
+	float SpeedError = motors[motor].refSpeed - motors[motor].speedControler.speedAverage.AverageData; // TODO - speedAverage or speedFromHall
 
 	float Pcorrection = KP * SpeedError;
 	float speed_I_correction = KI * SpeedError + motors[motor].speedControler.speed_I_correction;
@@ -124,23 +150,23 @@ float PISpeedControl(EMotor motor)
 
 
 // ==================================== GPIO motor Pin PWM out Disable - START ===================================
-void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_ch, EMotor motor)
+void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_pwm_ch, EMotor motor)
 {
-  sl_pwm_set_duty_cycle(motor_ch, 50);
+  sl_pwm_set_duty_cycle(motor_pwm_ch, 50);
 }
 // ==================================== GPIO motor Pin PWM out Disable - END ===================================
 
 
 // ==================================== GPIO motor Pin PWM out High - START ===================================
-void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_ch, EMotor motor){
-  sl_pwm_set_duty_cycle(motor_ch, motors[motor].PWMCommand);
+void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
+  sl_pwm_set_duty_cycle(motor_pwm_ch, motors[motor].PWMCommand);
 }
 // ==================================== GPIO motor Pin PWM out High - END ===================================
 
 
 // ==================================== GPIO motor Pin PWM out Low - START ===================================
-void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_ch, EMotor motor){
-  sl_pwm_set_duty_cycle(motor_ch, 0);
+void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
+  sl_pwm_set_duty_cycle(motor_pwm_ch, 0);
 }
 // ==================================== GPIO motor Pin PWM out Low - END ===================================
 
@@ -316,11 +342,11 @@ void speedControlHandle(EMotor motor)
 
 void resetMotorsData(EMotor motor)
 {
-	motors.speedControler[motor].speed_I_correction = 0;
-	motors.speedControler[motor].speedCorrected = 0;
-	motors.speedControler[motor].speedFromHall = 0;
-	motors.speedControler[motor].refSpeed = 0;
-	motors.speedControler[motor].prevSpeedFromHall = 0;
+	motors[motor].speedControler.speed_I_correction = 0;
+	motors[motor].speedControler.speedCorrected = 0;
+	motors[motor].speedControler.speedFromHall = 0;
+	motors[motor].speedControler.refSpeed = 0;
+	motors[motor].speedControler.prevSpeedFromHall = 0;
 	setMotorDriveState(motor);
 }
 

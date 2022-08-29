@@ -2,6 +2,8 @@
 #define INC_MOTORDRIVERMAIN_H_
 
 #include "stdbool.h"
+#include "sl_pwm.h"
+#include "stdint.h"
 
 #define MOTOR_PHASE_CONFIG_SIZE (8)
 #define NUM_OF_MOTORS (2)
@@ -91,7 +93,8 @@ float calcSpeedFromHalls(EMotor motor);
 void speedControlHandle(EMotor motor);
 void resetMotorsData(EMotor motor);
 void resetAllDriveMotorsData(void);
+
 // ============================= Type def =======================
-typedef void(*fctPtr)(sl_pwm_instance_t, EMotor);
+typedef void(*fctPtr)(sl_pwm_instance_t *, EMotor);
 
 #endif /* INC_MOTORDRIVERMAIN_H_ */
