@@ -39,7 +39,7 @@ int main(void)
   // task(s) if the kernel is present.
   app_init();
 
-  test_pwm(); // TODO - remove after test ןד successful
+  bool once = false;
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -52,6 +52,11 @@ int main(void)
 
     // Application process.
     app_process_action();
+
+    if(!once){
+        test_pwm();
+        once = true;
+    }
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.

@@ -9,5 +9,6 @@
 #define MY_INCLUDES_H_
 
 #include "tests/test_pwm.h"
+#include "stdbool.h"
 
 #endif /* MY_INCLUDES_H_ */
