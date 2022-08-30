@@ -27,6 +27,7 @@ gecko_sdk_4.1.1/platform/common/toolchain/src \
 gecko_sdk_4.1.1/platform/driver/debug/src \
 gecko_sdk_4.1.1/platform/driver/pwm/src \
 gecko_sdk_4.1.1/platform/emdrv/gpiointerrupt/src \
+gecko_sdk_4.1.1/platform/emdrv/rtcdrv/src \
 gecko_sdk_4.1.1/platform/emdrv/ustimer/src \
 gecko_sdk_4.1.1/platform/emlib/src \
 gecko_sdk_4.1.1/platform/service/device_init/src \

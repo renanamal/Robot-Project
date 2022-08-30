@@ -136,6 +136,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_ramfunc.h</locationURI>
 		</link>
 		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_rtcc.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_rtcc.h</locationURI>
+		</link>
+		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_system.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_system.h</locationURI>
@@ -179,6 +184,11 @@
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_msc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_msc.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/src/em_rtcc.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_rtcc.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_system.c</name>
@@ -289,6 +299,16 @@
 			<name>gecko_sdk_4.1.1/platform/emdrv/gpiointerrupt/src/gpiointerrupt.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emdrv/gpiointerrupt/src/gpiointerrupt.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emdrv/rtcdrv/inc/rtcdriver.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/rtcdrv/inc/rtcdriver.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emdrv/rtcdrv/src/rtcdriver.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/rtcdrv/src/rtcdriver.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/emdrv/ustimer/inc/ustimer.h</name>

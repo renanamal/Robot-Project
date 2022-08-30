@@ -1,5 +1,6 @@
 #include "generalPurposeFunctions.h"
-
+#include "rtcdriver.h"
+#include <stddef.h>
 
 void delay_ms(uint32_t mDelay)
 {
@@ -9,6 +10,17 @@ void delay_ms(uint32_t mDelay)
 void delay_us(uint32_t uDelay)
 {
   USTIMER_Delay(uDelay);
+}
+
+uint32_t getMillis(void)
+{
+  return RTCDRV_TicksToMsec(RTCDRV_GetWallClockTicks32());
+}
+
+
+uint32_t getSec(void)
+{
+  return RTCDRV_TicksToSec(RTCDRV_GetWallClockTicks32());
 }
 
 void continuousAverage(SContinuousAverage * dataIn)

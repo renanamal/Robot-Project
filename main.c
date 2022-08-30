@@ -27,12 +27,24 @@
 #endif // SL_CATALOG_KERNEL_PRESENT
 
 #include "stdbool.h"
+#include "ustimer.h"
+#include "rtcdriver.h"
+#include <stddef.h>
+
 #include "src/generalDefines.h"
+#include "src/generalPurposeFunctions.h"
 #include "tests/test_pwm.h"
+#include "src/motorControlStateMachine.h"
+#include "src/callBacks.h"
 
 int main(void)
 {
+  // Initialization of the RTCDRV driver.
+  RTCDRV_Init();
+
+  // Initialization of the USTIMER driver.
   USTIMER_Init();
+
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
   // this call.
@@ -41,6 +53,13 @@ int main(void)
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
   app_init();
+
+  // Initialize Timers
+  setTimedCallBacksDB();
+  init_callbacks_timed();
+
+  setIntCallBacksDB();
+  init_callbacks_GPIO();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -53,7 +72,6 @@ int main(void)
 
     // Application process.
     app_process_action();
-
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.

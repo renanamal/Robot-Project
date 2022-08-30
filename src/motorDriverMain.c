@@ -1,20 +1,4 @@
-#include <src/motorsDB.h>
 #include "motorDriverMain.h"
-#include "generalDefines.h"
-#include "sl_pwm.h"
-#include "sl_emlib_gpio_init_PA6_config.h"
-#include "sl_emlib_gpio_init_PA7_config.h"
-#include "sl_emlib_gpio_init_PA8_config.h"
-#include "sl_emlib_gpio_init_PA9_config.h"
-#include "sl_emlib_gpio_init_PB6_config.h"
-#include "sl_emlib_gpio_init_PB7_config.h"
-#include "sl_emlib_gpio_init_PB8_config.h"
-#include "sl_emlib_gpio_init_PB9_config.h"
-#include "sl_emlib_gpio_init_PC11_config.h"
-#include "sl_emlib_gpio_init_PC4_config.h"
-#include "sl_emlib_gpio_init_PC5_config.h"
-#include "sl_emlib_gpio_init_PD8_config.h"
-#include "em_gpio.h"
 
 fctPtr pwmSetDutyCycle[] = {GPIO_motorPinPWMoutLow , GPIO_motorPinPWMoutHigh , GPIO_motorPinPWMoutDisable};
 S_fullMotorPhaseConfiguration motorPhaseConfiguration;
@@ -138,6 +122,7 @@ float PISpeedControl(EMotor motor)
 // ==================================== GPIO motor Pin PWM out Disable - START ===================================
 void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_pwm_ch, EMotor motor)
 {
+  (void) motor; // unused argument
   sl_pwm_set_duty_cycle(motor_pwm_ch, 50);
 }
 // ==================================== GPIO motor Pin PWM out Disable - END ===================================
@@ -152,6 +137,7 @@ void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 
 // ==================================== GPIO motor Pin PWM out Low - START ===================================
 void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
+  (void) motor; // unused argument
   sl_pwm_set_duty_cycle(motor_pwm_ch, 0);
 }
 // ==================================== GPIO motor Pin PWM out Low - END ===================================

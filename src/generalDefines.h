@@ -9,7 +9,8 @@
 #define IS_ZERO_FLOAT(dataIn) ((dataIn < 0.00001 && dataIn > -0.00001)?true:false)
 #define RPS_TO_RPM (60.0)
 
-#define MOTOR_SPEED_CNTORLLER_HZ (60.0)
+#define MOTOR_SPEED_CONTROLLER_HZ (1.0)
+
 
 #define NUM_OF_MOTORS (2)
 

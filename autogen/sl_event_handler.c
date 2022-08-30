@@ -52,7 +52,6 @@ void sl_internal_app_init(void)
 
 void sl_platform_process_action(void)
 {
-
 }
 
 void sl_service_process_action(void)

@@ -3,6 +3,7 @@ FreeRTOSConfig.h=2036023119
 app_assert_config.h=1351236558
 emlib_core_debug_config.h=-551881347
 iot_pwm_cfg_fff.h=-957625431
+rtcdrv_config.h=-562573095
 sl_board_control_config.h=853603902
 sl_debug_swo_config.h=734494033
 sl_device_init_dcdc_config.h=-1580606003

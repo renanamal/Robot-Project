@@ -1,10 +1,27 @@
 #ifndef INC_MOTORDRIVERMAIN_H_
 #define INC_MOTORDRIVERMAIN_H_
 
+#include "generalDefines.h"
 #include "stdbool.h"
 #include "sl_pwm.h"
 #include "stdint.h"
 #include "generalPurposeFunctions.h"
+#include "motorsDB.h"
+#include "motorDriverMain.h"
+#include "sl_pwm.h"
+#include "sl_emlib_gpio_init_PA6_config.h"
+#include "sl_emlib_gpio_init_PA7_config.h"
+#include "sl_emlib_gpio_init_PA8_config.h"
+#include "sl_emlib_gpio_init_PA9_config.h"
+#include "sl_emlib_gpio_init_PB6_config.h"
+#include "sl_emlib_gpio_init_PB7_config.h"
+#include "sl_emlib_gpio_init_PB8_config.h"
+#include "sl_emlib_gpio_init_PB9_config.h"
+#include "sl_emlib_gpio_init_PC11_config.h"
+#include "sl_emlib_gpio_init_PC4_config.h"
+#include "sl_emlib_gpio_init_PC5_config.h"
+#include "sl_emlib_gpio_init_PD8_config.h"
+#include "em_gpio.h"
 
 #define MOTOR_PHASE_CONFIG_SIZE (8)
 
