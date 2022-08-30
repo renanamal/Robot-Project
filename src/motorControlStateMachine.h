@@ -9,7 +9,6 @@
 typedef enum{
 	MCS_HALT = 0,
   MCS_START_RUNING,
-	MCS_RAMP_SPEED,
 	MCS_RUNING,
 	MCS_MOTOR_FATAL_ERROR
 }e_motorControlStates;

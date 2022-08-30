@@ -1,8 +1,8 @@
 #ifndef INC_GENERALPURPOSEFUNCTIONS_H_
 #define INC_GENERALPURPOSEFUNCTIONS_H_
 
-#include "stdbool.h"
 #include "ustimer.h"
+#include "stdbool.h"
 
 typedef struct SContinuousAverage
 {

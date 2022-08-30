@@ -34,7 +34,7 @@ void sendCommandToDriver(EMotor motor){
       ERROR_BREAK
       return;
   }
-	//-------------------------------- enable the needed motor 1 driver pins ---------------------------------------
+
 	(*pwmSetDutyCycle[motors[motor].commutation.Apolarity])(motor_pwm_ch0, motor);
 	(*pwmSetDutyCycle[motors[motor].commutation.Bpolarity])(motor_pwm_ch1, motor);
 	(*pwmSetDutyCycle[motors[motor].commutation.Cpolarity])(motor_pwm_ch2, motor);
@@ -54,19 +54,19 @@ void getMotorComutation(EMotor motor){
   switch(motor)
   {
     case left:
-      motors[motor].hall.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
-      motors[motor].hall.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
-      motors[motor].hall.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
+      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
+      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
+      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
       break;
 
     case right:
-      motors[motor].hall.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB7_PORT, SL_EMLIB_GPIO_INIT_PB7_PIN);
-      motors[motor].hall.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PC11_PORT, SL_EMLIB_GPIO_INIT_PC11_PIN);
-      motors[motor].hall.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB8_PORT, SL_EMLIB_GPIO_INIT_PB8_PIN);
+      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB7_PORT, SL_EMLIB_GPIO_INIT_PB7_PIN);
+      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PC11_PORT, SL_EMLIB_GPIO_INIT_PC11_PIN);
+      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB8_PORT, SL_EMLIB_GPIO_INIT_PB8_PIN);
 
   }
 
-  gCommotationState[motor] = (motors[motor].hall.HallA << 2 | motors[motor].hall.HallB << 1 | motors[motor].hall.HallC) & 0x7;
+  gCommotationState[motor] = (motors[motor].hull.HallA << 2 | motors[motor].hull.HallB << 1 | motors[motor].hull.HallC) & 0x7;
 
   if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
   {
@@ -268,8 +268,8 @@ void motorDriverPhaseConfigurationInit(void){
 
 void getHallSequence(EMotor motor)
 {
-	uint8_t sequence = ((motors[motor].hall.HallA << 2) | (motors[motor].hall.HallB << 1) | (motors[motor].hall.HallC)) & 0x7;
-	motors[motor].hall.currentSequence = sequence-1;
+	uint8_t sequence = ((motors[motor].hull.HallA << 2) | (motors[motor].hull.HallB << 1) | (motors[motor].hull.HallC)) & 0x7;
+	motors[motor].hull.currentSequence = sequence-1;
 }
 
 
@@ -284,11 +284,11 @@ float calcSpeedFromHalls(EMotor motor)
   }
 
 	// to prevent changes in current time and hall counts during calculation we copy them to local variables
-	uint32_t curentTimeUs = motors[motor].hall.cnt_last_time_us;
-	uint32_t currentHallCnt = motors[motor].hall.cnt;
+	uint32_t curentTimeMillis = motors[motor].hull.cnt_last_time_millis;
+	uint32_t currentHallCnt = motors[motor].hull.cnt;
 
 	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.last_hall_cnt;
-	uint32_t currentDt = curentTimeUs - motors[motor].speedControler.lastCalcTimeUs;
+	uint32_t currentDt = curentTimeMillis - motors[motor].speedControler.lastCalcTimeMillis;
 
 	if (currentDt == 0 || currentDeltaCount == 0)
 	{
@@ -297,11 +297,11 @@ float calcSpeedFromHalls(EMotor motor)
 	}
 
   float motorAngleRotated = currentDeltaCount * RAD_PER_INTERAPT;
-  float dtSec = currentDt/1000000.0;
+  float dtSec = currentDt/1000.0;
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
   speedOut[motor] = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
-	motors[motor].speedControler.lastCalcTimeUs = curentTimeUs;
+	motors[motor].speedControler.lastCalcTimeMillis = curentTimeMillis;
 	motors[motor].speedControler.last_hall_cnt = currentHallCnt;
 	return speedOut[motor];
 }

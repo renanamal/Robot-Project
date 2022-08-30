@@ -22,6 +22,7 @@
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
 #include "em_gpio.h"
+#include <math.h>
 
 #define MOTOR_PHASE_CONFIG_SIZE (8)
 
@@ -52,8 +53,8 @@ typedef struct
   uint8_t HallB;
   uint8_t HallC;
   int32_t cnt;
-  int8_t  prevHallAdded;
-  uint32_t cnt_last_time_us;
+  int8_t  prevHullAdded;
+  uint32_t cnt_last_time_millis;
 }SGDComutation;
 
 typedef enum{
@@ -68,7 +69,7 @@ typedef struct {
   float               speedCorrected;
   float               speedFromHall;
   float               prevSpeedFromHall;
-  uint64_t            lastCalcTimeUs;
+  uint64_t            lastCalcTimeMillis;
   int64_t             last_hall_cnt;
   float               refSpeed;
   float               correctedSpeed;
@@ -76,7 +77,7 @@ typedef struct {
 }SPIspeedContorl;
 
 typedef struct{
-  SGDComutation                 hall;
+  SGDComutation                 hull;
   S_motorPhaseConfiguration     commutation;
   float                         payloadAngle;
   e_driveState                  motorDriveState;

@@ -38,31 +38,31 @@ void setMotorControlState(EMotor motor)
 	//==================================================== check if robot and at stop - END ============================================================
 
 
-	static uint32_t startRuningHallCnt[NUM_OF_MOTORS];
+	static int32_t startRuningHallCnt[NUM_OF_MOTORS];
 	switch (motorControlState[motor])
 	{
 	case MCS_HALT:
 		if (motors[motor].motorDriveState != DS_STOP)
     {
-			startRuningHallCnt[motor] = motors[motor].hall.cnt;
+			startRuningHallCnt[motor] = motors[motor].hull.cnt;
 			motorControlState[motor] = MCS_START_RUNING;
 		}
 		break;
 
 	case MCS_START_RUNING:
 
-		if ((startRuningHallCnt[motor] != motors[motor].hall.cnt))
+		if (startRuningHallCnt[motor] != motors[motor].hull.cnt)
 		{
 			motorControlState[motor] = MCS_RUNING;
 		}
 		break;
 
 	case MCS_RUNING:
-		if (startRuningHallCnt[motor] == motors[motor].hall.cnt)
+		if (startRuningHallCnt[motor] == motors[motor].hull.cnt)
 		{
 			motorControlState[motor] = MCS_START_RUNING;
 		}
-		startRuningHallCnt[motor] = motors[motor].hall.cnt;
+		startRuningHallCnt[motor] = motors[motor].hull.cnt;
 		break;
 
 

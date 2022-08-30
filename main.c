@@ -39,12 +39,6 @@
 
 int main(void)
 {
-  // Initialization of the RTCDRV driver.
-  RTCDRV_Init();
-
-  // Initialization of the USTIMER driver.
-  USTIMER_Init();
-
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
   // this call.
@@ -60,6 +54,12 @@ int main(void)
 
   setIntCallBacksDB();
   init_callbacks_GPIO();
+
+  // Initialization of the RTCDRV driver.
+  RTCDRV_Init();
+
+  // Initialization of the USTIMER driver.
+  USTIMER_Init();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

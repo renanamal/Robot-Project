@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include "em_gpio.h"
 #include "motorControlStateMachine.h"
+#include "gpiointerrupt.h"
 #include "sl_emlib_gpio_init_PA6_config.h"
 #include "sl_emlib_gpio_init_PA7_config.h"
 #include "sl_emlib_gpio_init_PA8_config.h"
@@ -20,7 +21,6 @@
 #include "sl_emlib_gpio_init_PD8_config.h"
 
 typedef void(*timedCallbackFctPtr)(RTCDRV_TimerID_t, void *);
-typedef void(*intCallbackFctPtr)(uint8_t);
 
 typedef struct{
   timedCallbackFctPtr func;
@@ -47,7 +47,7 @@ typedef enum{
 
 
 typedef struct{
-  intCallbackFctPtr func;
+  GPIOINT_IrqCallbackPtr_t func;
   uint8_t pin;
   uint8_t port;
 }SIntCallBacks;
@@ -55,14 +55,19 @@ typedef struct{
 
 // function protos
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user);
-void init_callbacks_timed(void);
+
 void setTimedCallBacksDB(void);
-void callback_D8(uint8_t intNo);
-void callback_A6(uint8_t intNo);
-void callback_A7(uint8_t intNo);
-void callback_B7(uint8_t intNo);
-void callback_C11(uint8_t intNo);
-void callback_D8(uint8_t intNo);
-void callback_B8(uint8_t intNo);
+void init_callbacks_timed(void);
+
+void setIntCallBacksDB(void);
+void init_callbacks_GPIO(void);
+
+void hullHandle(EMotor motor);
+void callback_motor1U(uint8_t intNo);
+void callback_motor1V(uint8_t intNo);
+void callback_motor1W(uint8_t intNo);
+void callback_motor2U(uint8_t intNo);
+void callback_motor2V(uint8_t intNo);
+void callback_motor2W(uint8_t intNo);
 
 #endif /* SRC_CALLBACKS_H_ */
