@@ -4,13 +4,15 @@
 #include "stdbool.h"
 #include "sl_pwm.h"
 #include "stdint.h"
+#include "generalPurposeFunctions.h"
 
 #define MOTOR_PHASE_CONFIG_SIZE (8)
-#define NUM_OF_MOTORS (2)
+
 
 typedef enum{
   right = 0,
-  left
+  left,
+  endOfMotors
 }EMotor;
 
 typedef struct
@@ -43,13 +45,6 @@ typedef enum{
   DS_CCW
 }e_driveState;
 
-typedef struct SContinuousAverage
-{
-  float AverageData;
-  float courentData;
-  float N;
-  bool reset;
-}SContinuousAverage;
 
 typedef struct {
   float               speed_I_correction;
@@ -59,6 +54,7 @@ typedef struct {
   uint64_t            lastCalcTimeUs;
   int64_t             last_hall_cnt;
   float               refSpeed;
+  float               correctedSpeed;
   SContinuousAverage  speedAverage;
 }SPIspeedContorl;
 
@@ -68,16 +64,13 @@ typedef struct{
   float                         payloadAngle;
   e_driveState                  motorDriveState;
   uint8_t                       PWMCommand;
-  float                         refSpeed;
-  float                         correctedSpeed;
-  uint32_t                      lastCalcTimeUs;
   SPIspeedContorl               speedControler;
+  bool                          isRunning;
 }SMotorsData;
 
 
 
 // ================= function prototypes ===========================
-void calcMotorPWMpercet(EMotor motor);
 void sendCommandToDriver(EMotor motor);
 void getAllMotorsCommutation(void);
 void getMotorComutation(EMotor motor);
@@ -91,8 +84,10 @@ void motorDriverPhaseConfigurationInit(void);
 void getHallSequence(EMotor motor);
 float calcSpeedFromHalls(EMotor motor);
 void speedControlHandle(EMotor motor);
-void resetMotorsData(EMotor motor);
+void resetMotorData(EMotor motor);
 void resetAllDriveMotorsData(void);
+void calcPWMpercent(EMotor motor);
+void sendPWMCommadToAllMotors(void);
 
 // ============================= Type def =======================
 typedef void(*fctPtr)(sl_pwm_instance_t *, EMotor);

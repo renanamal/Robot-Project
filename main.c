@@ -26,10 +26,13 @@
 #include "sl_system_process_action.h"
 #endif // SL_CATALOG_KERNEL_PRESENT
 
-#include "my_includes.h"
+#include "stdbool.h"
+#include "src/generalDefines.h"
+#include "tests/test_pwm.h"
 
 int main(void)
 {
+  USTIMER_Init();
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
   // this call.
@@ -38,8 +41,6 @@ int main(void)
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
   app_init();
-
-  bool once = false;
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -53,10 +54,6 @@ int main(void)
     // Application process.
     app_process_action();
 
-    if(!once){
-        test_pwm();
-        once = true;
-    }
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.

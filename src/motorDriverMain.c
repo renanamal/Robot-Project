@@ -18,7 +18,7 @@
 
 fctPtr pwmSetDutyCycle[] = {GPIO_motorPinPWMoutLow , GPIO_motorPinPWMoutHigh , GPIO_motorPinPWMoutDisable};
 S_fullMotorPhaseConfiguration motorPhaseConfiguration;
-uint8_t gCommotationState[3];
+uint8_t gCommotationState[NUM_OF_MOTORS];
 SMotorsData motors[NUM_OF_MOTORS];
 
 extern sl_pwm_instance_t sl_pwm_motor1_ch0;
@@ -27,15 +27,6 @@ extern sl_pwm_instance_t sl_pwm_motor1_ch2;
 extern sl_pwm_instance_t sl_pwm_motor2_ch0;
 extern sl_pwm_instance_t sl_pwm_motor2_ch1;
 extern sl_pwm_instance_t sl_pwm_motor2_ch2;
-
-
-// ========================================================= calc Motor Driver Command - START =======================================================================
-void calcMotorPWMpercet(EMotor motor)
-{
-
-}
-// ========================================================= calc Motor Driver Command - START =======================================================================
-
 
 void sendCommandToDriver(EMotor motor){
   static sl_pwm_instance_t *motor_pwm_ch0;
@@ -54,6 +45,10 @@ void sendCommandToDriver(EMotor motor){
       motor_pwm_ch1 = &sl_pwm_motor2_ch1;
       motor_pwm_ch2 = &sl_pwm_motor2_ch2;
       break;
+
+    default:
+      ERROR_BREAK
+      return;
   }
 	//-------------------------------- enable the needed motor 1 driver pins ---------------------------------------
 	(*pwmSetDutyCycle[motors[motor].commutation.Apolarity])(motor_pwm_ch0, motor);
@@ -64,8 +59,10 @@ void sendCommandToDriver(EMotor motor){
 
 void getAllMotorsCommutation(void)
 {
-	getMotorComutation(left);
-	getMotorComutation(right);
+  for(EMotor motor = left; motor < endOfMotors; motor++)
+  {
+      getMotorComutation(motor);
+  }
 }
 
 
@@ -76,17 +73,6 @@ void getMotorComutation(EMotor motor){
       motors[motor].hall.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
       motors[motor].hall.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
       motors[motor].hall.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
-
-      gCommotationState[motor] = (motors[motor].hall.HallA << 2 | motors[motor].hall.HallB << 1 | motors[motor].hall.HallC) & 0x7;
-
-      if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
-      {
-        motors[motor].commutation = motorPhaseConfiguration.forword[gCommotationState[motor]];
-      }
-      else if (motors[motor].motorDriveState == DS_CCW)
-      {
-        motors[motor].commutation = motorPhaseConfiguration.backword[gCommotationState[motor]];
-      }
       break;
 
     case right:
@@ -94,17 +80,17 @@ void getMotorComutation(EMotor motor){
       motors[motor].hall.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PC11_PORT, SL_EMLIB_GPIO_INIT_PC11_PIN);
       motors[motor].hall.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB8_PORT, SL_EMLIB_GPIO_INIT_PB8_PIN);
 
-      gCommotationState[motor] = (motors[motor].hall.HallA << 2 | motors[motor].hall.HallB << 1 | motors[motor].hall.HallC) & 0x7;
+  }
 
-      if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
-      {
-        motors[motor].commutation = motorPhaseConfiguration.forword[gCommotationState[motor]];
-      }
-      else if (motors[motor].motorDriveState == DS_CCW)
-      {
-        motors[motor].commutation = motorPhaseConfiguration.backword[gCommotationState[motor]];
-      }
-      break;
+  gCommotationState[motor] = (motors[motor].hall.HallA << 2 | motors[motor].hall.HallB << 1 | motors[motor].hall.HallC) & 0x7;
+
+  if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
+  {
+    motors[motor].commutation = motorPhaseConfiguration.forword[gCommotationState[motor]];
+  }
+  else if (motors[motor].motorDriveState == DS_CCW)
+  {
+    motors[motor].commutation = motorPhaseConfiguration.backword[gCommotationState[motor]];
   }
 
 }
@@ -128,7 +114,7 @@ float PISpeedControl(EMotor motor)
 //      break;
 //  }
 
-	float SpeedError = motors[motor].refSpeed - motors[motor].speedControler.speedAverage.AverageData; // TODO - speedAverage or speedFromHall
+	float SpeedError = motors[motor].speedControler.refSpeed - motors[motor].speedControler.speedAverage.AverageData; // TODO - speedAverage or speedFromHall
 
 	float Pcorrection = KP * SpeedError;
 	float speed_I_correction = KI * SpeedError + motors[motor].speedControler.speed_I_correction;
@@ -174,11 +160,11 @@ void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 // ==================================== set Motor Drive State - START ===================================
 void setMotorDriveState(EMotor motor)
 {
-	if (IS_ZERO_FLOAT(motors[motor].correctedSpeed))
+	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHall))
 	{
 		motors[motor].motorDriveState = DS_STOP;
 	}
-	else if (motors[motor].correctedSpeed > 0)
+	else if (motors[motor].speedControler.speedFromHall > 0)
 	{
 		motors[motor].motorDriveState = DS_CW;
 	}
@@ -193,8 +179,10 @@ void setMotorDriveState(EMotor motor)
 // ==================================== set All Motors Drive State - START ===================================
 void setAllMotorsDriveState(void)
 {
-  setMotorDriveState(left);
-  setMotorDriveState(right);
+  for(EMotor motor = left; motor < endOfMotors; motor++)
+  {
+      setMotorDriveState(motor);
+  }
 }
 // ==================================== set all Motors Drive State - START ===================================
 
@@ -301,8 +289,6 @@ void getHallSequence(EMotor motor)
 
 float calcSpeedFromHalls(EMotor motor)
 {
-//	static uint32_t last_hall_cnt[NUM_OF_MOTORS] = {0,0};
-//	static uint32_t lastCalcTimeUs[NUM_OF_MOTORS] = {0,0};
 	static float speedOut[NUM_OF_MOTORS] = {0,0};
 
 	if (motors[motor].motorDriveState == DS_STOP)
@@ -311,8 +297,10 @@ float calcSpeedFromHalls(EMotor motor)
     return speedOut[motor];
   }
 
+	// to prevent changes in current time and hall counts during calculation we copy them to local variables
 	uint32_t curentTimeUs = motors[motor].hall.cnt_last_time_us;
 	uint32_t currentHallCnt = motors[motor].hall.cnt;
+
 	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.last_hall_cnt;
 	uint32_t currentDt = curentTimeUs - motors[motor].speedControler.lastCalcTimeUs;
 
@@ -327,7 +315,7 @@ float calcSpeedFromHalls(EMotor motor)
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
   speedOut[motor] = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
-	motors[motor].lastCalcTimeUs = curentTimeUs;
+	motors[motor].speedControler.lastCalcTimeUs = curentTimeUs;
 	motors[motor].speedControler.last_hall_cnt = currentHallCnt;
 	return speedOut[motor];
 }
@@ -336,23 +324,48 @@ float calcSpeedFromHalls(EMotor motor)
 void speedControlHandle(EMotor motor)
 {
   float speedCorrection = PISpeedControl(motor);
-  motors[motor].correctedSpeed = motors[motor].refSpeed + speedCorrection;
+  motors[motor].speedControler.correctedSpeed = motors[motor].speedControler.refSpeed + speedCorrection;
 }
 
 
-void resetMotorsData(EMotor motor)
+void resetMotorData(EMotor motor)
 {
 	motors[motor].speedControler.speed_I_correction = 0;
 	motors[motor].speedControler.speedCorrected = 0;
 	motors[motor].speedControler.speedFromHall = 0;
-	motors[motor].speedControler.refSpeed = 0;
 	motors[motor].speedControler.prevSpeedFromHall = 0;
+	motors[motor].speedControler.refSpeed = 0;
+	motors[motor].speedControler.correctedSpeed = 0;
+	motors[motor].speedControler.speedAverage.reset = true;
 	setMotorDriveState(motor);
 }
 
 
 void resetAllDriveMotorsData(void)
 {
-    resetMotorsData(left);
-    resetMotorsData(right);
+  for(EMotor motor = left; motor < endOfMotors; motor++)
+  {
+    resetMotorData(motor);
+  }
+}
+
+
+// ==================================== calc PWM command - START ===================================
+void calcPWMpercent(EMotor motor)
+{
+  // calculate the motor needed voltage after PI controller
+  float refMotorSpeedRPM = fabs(motors[motor].speedControler.speedCorrected) * GEAR_RATIO * RPS_TO_RPM;
+  float commandVrms = (refMotorSpeedRPM / MOTOR_SPEED_CONSTANT) / MOTOR_EFFICIENCY;
+  motors[motor].PWMCommand = (commandVrms/POWER_SUPPLY_VOLTAGE)*100.0;
+  return;
+}
+// ==================================== calc PWM command - END ===================================
+
+
+void sendPWMCommadToAllMotors(void)
+{
+  for(EMotor motor = left; motor < endOfMotors; motor++)
+  {
+      sendCommandToDriver(motor);
+  }
 }
