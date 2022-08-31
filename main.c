@@ -31,14 +31,15 @@
 #include "rtcdriver.h"
 #include <stddef.h>
 
-#include "src/generalDefines.h"
-#include "src/generalPurposeFunctions.h"
-#include "src/motorControlStateMachine.h"
-#include "src/callBacks.h"
+#include "generalDefines.h"
+#include "generalPurposeFunctions.h"
+#include "motorControlStateMachine.h"
+#include "callBacks.h"
 
 
 #include "tests/test_pwm.h"
 #include "tests/test_gpio_int.h"
+#include "tests/read_hulls.h"
 
 
 int main(void)
@@ -59,12 +60,18 @@ int main(void)
   app_init();
 
   // Initialize Timers
-  setTimedCallBacksDB();
-  init_callbacks_timed();
+//  setTimedCallBacksDB();
+//  init_callbacks_timed();
 
-  setIntCallBacksDB();
-  init_callbacks_GPIO();
+//  setIntCallBacksDB();
+//  init_callbacks_GPIO();
 //  test_gpio_init();
+
+
+// Test functions for Debug
+//  test_pwm();
+//  read_hulls();
+  test_motors_handle();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

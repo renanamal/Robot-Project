@@ -43,9 +43,9 @@ typedef struct
 typedef struct
 {
   uint8_t currentSequence;
-  uint8_t HallA;
-  uint8_t HallB;
-  uint8_t HallC;
+  uint8_t HullU;
+  uint8_t HullV;
+  uint8_t HullW;
   int32_t cnt;
   int8_t  prevHullAdded;
   uint32_t cnt_last_time_millis;
@@ -61,10 +61,10 @@ typedef enum{
 typedef struct {
   float               speed_I_correction;
   float               speedCorrected;
-  float               speedFromHall;
+  float               speedFromHull;
   float               prevSpeedFromHall;
   uint64_t            lastCalcTimeMillis;
-  int64_t             last_hall_cnt;
+  int64_t             lastHullCnt;
   float               refSpeed;
   float               correctedSpeed;
   SContinuousAverage  speedAverage;

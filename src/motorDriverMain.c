@@ -54,21 +54,22 @@ void getMotorComutation(EMotor motor){
   switch(motor)
   {
     case left:
-      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
-      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
-      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
+      motors[motor].hull.HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
+      motors[motor].hull.HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
+      motors[motor].hull.HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
       break;
 
     case right:
-      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F15_PORT, SL_EMLIB_GPIO_INIT_F15_PIN);
-      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F14_PORT, SL_EMLIB_GPIO_INIT_F14_PIN);
-      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F13_PORT, SL_EMLIB_GPIO_INIT_F13_PIN);
+      motors[motor].hull.HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F15_PORT, SL_EMLIB_GPIO_INIT_F15_PIN);
+      motors[motor].hull.HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F14_PORT, SL_EMLIB_GPIO_INIT_F14_PIN);
+      motors[motor].hull.HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F13_PORT, SL_EMLIB_GPIO_INIT_F13_PIN);
+      break;
 
     default:
       ERROR_BREAK
   }
 
-  gCommotationState[motor] = (motors[motor].hull.HallA << 2 | motors[motor].hull.HallB << 1 | motors[motor].hull.HallC) & 0x7;
+  gCommotationState[motor] = (motors[motor].hull.HullU << 2 | motors[motor].hull.HullV << 1 | motors[motor].hull.HullW) & 0x7;
 
   if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
   {
@@ -148,11 +149,11 @@ void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 // ==================================== set Motor Drive State - START ===================================
 void setMotorDriveState(EMotor motor)
 {
-	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHall))
+	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
 	{
 		motors[motor].motorDriveState = DS_STOP;
 	}
-	else if (motors[motor].speedControler.speedFromHall > 0)
+	else if (motors[motor].speedControler.speedFromHull > 0)
 	{
 		motors[motor].motorDriveState = DS_CW;
 	}
@@ -270,7 +271,7 @@ void motorDriverPhaseConfigurationInit(void){
 
 void getHallSequence(EMotor motor)
 {
-	uint8_t sequence = ((motors[motor].hull.HallA << 2) | (motors[motor].hull.HallB << 1) | (motors[motor].hull.HallC)) & 0x7;
+	uint8_t sequence = ((motors[motor].hull.HullU << 2) | (motors[motor].hull.HullV << 1) | (motors[motor].hull.HullW)) & 0x7;
 	motors[motor].hull.currentSequence = sequence-1;
 }
 
@@ -289,7 +290,7 @@ float calcSpeedFromHalls(EMotor motor)
 	uint32_t curentTimeMillis = motors[motor].hull.cnt_last_time_millis;
 	uint32_t currentHallCnt = motors[motor].hull.cnt;
 
-	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.last_hall_cnt;
+	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastHullCnt;
 	uint32_t currentDt = curentTimeMillis - motors[motor].speedControler.lastCalcTimeMillis;
 
 	if (currentDt == 0 || currentDeltaCount == 0)
@@ -304,7 +305,7 @@ float calcSpeedFromHalls(EMotor motor)
   speedOut[motor] = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
 	motors[motor].speedControler.lastCalcTimeMillis = curentTimeMillis;
-	motors[motor].speedControler.last_hall_cnt = currentHallCnt;
+	motors[motor].speedControler.lastHullCnt = currentHallCnt;
 	return speedOut[motor];
 }
 
@@ -320,7 +321,7 @@ void resetMotorData(EMotor motor)
 {
 	motors[motor].speedControler.speed_I_correction = 0;
 	motors[motor].speedControler.speedCorrected = 0;
-	motors[motor].speedControler.speedFromHall = 0;
+	motors[motor].speedControler.speedFromHull = 0;
 	motors[motor].speedControler.prevSpeedFromHall = 0;
 	motors[motor].speedControler.refSpeed = 0;
 	motors[motor].speedControler.correctedSpeed = 0;

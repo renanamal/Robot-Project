@@ -1,5 +1,9 @@
 #include "callBacks.h"
 
+#ifdef DEBUG_HULLS
+  #include "debugFunctions.h"
+#endif
+
 uint8_t prevHullSequence[NUM_OF_MOTORS];
 
 // the correct hull sequence Hall State (Hall a, Hall b, Hall c)
@@ -257,6 +261,9 @@ void hullHandle(EMotor motor)
   }
   prevHullSequence[motor] = motors[motor].hull.currentSequence;
   sendCommandToDriver(motor);
+#ifdef DEBUG_HULLS
+  record_hull(motor, hullAdd);
+#endif
 }
 
 void encoderHandle(EMotor motor)

@@ -9,7 +9,7 @@ void handleMotors(void)
 {
 	for(EMotor motor = left; motor < endOfMotors; motor++)
 	{
-    motors[motor].speedControler.speedFromHall = calcSpeedFromHalls(motor);
+    motors[motor].speedControler.speedFromHull = calcSpeedFromHalls(motor);
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);
