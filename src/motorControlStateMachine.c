@@ -26,7 +26,6 @@ void handleMotors(void)
 
 void setMotorControlState(EMotor motor)
 {
-	bool doStartRunning = false;
 	// this function handle and set the needed state machine for the motor control
 
 

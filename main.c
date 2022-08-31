@@ -33,12 +33,22 @@
 
 #include "src/generalDefines.h"
 #include "src/generalPurposeFunctions.h"
-#include "tests/test_pwm.h"
 #include "src/motorControlStateMachine.h"
 #include "src/callBacks.h"
 
+
+#include "tests/test_pwm.h"
+#include "tests/test_gpio_int.h"
+
+
 int main(void)
 {
+  // Initialization of the RTCDRV driver.
+  RTCDRV_Init();
+
+  // Initialization of the USTIMER driver.
+  USTIMER_Init();
+
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
   // this call.
@@ -54,12 +64,7 @@ int main(void)
 
   setIntCallBacksDB();
   init_callbacks_GPIO();
-
-  // Initialization of the RTCDRV driver.
-  RTCDRV_Init();
-
-  // Initialization of the USTIMER driver.
-  USTIMER_Init();
+//  test_gpio_init();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

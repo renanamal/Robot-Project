@@ -56,6 +56,5 @@ dkms.conf
 *.bin
 *.s37
 *.mk
-*.axf
-GNU ARM v10.3.1 - Debug/makefile
-GNU ARM v10.3.1 - Debug/sources.mk
+
+GNU ARM v10.3.1 - Debug/

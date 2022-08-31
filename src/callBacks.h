@@ -49,9 +49,8 @@ typedef enum{
 typedef struct{
   GPIOINT_IrqCallbackPtr_t func;
   uint8_t pin;
-  uint8_t port;
+  GPIO_Port_TypeDef port;
 }SIntCallBacks;
-
 
 // function protos
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user);
@@ -63,11 +62,9 @@ void setIntCallBacksDB(void);
 void init_callbacks_GPIO(void);
 
 void hullHandle(EMotor motor);
-void callback_motor1U(uint8_t intNo);
-void callback_motor1V(uint8_t intNo);
-void callback_motor1W(uint8_t intNo);
-void callback_motor2U(uint8_t intNo);
-void callback_motor2V(uint8_t intNo);
-void callback_motor2W(uint8_t intNo);
+void callback_pin8(uint8_t intNo);
+void callback_pin6(uint8_t intNo);
+void callback_pin7(uint8_t intNo);
+void callback_pin11(uint8_t intNo);
 
 #endif /* SRC_CALLBACKS_H_ */
