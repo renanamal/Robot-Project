@@ -1,4 +1,5 @@
 #include "motorDriverMain.h"
+#include "motorControlStateMachine.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
@@ -16,7 +17,7 @@ void read_hulls(void)
 
 void test_motors_handle(void)
 {
-  EMotor motor = left;
+  volatile EMotor motor = left;
   getMotorComutation(motor);
   getHallSequence(motor);
   speedControlHandle(motor);

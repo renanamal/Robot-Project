@@ -89,6 +89,7 @@ bool motorControlSatetExct(EMotor motor)
 
 	case MCS_START_RUNING :
 		getMotorComutation(motor);
+		motorPhaseConfigurationHandle(motor);
 		getHallSequence(motor);
 		speedControlHandle(motor);
 		setMotorDriveState(motor);

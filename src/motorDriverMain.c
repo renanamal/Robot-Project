@@ -54,9 +54,9 @@ void getMotorComutation(EMotor motor){
   switch(motor)
   {
     case left:
-      motors[motor].hull.HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
-      motors[motor].hull.HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
-      motors[motor].hull.HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
+      motors[motor].hull.HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
+      motors[motor].hull.HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
+      motors[motor].hull.HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
       break;
 
     case right:
@@ -68,10 +68,14 @@ void getMotorComutation(EMotor motor){
     default:
       ERROR_BREAK
   }
+  return;
+}
 
+void motorPhaseConfigurationHandle(EMotor motor)
+{
   gCommotationState[motor] = (motors[motor].hull.HullU << 2 | motors[motor].hull.HullV << 1 | motors[motor].hull.HullW) & 0x7;
 
-  if ((motors[motor].motorDriveState == DS_CW) ||(motors[motor].motorDriveState == DS_STOP))
+  if ((motors[motor].motorDriveState == DS_CW) || (motors[motor].motorDriveState == DS_STOP))
   {
     motors[motor].commutation = motorPhaseConfiguration.forword[gCommotationState[motor]];
   }
@@ -79,9 +83,8 @@ void getMotorComutation(EMotor motor){
   {
     motors[motor].commutation = motorPhaseConfiguration.backword[gCommotationState[motor]];
   }
-
+  return;
 }
-
 
 // ==================================== PI speed control algorithm - START ===================================
 float PISpeedControl(EMotor motor)

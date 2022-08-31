@@ -100,6 +100,7 @@ void resetMotorData(EMotor motor);
 void resetAllDriveMotorsData(void);
 void calcPWMpercent(EMotor motor);
 void sendPWMCommadToAllMotors(void);
+void motorPhaseConfigurationHandle(EMotor motor);
 
 // ============================= Type def =======================
 typedef void(*fctPtr)(sl_pwm_instance_t *, EMotor);

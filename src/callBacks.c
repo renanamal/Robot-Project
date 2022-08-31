@@ -237,6 +237,7 @@ void hullHandle(EMotor motor)
 {
   int8_t hullAdd;
   getMotorComutation(motor);
+  motorPhaseConfigurationHandle(motor);
   getHallSequence(motor);
   if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
   {

@@ -40,6 +40,7 @@
 #include "tests/test_pwm.h"
 #include "tests/test_gpio_int.h"
 #include "tests/read_hulls.h"
+#include "tests/test_no_hulls.h"
 
 
 int main(void)
@@ -59,6 +60,7 @@ int main(void)
   // task(s) if the kernel is present.
   app_init();
 
+  motorDriverPhaseConfigurationInit();
   // Initialize Timers
 //  setTimedCallBacksDB();
 //  init_callbacks_timed();
@@ -71,7 +73,8 @@ int main(void)
 // Test functions for Debug
 //  test_pwm();
 //  read_hulls();
-  test_motors_handle();
+//  test_motors_handle();
+  runMotorNoHulls(left);
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -80,10 +83,10 @@ int main(void)
   while (1) {
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.
-    sl_system_process_action();
+//    sl_system_process_action();
 
     // Application process.
-    app_process_action();
+//    app_process_action();
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
     // Let the CPU go to sleep if the system allows it.
