@@ -153,21 +153,6 @@
 #define motor 1 Hall W_PORT                      gpioPortA
 #define motor 1 Hall W_PIN                       7
 
-#define motor 1 encoder A_PORT                   gpioPortA
-#define motor 1 encoder A_PIN                    8
-
-#define motor 1 encoder B_PORT                   gpioPortA
-#define motor 1 encoder B_PIN                    9
-
-#define motor 1 encoder I_PORT                   gpioPortB
-#define motor 1 encoder I_PIN                    6
-
-#define motor 2 Hall U_PORT                      gpioPortB
-#define motor 2 Hall U_PIN                       7
-
-#define motor 2 Hall W_PORT                      gpioPortB
-#define motor 2 Hall W_PIN                       8
-
 #define motor 2 encoder A_PORT                   gpioPortB
 #define motor 2 encoder A_PIN                    9
 
@@ -176,15 +161,6 @@
 
 #define motor 2 encoder C_PORT                   gpioPortC
 #define motor 2 encoder C_PIN                    5
-
-#define motor2 V_PORT                            gpioPortC
-#define motor2 V_PIN                             9
-
-#define motor2 W_PORT                            gpioPortC
-#define motor2 W_PIN                             10
-
-#define motor 2 Hall V_PORT                      gpioPortC
-#define motor 2 Hall V_PIN                       11
 
 #define motor 1 Hall U_PORT                      gpioPortD
 #define motor 1 Hall U_PIN                       8
@@ -200,6 +176,24 @@
 
 #define motor2 U_PORT                            gpioPortD
 #define motor2 U_PIN                             12
+
+#define motor 2 Hall U_PORT                      gpioPortF
+#define motor 2 Hall U_PIN                       13
+
+#define motor 2 Hall W_PORT                      gpioPortF
+#define motor 2 Hall W_PIN                       14
+
+#define motor 2 Hall V_PORT                      gpioPortF
+#define motor 2 Hall V_PIN                       15
+
+#define motor 1 encoder A_PORT                   gpioPortI
+#define motor 1 encoder A_PIN                    1
+
+#define motor 1 encoder B_PORT                   gpioPortI
+#define motor 1 encoder B_PIN                    2
+
+#define motor 1 encoder I_PORT                   gpioPortI
+#define motor 1 encoder I_PIN                    3
 
 // [CUSTOM_PIN_NAME]$
 
