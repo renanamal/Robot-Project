@@ -31,6 +31,7 @@ void setTimedCallBacksDB(void)
 
 void setIntCallBacksDB(void)
 {
+  // ====================== Hull motor 1 =================================
   intCallBacksDB[motor1U].func = callback_pin8;
   intCallBacksDB[motor1U].pin = SL_EMLIB_GPIO_INIT_PD8_PIN;
   intCallBacksDB[motor1U].port = SL_EMLIB_GPIO_INIT_PD8_PORT;
@@ -43,17 +44,44 @@ void setIntCallBacksDB(void)
   intCallBacksDB[motor1W].pin = SL_EMLIB_GPIO_INIT_PA7_PIN;
   intCallBacksDB[motor1W].port = SL_EMLIB_GPIO_INIT_PA7_PORT;
 
-  intCallBacksDB[motor2U].func = callback_pin7;
-  intCallBacksDB[motor2U].pin = SL_EMLIB_GPIO_INIT_PB7_PIN;
-  intCallBacksDB[motor2U].port = SL_EMLIB_GPIO_INIT_PB7_PORT;
+  // ====================== Hull motor 2 =================================
+  intCallBacksDB[motor2U].func = callback_pin13;
+  intCallBacksDB[motor2U].pin = SL_EMLIB_GPIO_INIT_F13_PIN;
+  intCallBacksDB[motor2U].port = SL_EMLIB_GPIO_INIT_F13_PORT;
 
-  intCallBacksDB[motor2V].func = callback_pin11;
-  intCallBacksDB[motor2V].pin = SL_EMLIB_GPIO_INIT_PC11_PIN;
-  intCallBacksDB[motor2V].port = SL_EMLIB_GPIO_INIT_PC11_PORT;
+  intCallBacksDB[motor2V].func = callback_pin15;
+  intCallBacksDB[motor2V].pin = SL_EMLIB_GPIO_INIT_F15_PIN;
+  intCallBacksDB[motor2V].port = SL_EMLIB_GPIO_INIT_F15_PORT;
 
-  intCallBacksDB[motor2W].func = callback_pin8;
-  intCallBacksDB[motor2W].pin = SL_EMLIB_GPIO_INIT_PB8_PIN;
-  intCallBacksDB[motor2W].port = SL_EMLIB_GPIO_INIT_PB8_PORT;
+  intCallBacksDB[motor2W].func = callback_pin14;
+  intCallBacksDB[motor2W].pin = SL_EMLIB_GPIO_INIT_F14_PIN;
+  intCallBacksDB[motor2W].port = SL_EMLIB_GPIO_INIT_F14_PORT;
+
+  // ====================== Encoder motor 1 =================================
+  intCallBacksDB[motor1EncA].func = callback_pin1;
+  intCallBacksDB[motor1EncA].pin = SL_EMLIB_GPIO_INIT_I1_PIN;
+  intCallBacksDB[motor1EncA].port = SL_EMLIB_GPIO_INIT_I1_PORT;
+
+  intCallBacksDB[motor1EncB].func = callback_pin2;
+  intCallBacksDB[motor1EncB].pin = SL_EMLIB_GPIO_INIT_I2_PIN;
+  intCallBacksDB[motor1EncB].port = SL_EMLIB_GPIO_INIT_I2_PORT;
+
+  intCallBacksDB[motor1EncI].func = callback_pin3;
+  intCallBacksDB[motor1EncI].pin = SL_EMLIB_GPIO_INIT_I3_PIN;
+  intCallBacksDB[motor1EncI].port = SL_EMLIB_GPIO_INIT_I3_PORT;
+
+  // ====================== Encoder motor 2 =================================
+  intCallBacksDB[motor2EncA].func = callback_pin9;
+  intCallBacksDB[motor2EncA].pin = SL_EMLIB_GPIO_INIT_PB9_PIN;
+  intCallBacksDB[motor2EncA].port = SL_EMLIB_GPIO_INIT_PB9_PORT;
+
+  intCallBacksDB[motor2EncB].func = callback_pin4;
+  intCallBacksDB[motor2EncB].pin = SL_EMLIB_GPIO_INIT_PC4_PIN;
+  intCallBacksDB[motor2EncB].port = SL_EMLIB_GPIO_INIT_PC4_PORT;
+
+  intCallBacksDB[motor2EncI].func = callback_pin5;
+  intCallBacksDB[motor2EncI].pin = SL_EMLIB_GPIO_INIT_PC5_PIN;
+  intCallBacksDB[motor2EncI].port = SL_EMLIB_GPIO_INIT_PC5_PORT;
 }
 
 void init_callbacks_timed(void)
@@ -69,27 +97,18 @@ void init_callbacks_timed(void)
 
 void init_callbacks_GPIO(void)
 {
-  uint8_t pinList[4] = {6, 7, 8, 11};
-  GPIOINT_IrqCallbackPtr_t funcs[4] = {callback_pin6, callback_pin7, callback_pin8, callback_pin11};
+//  uint8_t pinList[4] = {6, 7, 8, 11};
+//  GPIOINT_IrqCallbackPtr_t funcs[4] = {callback_pin6, callback_pin7, callback_pin8, callback_pin11};
 
-  GPIOINT_Init();
-  for(uint8_t i = 0; i < 4; i++)
-  {
-      GPIOINT_CallbackRegister(pinList[i], funcs[i]);
-  }
   // Initialization of the GPIOINT driver.
-//  for(uint8_t ind = 0; ind < endOfIntCallbacksFuncList; ind++)
-//  {
-//      GPIOINT_CallbackRegister(intCallBacksDB[ind].pin, intCallBacksDB[ind].func);
+  GPIOINT_Init();
+
+  for(uint8_t ind = 0; ind < endOfIntCallbacksFuncList; ind++)
+  {
+      GPIOINT_CallbackRegister(intCallBacksDB[ind].pin, intCallBacksDB[ind].func);
 //      GPIO_IntConfig(intCallBacksDB[ind].port, intCallBacksDB[ind].pin, true, true, true);
-//  }
-//  GPIOINT_CallbackRegister(intCallBacksDB[0].pin, intCallBacksDB[0].func);
-
-//  GPIO_ExtIntConfig(intCallBacksDB[3].port, intCallBacksDB[3].pin, intCallBacksDB[3].pin, true, true, true);
-  GPIO_ExtIntConfig(intCallBacksDB[2].port, intCallBacksDB[2].pin, intCallBacksDB[2].pin, true, true, true);
-
-  uint32_t PinMask = (1 << 6 | 1 << 7 | 1 << 8 | 1 << 11);
-  GPIO_IntEnable(PinMask);
+      GPIO_ExtIntConfig(intCallBacksDB[ind].port, intCallBacksDB[ind].pin, intCallBacksDB[ind].pin, true, true, true);
+  }
 }
 
 // definition of the Callback functions
@@ -101,19 +120,50 @@ void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
 }
 
 
-void callback_pin8(uint8_t intNo) // pin D8 or B8
+void callback_pin1(uint8_t intNo) // pin I1
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1U].port, intCallBacksDB[motor1U].pin))
+  if (GPIO_PinInGet(intCallBacksDB[motor1EncA].port, intCallBacksDB[motor1EncA].pin))
   {
-      hullHandle(left);
-  }
-  if (GPIO_PinInGet(intCallBacksDB[motor2W].port, intCallBacksDB[motor2W].pin))
-  {
-      hullHandle(right);
+      encoderHandle(left);
   }
 }
 
+void callback_pin2(uint8_t intNo) // pin I2
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor1EncB].port, intCallBacksDB[motor1EncB].pin))
+  {
+      encoderHandle(left);
+  }
+}
+
+void callback_pin3(uint8_t intNo) // pin I3
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor1EncI].port, intCallBacksDB[motor1EncI].pin))
+  {
+      encoderHandle(left);
+  }
+}
+
+void callback_pin4(uint8_t intNo) // pin C4
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor2EncB].port, intCallBacksDB[motor2EncB].pin))
+  {
+      encoderHandle(right);
+  }
+}
+
+void callback_pin5(uint8_t intNo) // pin C5
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor2EncI].port, intCallBacksDB[motor2EncI].pin))
+  {
+      encoderHandle(right);
+  }
+}
 
 void callback_pin6(uint8_t intNo) // pin A6
 {
@@ -124,24 +174,53 @@ void callback_pin6(uint8_t intNo) // pin A6
   }
 }
 
-
-void callback_pin7(uint8_t intNo) // pin A7 or B7
+void callback_pin7(uint8_t intNo) // pin A7
 {
   (void) intNo; // not in use
   if (GPIO_PinInGet(intCallBacksDB[motor1W].port, intCallBacksDB[motor1W].pin))
   {
     hullHandle(left);
-    hullHandle(right);
-    uint32_t pinmask = (1<<7);
-    GPIO_IntClear(pinmask);
   }
-  if (GPIO_PinInGet(intCallBacksDB[motor2U].port, intCallBacksDB[motor2U].pin))
+
+}
+
+void callback_pin8(uint8_t intNo) // pin D8
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor1U].port, intCallBacksDB[motor1U].pin))
   {
+      hullHandle(left);
   }
 }
 
+void callback_pin9(uint8_t intNo) // pin B9
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor2EncA].port, intCallBacksDB[motor2EncA].pin))
+  {
+      encoderHandle(right);
+  }
+}
 
-void callback_pin11(uint8_t intNo) // pin C11
+void callback_pin13(uint8_t intNo) // pin F13
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor2U].port, intCallBacksDB[motor2U].pin))
+  {
+      hullHandle(right);
+  }
+}
+
+void callback_pin14(uint8_t intNo) // pin F14
+{
+  (void) intNo; // not in use
+  if (GPIO_PinInGet(intCallBacksDB[motor2W].port, intCallBacksDB[motor2W].pin))
+  {
+      hullHandle(right);
+  }
+}
+
+void callback_pin15(uint8_t intNo) // pin F15
 {
   (void) intNo; // not in use
   if (GPIO_PinInGet(intCallBacksDB[motor2V].port, intCallBacksDB[motor2V].pin))
@@ -149,7 +228,6 @@ void callback_pin11(uint8_t intNo) // pin C11
       hullHandle(right);
   }
 }
-
 
 void hullHandle(EMotor motor)
 {
@@ -179,4 +257,9 @@ void hullHandle(EMotor motor)
   }
   prevHullSequence[motor] = motors[motor].hull.currentSequence;
   sendCommandToDriver(motor);
+}
+
+void encoderHandle(EMotor motor)
+{
+  return;
 }

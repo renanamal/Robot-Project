@@ -60,10 +60,12 @@ void getMotorComutation(EMotor motor){
       break;
 
     case right:
-      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB7_PORT, SL_EMLIB_GPIO_INIT_PB7_PIN);
-      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PC11_PORT, SL_EMLIB_GPIO_INIT_PC11_PIN);
-      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PB8_PORT, SL_EMLIB_GPIO_INIT_PB8_PIN);
+      motors[motor].hull.HallB = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F15_PORT, SL_EMLIB_GPIO_INIT_F15_PIN);
+      motors[motor].hull.HallC = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F14_PORT, SL_EMLIB_GPIO_INIT_F14_PIN);
+      motors[motor].hull.HallA = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F13_PORT, SL_EMLIB_GPIO_INIT_F13_PIN);
 
+    default:
+      ERROR_BREAK
   }
 
   gCommotationState[motor] = (motors[motor].hull.HallA << 2 | motors[motor].hull.HallB << 1 | motors[motor].hull.HallC) & 0x7;

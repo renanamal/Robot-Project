@@ -7,15 +7,15 @@
 #include "em_gpio.h"
 #include "motorControlStateMachine.h"
 #include "gpiointerrupt.h"
+#include "sl_emlib_gpio_init_F13_config.h"
+#include "sl_emlib_gpio_init_F14_config.h"
+#include "sl_emlib_gpio_init_F15_config.h"
+#include "sl_emlib_gpio_init_I1_config.h"
+#include "sl_emlib_gpio_init_I2_config.h"
+#include "sl_emlib_gpio_init_I3_config.h"
 #include "sl_emlib_gpio_init_PA6_config.h"
 #include "sl_emlib_gpio_init_PA7_config.h"
-#include "sl_emlib_gpio_init_PA8_config.h"
-#include "sl_emlib_gpio_init_PA9_config.h"
-#include "sl_emlib_gpio_init_PB6_config.h"
-#include "sl_emlib_gpio_init_PB7_config.h"
-#include "sl_emlib_gpio_init_PB8_config.h"
 #include "sl_emlib_gpio_init_PB9_config.h"
-#include "sl_emlib_gpio_init_PC11_config.h"
 #include "sl_emlib_gpio_init_PC4_config.h"
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
@@ -42,6 +42,12 @@ typedef enum{
   motor2U,
   motor2V,
   motor2W,
+  motor1EncA,
+  motor1EncB,
+  motor1EncI,
+  motor2EncA,
+  motor2EncB,
+  motor2EncI,
   endOfIntCallbacksFuncList
 }EIntCallBacksdFunctions;
 
@@ -61,10 +67,20 @@ void init_callbacks_timed(void);
 void setIntCallBacksDB(void);
 void init_callbacks_GPIO(void);
 
+void encoderHandle(EMotor motor);
 void hullHandle(EMotor motor);
-void callback_pin8(uint8_t intNo);
+
+void callback_pin1(uint8_t intNo);
+void callback_pin2(uint8_t intNo);
+void callback_pin3(uint8_t intNo);
+void callback_pin4(uint8_t intNo);
+void callback_pin5(uint8_t intNo);
 void callback_pin6(uint8_t intNo);
 void callback_pin7(uint8_t intNo);
-void callback_pin11(uint8_t intNo);
+void callback_pin8(uint8_t intNo);
+void callback_pin9(uint8_t intNo);
+void callback_pin13(uint8_t intNo);
+void callback_pin14(uint8_t intNo);
+void callback_pin15(uint8_t intNo);
 
 #endif /* SRC_CALLBACKS_H_ */
