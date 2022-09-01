@@ -9,7 +9,8 @@ void handleMotors(void)
 {
 	for(EMotor motor = left; motor < endOfMotors; motor++)
 	{
-    motors[motor].speedControler.speedFromHull = calcSpeedFromHalls(motor);
+    calcSpeedFromHalls(motor);
+    continuousAverage(&motors[motor].speedControler.speedAverage);
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);
@@ -17,7 +18,8 @@ void handleMotors(void)
     if(motors[motor].isRunning)
     {
       setMotorDriveState(motor);
-      calcMotorPWMCommand(motor);
+//      calcMotorPWMCommand(motor);
+      calcPWMpercent(motor);
     }
 	}
 	return;
@@ -83,7 +85,8 @@ bool motorControlSatetExct(EMotor motor)
 	case MCS_HALT  :
 		resetMotorData(motor);
 		speedControlHandle(motor);
-		calcMotorPWMCommand(motor);
+//		calcMotorPWMCommand(motor);
+		calcPWMpercent(motor);
 		sendCommandToDriver(motor);
 		break;
 
@@ -93,7 +96,8 @@ bool motorControlSatetExct(EMotor motor)
 		getHallSequence(motor);
 		speedControlHandle(motor);
 		setMotorDriveState(motor);
-		calcMotorPWMCommand(motor);
+//		calcMotorPWMCommand(motor);
+		calcPWMpercent(motor);
 		sendCommandToDriver(motor);
 		motorRunning = true;
 		break;

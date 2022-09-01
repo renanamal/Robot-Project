@@ -42,13 +42,15 @@ typedef struct
 
 typedef struct
 {
-  uint8_t currentSequence;
-  uint8_t HullU;
-  uint8_t HullV;
-  uint8_t HullW;
-  int32_t cnt;
-  int8_t  prevHullAdded;
-  uint32_t cnt_last_time_millis;
+  uint8_t   currentSequence;
+  uint8_t   prevSequence;
+  uint8_t   HullU;
+  uint8_t   HullV;
+  uint8_t   HullW;
+  int32_t   cnt;
+  int8_t    prevHullAdded;
+  uint32_t  cnt_last_time_millis;
+  int8_t    hullAdd;
 }SGDComutation;
 
 typedef enum{
@@ -66,7 +68,6 @@ typedef struct {
   uint64_t            lastCalcTimeMillis;
   int64_t             lastHullCnt;
   float               refSpeed;
-  float               correctedSpeed;
   SContinuousAverage  speedAverage;
 }SPIspeedContorl;
 
@@ -94,15 +95,20 @@ void setMotorDriveState(EMotor motor);
 void setAllMotorsDriveState(void);
 void motorDriverPhaseConfigurationInit(void);
 void getHallSequence(EMotor motor);
-float calcSpeedFromHalls(EMotor motor);
+void calcSpeedFromHalls(EMotor motor);
 void speedControlHandle(EMotor motor);
 void resetMotorData(EMotor motor);
 void resetAllDriveMotorsData(void);
 void calcPWMpercent(EMotor motor);
 void sendPWMCommadToAllMotors(void);
 void motorPhaseConfigurationHandle(EMotor motor);
+void calcHullAdd(EMotor motor);
 
 // ============================= Type def =======================
 typedef void(*fctPtr)(sl_pwm_instance_t *, EMotor);
+
+#ifdef DEBUG_SPEED_CONTROL
+  #include "debugFunctions.h"
+#endif
 
 #endif /* INC_MOTORDRIVERMAIN_H_ */

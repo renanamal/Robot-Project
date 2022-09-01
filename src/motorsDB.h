@@ -8,7 +8,7 @@
 #define MOTOR_EFFICIENCY (0.63 * MOTOR_GEAR_EFFICIENCY)
 #define GEAR_RATIO (17.0)
 #define INV_GEAR_RATIO (1.0/GEAR_RATIO)
-#define POWER_SUPPLY_VOLTAGE (12.0)
+#define POWER_SUPPLY_VOLTAGE (3.3)
 
 // control gains
 // TODO - if needed define KI, KP for each motor

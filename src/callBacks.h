@@ -19,6 +19,7 @@
 #include "sl_emlib_gpio_init_PC4_config.h"
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
+#include "debugFunctions.h"
 
 typedef void(*timedCallbackFctPtr)(RTCDRV_TimerID_t, void *);
 

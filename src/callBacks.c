@@ -4,7 +4,7 @@
   #include "debugFunctions.h"
 #endif
 
-uint8_t prevHullSequence[NUM_OF_MOTORS];
+//uint8_t prevHullSequence[NUM_OF_MOTORS];
 
 // the correct hull sequence Hall State (Hall a, Hall b, Hall c)
 //4 (100) 00  10  01
@@ -239,12 +239,12 @@ void hullHandle(EMotor motor)
   getMotorComutation(motor);
   motorPhaseConfigurationHandle(motor);
   getHallSequence(motor);
-  if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
+  if(motors[motor].hull.currentSequence > 5 || motors[motor].hull.currentSequence < 0) // not a legal  sequence
   {
       ERROR_BREAK
   }
 
-  hullAdd =  hallIrqCntAdevanceMatrix[prevHullSequence[motor]][motors[motor].hull.currentSequence];
+  calcHullAdd(motor);
 
   if(motors[motor].hull.prevHullAdded != hullAdd)
   {
@@ -255,19 +255,15 @@ void hullHandle(EMotor motor)
   {
     motors[motor].hull.cnt_last_time_millis = getMillis();
     motors[motor].hull.cnt += hullAdd;
-    if (hullAdd == 0 && prevHullSequence[motor] != motors[motor].hull.currentSequence)
-    {
-        ERROR_BREAK
-    }
   }
-  prevHullSequence[motor] = motors[motor].hull.currentSequence;
   sendCommandToDriver(motor);
 #ifdef DEBUG_HULLS
-  record_hull(motor, hullAdd);
+  record_hull(motor);
 #endif
 }
 
 void encoderHandle(EMotor motor)
 {
+  (void) motor;
   return;
 }

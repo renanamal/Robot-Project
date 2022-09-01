@@ -11,6 +11,7 @@ extern sl_pwm_instance_t sl_pwm_motor1_ch2;
 extern sl_pwm_instance_t sl_pwm_motor2_ch0;
 extern sl_pwm_instance_t sl_pwm_motor2_ch1;
 extern sl_pwm_instance_t sl_pwm_motor2_ch2;
+extern hallIrqCntAdevanceMatrix[6][6];
 
 void sendCommandToDriver(EMotor motor){
   static sl_pwm_instance_t *motor_pwm_ch0;
@@ -120,6 +121,13 @@ float PISpeedControl(EMotor motor)
 		speed_I_correction = -1 * PI_ANTIWINDUP;
 	}
 	motors[motor].speedControler.speed_I_correction = speed_I_correction;
+
+#ifdef DEBUG_SPEED_CONTROL
+	record_SpeedError(motor, SpeedError);
+	record_Pcorrection(motor, Pcorrection);
+	record_speed_I_correction(motor, speed_I_correction);
+#endif
+
 	return Pcorrection + speed_I_correction;
 }
 // ==================================== PI linear speed control algorithm - START ===================================
@@ -279,19 +287,24 @@ void getHallSequence(EMotor motor)
 }
 
 
-float calcSpeedFromHalls(EMotor motor)
+void calcHullAdd(EMotor motor)
 {
-	static float speedOut[NUM_OF_MOTORS] = {0,0};
+  motors[motor].hull.hullAdd =  hallIrqCntAdevanceMatrix[motors[motor].hull.prevSequence][motors[motor].hull.currentSequence];
+  motors[motor].hull.prevSequence = motors[motor].hull.currentSequence;
+}
+
+void calcSpeedFromHalls(EMotor motor)
+{
+  // to prevent changes in current time and hall counts during calculation we copy them to local variables
+  uint32_t curentTimeMillis = motors[motor].hull.cnt_last_time_millis;
+  uint32_t currentHallCnt = motors[motor].hull.cnt;
 
 	if (motors[motor].motorDriveState == DS_STOP)
   {
-    speedOut[motor] = 0;
-    return speedOut[motor];
+	    motors[motor].speedControler.speedFromHull = 0.0;
+	    motors[motor].speedControler.speedAverage.reset = true;
+	    continuousAverage(&motors[motor].speedControler.speedAverage);
   }
-
-	// to prevent changes in current time and hall counts during calculation we copy them to local variables
-	uint32_t curentTimeMillis = motors[motor].hull.cnt_last_time_millis;
-	uint32_t currentHallCnt = motors[motor].hull.cnt;
 
 	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastHullCnt;
 	uint32_t currentDt = curentTimeMillis - motors[motor].speedControler.lastCalcTimeMillis;
@@ -299,24 +312,30 @@ float calcSpeedFromHalls(EMotor motor)
 	if (currentDt == 0 || currentDeltaCount == 0)
 	{
 		//do nothing and take the last calculated "speedOut"
-	    return speedOut[motor];
+	  return;
 	}
 
   float motorAngleRotated = currentDeltaCount * RAD_PER_INTERAPT;
   float dtSec = currentDt/1000.0;
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
-  speedOut[motor] = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
+  motors[motor].speedControler.speedFromHull = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
 	motors[motor].speedControler.lastCalcTimeMillis = curentTimeMillis;
 	motors[motor].speedControler.lastHullCnt = currentHallCnt;
-	return speedOut[motor];
+
+	motors[motor].speedControler.speedAverage.courentData = motors[motor].speedControler.speedFromHull;
+  continuousAverage(&motors[motor].speedControler.speedAverage);
+	return;
 }
 
 
 void speedControlHandle(EMotor motor)
 {
   float speedCorrection = PISpeedControl(motor);
-  motors[motor].speedControler.correctedSpeed = motors[motor].speedControler.refSpeed + speedCorrection;
+  motors[motor].speedControler.speedCorrected = motors[motor].speedControler.refSpeed + speedCorrection;
+#ifdef DEBUG_SPEED_CONTROL
+  record_motor_data(motor);
+#endif
 }
 
 
@@ -327,7 +346,7 @@ void resetMotorData(EMotor motor)
 	motors[motor].speedControler.speedFromHull = 0;
 	motors[motor].speedControler.prevSpeedFromHall = 0;
 	motors[motor].speedControler.refSpeed = 0;
-	motors[motor].speedControler.correctedSpeed = 0;
+	motors[motor].speedControler.speedCorrected = 0;
 	motors[motor].speedControler.speedAverage.reset = true;
 	setMotorDriveState(motor);
 }
@@ -349,6 +368,11 @@ void calcPWMpercent(EMotor motor)
   float refMotorSpeedRPM = fabs(motors[motor].speedControler.speedCorrected) * GEAR_RATIO * RPS_TO_RPM;
   float commandVrms = (refMotorSpeedRPM / MOTOR_SPEED_CONSTANT) / MOTOR_EFFICIENCY;
   motors[motor].PWMCommand = (commandVrms/POWER_SUPPLY_VOLTAGE)*100.0;
+
+#ifdef DEBUG_SPEED_CONTROL
+  record_refMotorSpeedRPM(motor, refMotorSpeedRPM);
+  record_commandVrms(motor, commandVrms);
+#endif
   return;
 }
 // ==================================== calc PWM command - END ===================================
