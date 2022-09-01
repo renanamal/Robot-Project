@@ -1,9 +1,9 @@
 /***************************************************************************//**
  * @file
- * @brief USTIMER configuration file.
+ * @brief RAIL callbacks configuration header file.
  *******************************************************************************
  * # License
- * <b>Copyright 2018 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2021 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -27,26 +27,18 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  ******************************************************************************/
-#ifndef __SILICON_LABS_USTIMER_CONFIG_H__
-#define __SILICON_LABS_USTIMER_CONFIG_H__
 
-/***************************************************************************//**
- * @addtogroup ustimer
- * @{
- ******************************************************************************/
+#ifndef SL_RAIL_UTIL_CALLBACKS_CONFIG_H
+#define SL_RAIL_UTIL_CALLBACKS_CONFIG_H
 
-// <<< sl:start pin_tool >>>
+// <<< Use Configuration Wizard in Context Menu >>>
 
-// <timer> USTIMER
-// $[TIMER_USTIMER]
-#define USTIMER_PERIPHERAL              TIMER0
-#define USTIMER_PERIPHERAL_NO           0
-// [TIMER_USTIMER]$
+// <h> RAIL Callbacks Configuration
 
-// <<< sl:end pin_tool >>>
+// <q SL_RAIL_UTIL_CALLBACKS_ASSERT_FAILED_OVERRIDE> Override weak internal RAIL callback RAILCb_AssertFailed()
+// <i> Default: 1
+#define SL_RAIL_UTIL_CALLBACKS_ASSERT_FAILED_OVERRIDE 1
 
-#define USTIMER_TIMER USTIMER_PERIPHERAL_NO
-
-/** @} (end addtogroup ustimer) */
-
-#endif /* __SILICON_LABS_USTIMER_CONFIG_H__ */
+// </h>
+// <<< end of configuration section >>>
+#endif // SL_RAIL_UTIL_CALLBACKS_CONFIG_H

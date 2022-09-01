@@ -131,6 +131,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_msc_compat.h</locationURI>
 		</link>
 		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_prs.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_prs.h</locationURI>
+		</link>
+		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_ramfunc.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_ramfunc.h</locationURI>
@@ -184,6 +189,11 @@
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_msc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_msc.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/src/em_prs.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_prs.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_rtcc.c</name>
@@ -324,6 +334,31 @@
 			<name>gecko_sdk_4.1.1/platform/emlib/init/gpio_simple/sl_emlib_gpio_simple_init.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/init/gpio_simple/sl_emlib_gpio_simple_init.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/common/rail.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/common/rail.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/common/rail_assert_error_codes.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/common/rail_assert_error_codes.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/common/rail_features.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/common/rail_features.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/common/rail_mfm.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/common/rail_mfm.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/common/rail_types.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/common/rail_types.h</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/service/device_init/inc/sl_device_init_clocks.h</name>
@@ -679,6 +714,56 @@
 			<name>gecko_sdk_4.1.1/platform/Device/SiliconLabs/EFR32FG12P/Source/system_efr32fg12p.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/Device/SiliconLabs/EFR32FG12P/Source/system_efr32fg12p.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/autogen/librail_release/librail_efr32xg12_gcc_release.a</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/autogen/librail_release/librail_efr32xg12_gcc_release.a</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_callbacks/sl_rail_util_callbacks.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/plugin/rail_util_callbacks/sl_rail_util_callbacks.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_callbacks/sli_rail_util_callbacks.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/plugin/rail_util_callbacks/sli_rail_util_callbacks.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol_types.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/plugin/rail_util_protocol/sl_rail_util_protocol_types.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/protocol/ble/rail_ble.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/protocol/ble/rail_ble.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/protocol/ieee802154/rail_ieee802154.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/protocol/ieee802154/rail_ieee802154.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/protocol/zwave/rail_zwave.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/protocol/zwave/rail_zwave.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/radio/rail_lib/chip/efr32/efr32xg1x/rail_chip_specific.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/radio/rail_lib/chip/efr32/efr32xg1x/rail_chip_specific.h</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

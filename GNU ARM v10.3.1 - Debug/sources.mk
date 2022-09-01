@@ -30,6 +30,7 @@ gecko_sdk_4.1.1/platform/emdrv/gpiointerrupt/src \
 gecko_sdk_4.1.1/platform/emdrv/rtcdrv/src \
 gecko_sdk_4.1.1/platform/emdrv/ustimer/src \
 gecko_sdk_4.1.1/platform/emlib/src \
+gecko_sdk_4.1.1/platform/radio/rail_lib/plugin/rail_util_protocol \
 gecko_sdk_4.1.1/platform/service/device_init/src \
 gecko_sdk_4.1.1/platform/service/system/src \
 gecko_sdk_4.1.1/platform/service/udelay/src \

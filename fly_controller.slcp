@@ -23,18 +23,20 @@ include:
 sdk: {id: gecko_sdk, version: 4.1.1}
 toolchain_settings: []
 component:
-- {id: EFR32FG12P433F1024GL125}
-- instance: [motor1, motor2]
-  id: pwm
 - instance: [F13, F14, F15, I1, I2, I3, PA6, PA7, PB9, PC4, PC5, PD8]
   id: emlib_gpio_simple_init
 - {id: sl_system}
-- {id: device_init}
 - {id: brd4001a}
+- instance: [rail_init]
+  id: rail_util_init
+- {id: rtcdrv}
+- {id: EFR32FG12P433F1024GL125}
+- instance: [motor1, motor2]
+  id: pwm
+- {id: device_init}
 - {id: brd4253a}
 - {id: gpiointerrupt}
 - {id: ustimer}
-- {id: rtcdrv}
 define:
 - {name: DEBUG_EFM}
 ui_hints: {}
