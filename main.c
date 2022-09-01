@@ -67,8 +67,8 @@ int main(void)
 //  setTimedCallBacksDB();
 //  init_callbacks_timed();
 
-//  setIntCallBacksDB();
-//  init_callbacks_GPIO();
+  setIntCallBacksDB();
+  init_callbacks_GPIO();
 //  test_gpio_init();
 
 

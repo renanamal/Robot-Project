@@ -235,26 +235,28 @@ void callback_pin15(uint8_t intNo) // pin F15
 
 void hullHandle(EMotor motor)
 {
+
+#if !defined(DEBUG_SPEED_CONTROL) || !defined(DEBUG_HULLS)
   getMotorHulls(motor);
+
+
   motorPhaseConfigurationHandle(motor);
   getHullSequence(motor);
   if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
   {
       ERROR_BREAK
   }
+#endif
 
   calcHullAdd(motor);
 
-  if(motors[motor].hull.prevHullAdded != motors[motor].hull.hullAdd)
-  {
-    motors[motor].hull.prevHullAdded = motors[motor].hull.hullAdd;
-    motors[motor].hull.hullAdd = 0;
-  }
-  else
-  {
-    motors[motor].hull.cnt_last_time_millis = getMillis();
-    motors[motor].hull.cnt += motors[motor].hull.hullAdd;
-  }
+//  if(motors[motor].hull.prevHullAdded != motors[motor].hull.hullAdd)
+//  {
+//    motors[motor].hull.prevHullAdded = motors[motor].hull.hullAdd;
+//  }
+
+  motors[motor].hull.cnt_last_time_millis = getMillis();
+  motors[motor].hull.cnt += motors[motor].hull.hullAdd;
   sendCommandToDriver(motor);
 #ifdef DEBUG_HULLS
   record_hull(motor);

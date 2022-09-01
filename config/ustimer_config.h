@@ -38,7 +38,7 @@
 // <<< sl:start pin_tool >>>
 // <timer> USTIMER
 // $[TIMER_USTIMER]
-#define USTIMER_PERIPHERAL                       TIMER0
+#define USTIMER_PERIPHERAL                       TIMER3
 #define USTIMER_PERIPHERAL_NO                    0
 // [TIMER_USTIMER]$
 
