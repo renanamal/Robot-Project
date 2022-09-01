@@ -11,6 +11,8 @@ void record_motor_data(EMotor motor)
   // ========================================================== DEBUG - START ========================================================================
   mainDBG.speedControl[motor].counter++;
   uint32_t ind = mainDBG.speedControl[motor].counter;
+  getHullsDBG(motor);
+  mainDBG.speedControl[motor].commutation[ind] = motors[motor].commutation;
   mainDBG.speedControl[motor].PI_correction[ind] = motors[motor].speedControler.speed_I_correction;
   mainDBG.speedControl[motor].PWMpercent[ind] =  motors[motor].PWMCommand;
   mainDBG.speedControl[motor].speedFromHull[ind] = motors[motor].speedControler.speedFromHull;
@@ -22,6 +24,11 @@ void record_motor_data(EMotor motor)
     while (1);
   }
   // ========================================================== DEBUG - END ==========================================================================
+}
+
+void record_gCommotationState(EMotor motor, uint8_t gCommotationState)
+{
+  mainDBG.speedControl[motor].gCommotationState[mainDBG.speedControl[motor].counter] = gCommotationState;
 }
 
 void record_SpeedError(EMotor motor, float SpeedError)
@@ -60,4 +67,27 @@ void record_hull(EMotor motor)
     DEBUG_BREAK;
     while (1);
   }
+}
+
+void getHullsDBG(EMotor motor)
+{
+  uint8_t ind = mainDBG.hullCounter[motor].counter;
+  switch(motor)
+  {
+    case left:
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PD8_PORT, SL_EMLIB_GPIO_INIT_PD8_PIN);
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA6_PORT, SL_EMLIB_GPIO_INIT_PA6_PIN);
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_PA7_PORT, SL_EMLIB_GPIO_INIT_PA7_PIN);
+      break;
+
+    case right:
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullU = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F13_PORT, SL_EMLIB_GPIO_INIT_F13_PIN);
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullV = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F15_PORT, SL_EMLIB_GPIO_INIT_F15_PIN);
+      mainDBG.hullCounter[motor].motorsRealHulls[ind].HullW = GPIO_PinInGet(SL_EMLIB_GPIO_INIT_F14_PORT, SL_EMLIB_GPIO_INIT_F14_PIN);
+      break;
+
+    default:
+      ERROR_BREAK
+  }
+  return;
 }

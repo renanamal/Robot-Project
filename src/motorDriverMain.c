@@ -11,7 +11,7 @@ extern sl_pwm_instance_t sl_pwm_motor1_ch2;
 extern sl_pwm_instance_t sl_pwm_motor2_ch0;
 extern sl_pwm_instance_t sl_pwm_motor2_ch1;
 extern sl_pwm_instance_t sl_pwm_motor2_ch2;
-extern hallIrqCntAdevanceMatrix[6][6];
+extern int8_t hallIrqCntAdevanceMatrix[6][6];
 
 void sendCommandToDriver(EMotor motor){
   static sl_pwm_instance_t *motor_pwm_ch0;
@@ -36,9 +36,9 @@ void sendCommandToDriver(EMotor motor){
       return;
   }
 
-	(*pwmSetDutyCycle[motors[motor].commutation.Apolarity])(motor_pwm_ch0, motor);
-	(*pwmSetDutyCycle[motors[motor].commutation.Bpolarity])(motor_pwm_ch1, motor);
-	(*pwmSetDutyCycle[motors[motor].commutation.Cpolarity])(motor_pwm_ch2, motor);
+	(*pwmSetDutyCycle[motors[motor].commutation.Upolarity])(motor_pwm_ch0, motor);
+	(*pwmSetDutyCycle[motors[motor].commutation.Vpolarity])(motor_pwm_ch1, motor);
+	(*pwmSetDutyCycle[motors[motor].commutation.Wpolarity])(motor_pwm_ch2, motor);
 }
 
 
@@ -46,12 +46,12 @@ void getAllMotorsCommutation(void)
 {
   for(EMotor motor = left; motor < endOfMotors; motor++)
   {
-      getMotorComutation(motor);
+      getMotorHulls(motor);
   }
 }
 
 
-void getMotorComutation(EMotor motor){
+void getMotorHulls(EMotor motor){
   switch(motor)
   {
     case left:
@@ -75,6 +75,11 @@ void getMotorComutation(EMotor motor){
 void motorPhaseConfigurationHandle(EMotor motor)
 {
   gCommotationState[motor] = (motors[motor].hull.HullU << 2 | motors[motor].hull.HullV << 1 | motors[motor].hull.HullW) & 0x7;
+
+#ifdef DEBUG_SPEED_CONTROL
+  record_gCommotationState(motor, gCommotationState[motor]);
+#endif
+
 
   if ((motors[motor].motorDriveState == DS_CW) || (motors[motor].motorDriveState == DS_STOP))
   {
@@ -138,6 +143,7 @@ void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_pwm_ch, EMotor motor)
 {
   (void) motor; // unused argument
   sl_pwm_set_duty_cycle(motor_pwm_ch, 50);
+  sl_pwm_start(motor_pwm_ch);
 }
 // ==================================== GPIO motor Pin PWM out Disable - END ===================================
 
@@ -145,6 +151,7 @@ void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_pwm_ch, EMotor motor)
 // ==================================== GPIO motor Pin PWM out High - START ===================================
 void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
   sl_pwm_set_duty_cycle(motor_pwm_ch, motors[motor].PWMCommand);
+  sl_pwm_start(motor_pwm_ch);
 }
 // ==================================== GPIO motor Pin PWM out High - END ===================================
 
@@ -152,7 +159,9 @@ void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 // ==================================== GPIO motor Pin PWM out Low - START ===================================
 void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
   (void) motor; // unused argument
-  sl_pwm_set_duty_cycle(motor_pwm_ch, 0);
+//  sl_pwm_set_duty_cycle(motor_pwm_ch, 0);
+//  sl_pwm_start(motor_pwm_ch);
+  sl_pwm_stop(motor_pwm_ch);
 }
 // ==================================== GPIO motor Pin PWM out Low - END ===================================
 
@@ -195,92 +204,92 @@ void motorDriverPhaseConfigurationInit(void){
 	// Xpolarity = 2 - 50% duty cycle
 
 	// ======================= FORWORD CONFIGURATION - START =============================
-	motorPhaseConfiguration.forword[0].Apolarity = 0;
-	motorPhaseConfiguration.forword[0].Bpolarity = 0;
-	motorPhaseConfiguration.forword[0].Cpolarity = 0;
+	motorPhaseConfiguration.forword[0].Upolarity = NA;
+	motorPhaseConfiguration.forword[0].Vpolarity = NA;
+	motorPhaseConfiguration.forword[0].Wpolarity = NA;
 
 
-	motorPhaseConfiguration.forword[1].Apolarity = 0;
-	motorPhaseConfiguration.forword[1].Bpolarity = 1;
-	motorPhaseConfiguration.forword[1].Cpolarity = 2;
+	motorPhaseConfiguration.forword[1].Upolarity = D;
+	motorPhaseConfiguration.forword[1].Vpolarity = H;
+	motorPhaseConfiguration.forword[1].Wpolarity = L;
 
 
-	motorPhaseConfiguration.forword[2].Apolarity = 1;
-	motorPhaseConfiguration.forword[2].Bpolarity = 2;
-	motorPhaseConfiguration.forword[2].Cpolarity = 0;
+	motorPhaseConfiguration.forword[2].Upolarity = H;
+	motorPhaseConfiguration.forword[2].Vpolarity = L;
+	motorPhaseConfiguration.forword[2].Wpolarity = D;
 
 
-	motorPhaseConfiguration.forword[3].Apolarity = 2;
-	motorPhaseConfiguration.forword[3].Bpolarity = 1;
-	motorPhaseConfiguration.forword[3].Cpolarity = 0;
+	motorPhaseConfiguration.forword[3].Upolarity = H;
+	motorPhaseConfiguration.forword[3].Vpolarity = D;
+	motorPhaseConfiguration.forword[3].Wpolarity = L;
 
 
-	motorPhaseConfiguration.forword[4].Apolarity = 2;
-	motorPhaseConfiguration.forword[4].Bpolarity = 0;
-	motorPhaseConfiguration.forword[4].Cpolarity = 1;
+	motorPhaseConfiguration.forword[4].Upolarity = L;
+	motorPhaseConfiguration.forword[4].Vpolarity = D;
+	motorPhaseConfiguration.forword[4].Wpolarity = H;
 
 
-	motorPhaseConfiguration.forword[5].Apolarity = 0;
-	motorPhaseConfiguration.forword[5].Bpolarity = 2;
-	motorPhaseConfiguration.forword[5].Cpolarity = 1;
+	motorPhaseConfiguration.forword[5].Upolarity = L;
+	motorPhaseConfiguration.forword[5].Vpolarity = H;
+	motorPhaseConfiguration.forword[5].Wpolarity = D;
 
 
-	motorPhaseConfiguration.forword[6].Apolarity = 1;
-	motorPhaseConfiguration.forword[6].Bpolarity = 0;
-	motorPhaseConfiguration.forword[6].Cpolarity = 2;
+	motorPhaseConfiguration.forword[6].Upolarity = D;
+	motorPhaseConfiguration.forword[6].Vpolarity = L;
+	motorPhaseConfiguration.forword[6].Wpolarity = H;
 
 
-	motorPhaseConfiguration.forword[7].Apolarity = 0;
-	motorPhaseConfiguration.forword[7].Bpolarity = 0;
-	motorPhaseConfiguration.forword[7].Cpolarity = 0;
+	motorPhaseConfiguration.forword[7].Upolarity = NA;
+	motorPhaseConfiguration.forword[7].Vpolarity = NA;
+	motorPhaseConfiguration.forword[7].Wpolarity = NA;
 	// ======================= FORWORD CONFIGURATION - END =============================
 
 
 	// ======================= BACKWORD CONFIGURATION - START =============================
-	motorPhaseConfiguration.backword[0].Apolarity = 0;
-	motorPhaseConfiguration.backword[0].Bpolarity = 0;
-	motorPhaseConfiguration.backword[0].Cpolarity = 0;
+	motorPhaseConfiguration.backword[0].Upolarity = NA;
+	motorPhaseConfiguration.backword[0].Vpolarity = NA;
+	motorPhaseConfiguration.backword[0].Wpolarity = NA;
 
 
-	motorPhaseConfiguration.backword[1].Apolarity = 1;
-	motorPhaseConfiguration.backword[1].Bpolarity = 0;
-	motorPhaseConfiguration.backword[1].Cpolarity = 2;
+	motorPhaseConfiguration.backword[1].Upolarity = L;
+	motorPhaseConfiguration.backword[1].Vpolarity = H;
+	motorPhaseConfiguration.backword[1].Wpolarity = D;
 
 
-	motorPhaseConfiguration.backword[2].Apolarity = 0;
-	motorPhaseConfiguration.backword[2].Bpolarity = 2;
-	motorPhaseConfiguration.backword[2].Cpolarity = 1;
+	motorPhaseConfiguration.backword[2].Upolarity = D;
+	motorPhaseConfiguration.backword[2].Vpolarity = L;
+	motorPhaseConfiguration.backword[2].Wpolarity = H;
 
 
-	motorPhaseConfiguration.backword[3].Apolarity = 2;
-	motorPhaseConfiguration.backword[3].Bpolarity = 0;
-	motorPhaseConfiguration.backword[3].Cpolarity = 1;
+	motorPhaseConfiguration.backword[3].Upolarity = L;
+	motorPhaseConfiguration.backword[3].Vpolarity = D;
+	motorPhaseConfiguration.backword[3].Wpolarity = H;
 
 
-	motorPhaseConfiguration.backword[4].Apolarity = 2;
-	motorPhaseConfiguration.backword[4].Bpolarity = 1;
-	motorPhaseConfiguration.backword[4].Cpolarity = 0;
+	motorPhaseConfiguration.backword[4].Upolarity = H;
+	motorPhaseConfiguration.backword[4].Vpolarity = D;
+	motorPhaseConfiguration.backword[4].Wpolarity = L;
 
 
-	motorPhaseConfiguration.backword[5].Apolarity = 1;
-	motorPhaseConfiguration.backword[5].Bpolarity = 2;
-	motorPhaseConfiguration.backword[5].Cpolarity = 0;
+	motorPhaseConfiguration.backword[5].Upolarity = D;
+	motorPhaseConfiguration.backword[5].Vpolarity = H;
+	motorPhaseConfiguration.backword[5].Wpolarity = L;
 
 
-	motorPhaseConfiguration.backword[6].Apolarity = 0;
-	motorPhaseConfiguration.backword[6].Bpolarity = 1;
-	motorPhaseConfiguration.backword[6].Cpolarity = 2;
+	motorPhaseConfiguration.backword[6].Upolarity = H;
+	motorPhaseConfiguration.backword[6].Vpolarity = L;
+	motorPhaseConfiguration.backword[6].Wpolarity = D;
 
 
-	motorPhaseConfiguration.backword[7].Apolarity = 0;
-	motorPhaseConfiguration.backword[7].Bpolarity = 0;
-	motorPhaseConfiguration.backword[7].Cpolarity = 0;
+	motorPhaseConfiguration.backword[7].Upolarity = NA;
+	motorPhaseConfiguration.backword[7].Vpolarity = NA;
+	motorPhaseConfiguration.backword[7].Wpolarity = NA;
 	// ======================= BACKWORD CONFIGURATION - END =============================
 }
 // ==================================== motor Driver Phase Configuration Initialize - END ===================================
 
 
-void getHallSequence(EMotor motor)
+void getHullSequence(EMotor motor)
 {
 	uint8_t sequence = ((motors[motor].hull.HullU << 2) | (motors[motor].hull.HullV << 1) | (motors[motor].hull.HullW)) & 0x7;
 	motors[motor].hull.currentSequence = sequence-1;

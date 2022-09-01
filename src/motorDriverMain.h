@@ -27,11 +27,18 @@ typedef enum{
   endOfMotors
 }EMotor;
 
+typedef enum{
+  L = 0,
+  H,
+  D,
+  NA = 0
+}EPolarity;
+
 typedef struct
 {
-  uint8_t Apolarity;
-  uint8_t Bpolarity;
-  uint8_t Cpolarity;
+  uint8_t Upolarity;
+  uint8_t Vpolarity;
+  uint8_t Wpolarity;
 }S_motorPhaseConfiguration;
 
 typedef struct
@@ -86,7 +93,7 @@ typedef struct{
 // ================= function prototypes ===========================
 void sendCommandToDriver(EMotor motor);
 void getAllMotorsCommutation(void);
-void getMotorComutation(EMotor motor);
+void getMotorHulls(EMotor motor);
 float PISpeedControl(EMotor motor);
 void GPIO_motorPinPWMoutDisable(sl_pwm_instance_t *motor_ch, EMotor motor);
 void GPIO_motorPinPWMoutHigh(sl_pwm_instance_t *motor_ch, EMotor motor);
@@ -94,7 +101,7 @@ void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_ch, EMotor motor);
 void setMotorDriveState(EMotor motor);
 void setAllMotorsDriveState(void);
 void motorDriverPhaseConfigurationInit(void);
-void getHallSequence(EMotor motor);
+void getHullSequence(EMotor motor);
 void calcSpeedFromHalls(EMotor motor);
 void speedControlHandle(EMotor motor);
 void resetMotorData(EMotor motor);

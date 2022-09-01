@@ -45,6 +45,8 @@
 
 int main(void)
 {
+  motorDriverPhaseConfigurationInit();
+
   // Initialization of the RTCDRV driver.
   RTCDRV_Init();
 
@@ -60,7 +62,7 @@ int main(void)
   // task(s) if the kernel is present.
   app_init();
 
-  motorDriverPhaseConfigurationInit();
+
   // Initialize Timers
 //  setTimedCallBacksDB();
 //  init_callbacks_timed();

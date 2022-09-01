@@ -235,26 +235,25 @@ void callback_pin15(uint8_t intNo) // pin F15
 
 void hullHandle(EMotor motor)
 {
-  int8_t hullAdd;
-  getMotorComutation(motor);
+  getMotorHulls(motor);
   motorPhaseConfigurationHandle(motor);
-  getHallSequence(motor);
-  if(motors[motor].hull.currentSequence > 5 || motors[motor].hull.currentSequence < 0) // not a legal  sequence
+  getHullSequence(motor);
+  if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
   {
       ERROR_BREAK
   }
 
   calcHullAdd(motor);
 
-  if(motors[motor].hull.prevHullAdded != hullAdd)
+  if(motors[motor].hull.prevHullAdded != motors[motor].hull.hullAdd)
   {
-    motors[motor].hull.prevHullAdded = hullAdd;
-    hullAdd = 0;
+    motors[motor].hull.prevHullAdded = motors[motor].hull.hullAdd;
+    motors[motor].hull.hullAdd = 0;
   }
   else
   {
     motors[motor].hull.cnt_last_time_millis = getMillis();
-    motors[motor].hull.cnt += hullAdd;
+    motors[motor].hull.cnt += motors[motor].hull.hullAdd;
   }
   sendCommandToDriver(motor);
 #ifdef DEBUG_HULLS

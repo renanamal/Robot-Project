@@ -7,7 +7,7 @@ void read_hulls(void)
 {
   EMotor motor = left;
   volatile uint8_t hulls[3];
-  getMotorComutation(motor);
+  getMotorHulls(motor);
   hulls[0] = motors[motor].hull.HullU;
   hulls[1] = motors[motor].hull.HullV;
   hulls[2] = motors[motor].hull.HullW;
@@ -18,8 +18,8 @@ void read_hulls(void)
 void test_motors_handle(void)
 {
   volatile EMotor motor = left;
-  getMotorComutation(motor);
-  getHallSequence(motor);
+  getMotorHulls(motor);
+  getHullSequence(motor);
   speedControlHandle(motor);
   setMotorDriveState(motor);
   calcMotorPWMCommand(motor);

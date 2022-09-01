@@ -3,14 +3,17 @@
 extern SMotorsData motors[NUM_OF_MOTORS];
 extern int8_t hallIrqCntAdevanceMatrix[6][6];
 
-uint32_t millis = 100;
+uint32_t millis = 10;
 RTCDRV_TimerID_t id = 1;
 EMotor motor = left;
 
 void runMotorNoHulls(EMotor motor)
 {
   motors[motor].speedControler.refSpeed = 3.0; // 1 [rad/sec]
-  getMotorComutation(motor);
+  getMotorHulls(motor);
+//  motors[motor].hull.HullU = 0;
+//  motors[motor].hull.HullV = 1;
+//  motors[motor].hull.HullW = 0;
   RTCDRV_AllocateTimer( &id );
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, millis, doStep, NULL );
 }
@@ -19,22 +22,22 @@ void doStep(RTCDRV_TimerID_t id, void * user)
 {
   (void) user;
   motorPhaseConfigurationHandle(motor);
-  getHallSequence(motor);
+  getHullSequence(motor);
   motors[motor].hull.hullAdd =  hallIrqCntAdevanceMatrix[motors[motor].hull.prevSequence][motors[motor].hull.currentSequence];
   record_hull(motor);
   motors[motor].hull.prevSequence = motors[motor].hull.currentSequence;
-//  calcSpeedFromHalls(motor);
-//  speedControlHandle(motor);
-//  setMotorDriveState(motor);
-//  calcPWMpercent(motor);
-//  sendCommandToDriver(motor);
+  calcSpeedFromHalls(motor);
+  speedControlHandle(motor);
+  setMotorDriveState(motor);
+  calcPWMpercent(motor);
+  sendCommandToDriver(motor);
   setNextHullSequence(motor);
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, millis, doStep, NULL );
 }
 
 void setNextHullSequence(EMotor motor)
 {
-  // the correct hull sequence Hall State (Hall a, Hall b, Hall c)
+  // the correct hull sequence Hall State (Hall a=U, Hall b=V, Hall c=W)
   //4 (100) 00  10  01      ind 3
   //6 (110) 01  10  00      ind 5
   //2 (010) 01  00  10      ind 1
