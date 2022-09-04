@@ -12,7 +12,10 @@
 #define STARTING_VOLTAGE (0.7)
 // control gains
 // TODO - if needed define KI, KP for each motor
-#define KI (0.1)
-#define KP (1.0)
+#define KI (0.5)
+#define KP (5.0)
+
+
+#define MOTOR_SPEED_CONTROLLER_HZ (100.0) // TODO - change to the correct Hz
 
 #endif /* SRC_MOTORSCHARACTERSDB_H_ */

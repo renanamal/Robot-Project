@@ -13,8 +13,6 @@
 #define IS_ZERO_FLOAT(dataIn) ((dataIn < 0.00001 && dataIn > -0.00001)?true:false)
 #define RadPS_TO_RPM (60.0/(2.0*PI))
 
-#define MOTOR_SPEED_CONTROLLER_HZ (10.0) // TODO - change to the correct Hz
-
 #define NUM_OF_MOTORS (2)
 
 

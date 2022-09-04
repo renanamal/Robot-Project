@@ -5,7 +5,7 @@
 #include "motorDriverMain.h"
 #include "stdint.h"
 
-#define speedControlDbgArraySize 50
+#define speedControlDbgArraySize 70
 
 typedef struct
 {
