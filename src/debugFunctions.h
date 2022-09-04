@@ -5,7 +5,7 @@
 #include "motorDriverMain.h"
 #include "stdint.h"
 
-#define speedControlDbgArraySize 200
+#define speedControlDbgArraySize 50
 
 typedef struct
 {
@@ -14,7 +14,7 @@ typedef struct
   float                         speed_I_correction[speedControlDbgArraySize];
   float                         speedFromHull[speedControlDbgArraySize];
   float                         speedAverage[speedControlDbgArraySize];
-  float                         refMotorSpeedRPM[speedControlDbgArraySize];
+  float                         motorSpeedCommandRPM[speedControlDbgArraySize];
   float                         commandVrms[speedControlDbgArraySize];
   uint8_t                       PWMpercent[speedControlDbgArraySize];
   int                           counter;
@@ -24,13 +24,14 @@ typedef struct
   uint8_t                       gCommotationState[speedControlDbgArraySize];
 }SDBGSpeedControl;
 
-#define hullCounterDbgArraySize 200
+#define hullCounterDbgArraySize 100
 
 typedef struct
 {
   uint8_t   HullU;
   uint8_t   HullV;
   uint8_t   HullW;
+  uint8_t   currentSequence;
 }ShullsOnly;
 
 typedef struct
@@ -53,7 +54,7 @@ void record_hull(EMotor motor);
 void record_SpeedError(EMotor motor, float SpeedError);
 void record_Pcorrection(EMotor motor, float Pcorrection);
 void record_speed_I_correction(EMotor motor, float speed_I_correction);
-void record_refMotorSpeedRPM(EMotor motor, float refMotorSpeedRPM);
+void record_motorSpeedCommandRPM(EMotor motor, float refMotorSpeedRPM);
 void record_commandVrms(EMotor motor, float commandVrms);
 void record_gCommotationState(EMotor motor, uint8_t gCommotationState);
 void getHullsDBG(EMotor motor);

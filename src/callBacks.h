@@ -61,6 +61,7 @@ typedef struct{
 
 // function protos
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user);
+//void callback_motor_handle(void);
 
 void setTimedCallBacksDB(void);
 void init_callbacks_timed(void);

@@ -23,7 +23,7 @@
 // <gpioModeWiredAndAlternatePullUp=> Open-drain output with pull-up (alternate)
 // <gpioModeWiredAndAlternatePullUpFilter=> Open-drain output with pull-up and filter (alternate)
 // <i> Default: gpioModePushPull
-#define SL_EMLIB_GPIO_INIT_PA6_MODE        gpioModeInput
+#define SL_EMLIB_GPIO_INIT_PA6_MODE        gpioModeInputPullFilter
 
 // <o SL_EMLIB_GPIO_INIT_PA6_DOUT> DOUT <0-1>
 // <i> In push-pull mode: The drive direction for the pin
@@ -31,7 +31,7 @@
 // <i> In open-source mode: Set to 0 for the idle state
 // <i> In open-drain mode: Set to 1 for the idle state
 // <i> Default: 0
-#define SL_EMLIB_GPIO_INIT_PA6_DOUT        0
+#define SL_EMLIB_GPIO_INIT_PA6_DOUT        1
 
 // </h> end pin settings
 

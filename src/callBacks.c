@@ -26,6 +26,8 @@ static SIntCallBacks intCallBacksDB[endOfIntCallbacksFuncList];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
+uint32_t pinCounter[16];
+
 void setTimedCallBacksDB(void)
 {
   timedCallBacksDB[0].func = callback_motor_handle;
@@ -101,152 +103,124 @@ void init_callbacks_timed(void)
 
 void init_callbacks_GPIO(void)
 {
-//  uint8_t pinList[4] = {6, 7, 8, 11};
-//  GPIOINT_IrqCallbackPtr_t funcs[4] = {callback_pin6, callback_pin7, callback_pin8, callback_pin11};
-
   // Initialization of the GPIOINT driver.
   GPIOINT_Init();
 
   for(uint8_t ind = 0; ind < endOfIntCallbacksFuncList; ind++)
   {
       GPIOINT_CallbackRegister(intCallBacksDB[ind].pin, intCallBacksDB[ind].func);
-//      GPIO_IntConfig(intCallBacksDB[ind].port, intCallBacksDB[ind].pin, true, true, true);
       GPIO_ExtIntConfig(intCallBacksDB[ind].port, intCallBacksDB[ind].pin, intCallBacksDB[ind].pin, true, true, true);
   }
 }
 
 // definition of the Callback functions
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
+//void callback_motor_handle(void)
 {
-  (void) user; // unused argument in this example
+  (void) user;
+//  static uint32_t prevCallTime = 0;
+//  if(getMillis() - prevCallTime > 1.0/MOTOR_SPEED_CONTROLLER_HZ*1000.0)
+//  {
+//      prevCallTime = getMillis();
+      handleMotors();
+//  }
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[motorHandle].millis, timedCallBacksDB[motorHandle].func, NULL );
-  handleMotors();
 }
 
 
 void callback_pin1(uint8_t intNo) // pin I1
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1EncA].port, intCallBacksDB[motor1EncA].pin))
-  {
-      encoderHandle(left);
-  }
+  pinCounter[1]++;
+  encoderHandle(left);
 }
 
 void callback_pin2(uint8_t intNo) // pin I2
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1EncB].port, intCallBacksDB[motor1EncB].pin))
-  {
-      encoderHandle(left);
-  }
+  pinCounter[2]++;
+  encoderHandle(left);
 }
 
 void callback_pin3(uint8_t intNo) // pin I3
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1EncI].port, intCallBacksDB[motor1EncI].pin))
-  {
-      encoderHandle(left);
-  }
+  pinCounter[3]++;
+  encoderHandle(left);
 }
 
 void callback_pin4(uint8_t intNo) // pin C4
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2EncB].port, intCallBacksDB[motor2EncB].pin))
-  {
-      encoderHandle(right);
-  }
+  pinCounter[4]++;
+  encoderHandle(right);
 }
 
 void callback_pin5(uint8_t intNo) // pin C5
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2EncI].port, intCallBacksDB[motor2EncI].pin))
-  {
-      encoderHandle(right);
-  }
+  pinCounter[5]++;
+  encoderHandle(right);
 }
 
 void callback_pin6(uint8_t intNo) // pin A6
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1V].port, intCallBacksDB[motor1V].pin))
-  {
-      hullHandle(left);
-  }
+  pinCounter[6]++;
+  hullHandle(left);
 }
 
 void callback_pin7(uint8_t intNo) // pin A7
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1W].port, intCallBacksDB[motor1W].pin))
-  {
-    hullHandle(left);
-  }
-
+  pinCounter[7]++;
+  hullHandle(left);
 }
 
 void callback_pin8(uint8_t intNo) // pin D8
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor1U].port, intCallBacksDB[motor1U].pin))
-  {
-      hullHandle(left);
-  }
+  pinCounter[8]++;
+  hullHandle(left);
 }
 
 void callback_pin9(uint8_t intNo) // pin B9
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2EncA].port, intCallBacksDB[motor2EncA].pin))
-  {
-      encoderHandle(right);
-  }
+  pinCounter[9]++;
+  encoderHandle(right);
 }
 
 void callback_pin13(uint8_t intNo) // pin F13
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2U].port, intCallBacksDB[motor2U].pin))
-  {
-      hullHandle(right);
-  }
+  pinCounter[13]++;
+  hullHandle(right);
 }
 
 void callback_pin14(uint8_t intNo) // pin F14
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2W].port, intCallBacksDB[motor2W].pin))
-  {
-      hullHandle(right);
-  }
+  pinCounter[14]++;
+  hullHandle(right);
 }
 
 void callback_pin15(uint8_t intNo) // pin F15
 {
   (void) intNo; // not in use
-  if (GPIO_PinInGet(intCallBacksDB[motor2V].port, intCallBacksDB[motor2V].pin))
-  {
-      hullHandle(right);
-  }
+  pinCounter[15]++;
+  hullHandle(right);
 }
 
 void hullHandle(EMotor motor)
 {
-
-#if !defined(DEBUG_SPEED_CONTROL) || !defined(DEBUG_HULLS)
   getMotorHulls(motor);
-
-
   motorPhaseConfigurationHandle(motor);
   getHullSequence(motor);
   if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
   {
       ERROR_BREAK
   }
-#endif
 
   calcHullAdd(motor);
 
@@ -255,10 +229,11 @@ void hullHandle(EMotor motor)
 //    motors[motor].hull.prevHullAdded = motors[motor].hull.hullAdd;
 //  }
 
-  motors[motor].hull.cnt_last_time_millis = getMillis();
+  motors[motor].hull.cnt_last_time_uSec = getuSec();
   motors[motor].hull.cnt += motors[motor].hull.hullAdd;
   sendCommandToDriver(motor);
 #ifdef DEBUG_HULLS
+//  getHullsDBG(motor);
   record_hull(motor);
 #endif
 }

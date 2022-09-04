@@ -27,6 +27,7 @@ typedef enum{
   endOfMotors
 }EMotor;
 
+
 typedef enum{
   L = 0,
   H,
@@ -43,8 +44,8 @@ typedef struct
 
 typedef struct
 {
-  S_motorPhaseConfiguration forword[MOTOR_PHASE_CONFIG_SIZE];
-  S_motorPhaseConfiguration backword[MOTOR_PHASE_CONFIG_SIZE];
+  S_motorPhaseConfiguration forward[MOTOR_PHASE_CONFIG_SIZE];
+  S_motorPhaseConfiguration backward[MOTOR_PHASE_CONFIG_SIZE];
 }S_fullMotorPhaseConfiguration;
 
 typedef struct
@@ -56,7 +57,7 @@ typedef struct
   uint8_t   HullW;
   int32_t   cnt;
   int8_t    prevHullAdded;
-  uint32_t  cnt_last_time_millis;
+  uint32_t  cnt_last_time_uSec;
   int8_t    hullAdd;
 }SGDComutation;
 
@@ -69,10 +70,10 @@ typedef enum{
 
 typedef struct {
   float               speed_I_correction;
-  float               speedCorrected;
-  float               speedFromHull;
-  float               prevSpeedFromHall;
-  uint64_t            lastCalcTimeMillis;
+  float               correctedSpeed;     // [Rad/sec]
+  float               speedFromHull;      // [Rad/sec]
+  float               prevSpeedFromHall;  // [Rad/sec]
+  uint64_t            lastCalcTimeuSec;
   int64_t             lastHullCnt;
   float               refSpeed;
   SContinuousAverage  speedAverage;
@@ -102,7 +103,7 @@ void setMotorDriveState(EMotor motor);
 void setAllMotorsDriveState(void);
 void motorDriverPhaseConfigurationInit(void);
 void getHullSequence(EMotor motor);
-void calcSpeedFromHalls(EMotor motor);
+void calcSpeedFromHulls(EMotor motor);
 void speedControlHandle(EMotor motor);
 void resetMotorData(EMotor motor);
 void resetAllDriveMotorsData(void);

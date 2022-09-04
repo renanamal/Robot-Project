@@ -1,6 +1,7 @@
 #include "test_no_hulls.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
+extern e_motorControlStates motorControlState[NUM_OF_MOTORS];
 extern int8_t hallIrqCntAdevanceMatrix[6][6];
 
 uint32_t millis = 10;
@@ -9,7 +10,7 @@ EMotor motor = left;
 
 void runMotorNoHulls(EMotor motor)
 {
-  motors[motor].speedControler.refSpeed = 3.0; // 1 [rad/sec]
+  motors[motor].speedControler.refSpeed = 1.0; // 3 [rad/sec]
   getMotorHulls(motor);
 //  motors[motor].hull.HullU = 0;
 //  motors[motor].hull.HullV = 1;
@@ -26,14 +27,25 @@ void doStep(RTCDRV_TimerID_t id, void * user)
   motors[motor].hull.hullAdd =  hallIrqCntAdevanceMatrix[motors[motor].hull.prevSequence][motors[motor].hull.currentSequence];
   record_hull(motor);
   motors[motor].hull.prevSequence = motors[motor].hull.currentSequence;
-  calcSpeedFromHalls(motor);
-  speedControlHandle(motor);
-  setMotorDriveState(motor);
-  calcPWMpercent(motor);
+  calcHullAdd(motor);
+  motors[motor].hull.cnt_last_time_uSec = getuSec();
+  motors[motor].hull.cnt += motors[motor].hull.hullAdd;
   sendCommandToDriver(motor);
+//  getHullsDBG(motor);
+//  calcMotorSpeedDBG(motor);
   setNextHullSequence(motor);
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, millis, doStep, NULL );
 }
+
+//void calcMotorSpeedDBG(EMotor motor)
+//{
+//  motorControlState[motor] = MCS_START_RUNING;
+//  calcSpeedFromHulls(motor);
+//  continuousAverage(&motors[motor].speedControler.speedAverage);
+//  setMotorDriveState(motor);
+//  motorControlSatetExct(motor);
+//  calcPWMpercent(motor);
+//}
 
 void setNextHullSequence(EMotor motor)
 {

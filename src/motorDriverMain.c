@@ -44,7 +44,7 @@ void sendCommandToDriver(EMotor motor){
 
 void getAllMotorsCommutation(void)
 {
-  for(EMotor motor = left; motor < endOfMotors; motor++)
+  for(EMotor motor = right; motor < endOfMotors; motor++)
   {
       getMotorHulls(motor);
   }
@@ -83,11 +83,11 @@ void motorPhaseConfigurationHandle(EMotor motor)
 
   if ((motors[motor].motorDriveState == DS_CW) || (motors[motor].motorDriveState == DS_STOP))
   {
-    motors[motor].commutation = motorPhaseConfiguration.forword[gCommotationState[motor]];
+    motors[motor].commutation = motorPhaseConfiguration.forward[gCommotationState[motor]];
   }
   else if (motors[motor].motorDriveState == DS_CCW)
   {
-    motors[motor].commutation = motorPhaseConfiguration.backword[gCommotationState[motor]];
+    motors[motor].commutation = motorPhaseConfiguration.backward[gCommotationState[motor]];
   }
   return;
 }
@@ -169,18 +169,27 @@ void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 // ==================================== set Motor Drive State - START ===================================
 void setMotorDriveState(EMotor motor)
 {
-	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
+	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull) && motors[motor].motorDriveState != DS_STOP)
 	{
 		motors[motor].motorDriveState = DS_STOP;
+    motors[motor].speedControler.speedFromHull = 0.0;
+    motors[motor].speedControler.speedAverage.reset = true;
+    continuousAverage(&motors[motor].speedControler.speedAverage);
 	}
-	else if (motors[motor].speedControler.speedFromHull > 0)
+//	else if (motors[motor].speedControler.speedFromHull > 0)
+  else if (motors[motor].speedControler.refSpeed < 0)
+	{
+		motors[motor].motorDriveState = DS_CCW;
+	}
+//	else if (motors[motor].speedControler.speedFromHull < 0)
+  else if (motors[motor].speedControler.refSpeed > 0)
 	{
 		motors[motor].motorDriveState = DS_CW;
 	}
 	else
-	{
-		motors[motor].motorDriveState = DS_CCW;
-	}
+  {
+    //do nothing
+  }
 }
 // ==================================== set Motor Drive State - END ===================================
 
@@ -188,7 +197,7 @@ void setMotorDriveState(EMotor motor)
 // ==================================== set All Motors Drive State - START ===================================
 void setAllMotorsDriveState(void)
 {
-  for(EMotor motor = left; motor < endOfMotors; motor++)
+  for(EMotor motor = right; motor < endOfMotors; motor++)
   {
       setMotorDriveState(motor);
   }
@@ -203,88 +212,88 @@ void motorDriverPhaseConfigurationInit(void){
 	// Xpolarity = 1 - HIGH
 	// Xpolarity = 2 - 50% duty cycle
 
-	// ======================= FORWORD CONFIGURATION - START =============================
-	motorPhaseConfiguration.forword[0].Upolarity = NA;
-	motorPhaseConfiguration.forword[0].Vpolarity = NA;
-	motorPhaseConfiguration.forword[0].Wpolarity = NA;
+	// ======================= BACKWARD CONFIGURATION - START =============================
+	motorPhaseConfiguration.backward[0].Upolarity = NA;
+	motorPhaseConfiguration.backward[0].Vpolarity = NA;
+	motorPhaseConfiguration.backward[0].Wpolarity = NA;
 
 
-	motorPhaseConfiguration.forword[1].Upolarity = D;
-	motorPhaseConfiguration.forword[1].Vpolarity = H;
-	motorPhaseConfiguration.forword[1].Wpolarity = L;
+	motorPhaseConfiguration.backward[1].Upolarity = D;
+	motorPhaseConfiguration.backward[1].Vpolarity = H;
+	motorPhaseConfiguration.backward[1].Wpolarity = L;
 
 
-	motorPhaseConfiguration.forword[2].Upolarity = H;
-	motorPhaseConfiguration.forword[2].Vpolarity = L;
-	motorPhaseConfiguration.forword[2].Wpolarity = D;
+	motorPhaseConfiguration.backward[2].Upolarity = H;
+	motorPhaseConfiguration.backward[2].Vpolarity = L;
+	motorPhaseConfiguration.backward[2].Wpolarity = D;
 
 
-	motorPhaseConfiguration.forword[3].Upolarity = H;
-	motorPhaseConfiguration.forword[3].Vpolarity = D;
-	motorPhaseConfiguration.forword[3].Wpolarity = L;
+	motorPhaseConfiguration.backward[3].Upolarity = H;
+	motorPhaseConfiguration.backward[3].Vpolarity = D;
+	motorPhaseConfiguration.backward[3].Wpolarity = L;
 
 
-	motorPhaseConfiguration.forword[4].Upolarity = L;
-	motorPhaseConfiguration.forword[4].Vpolarity = D;
-	motorPhaseConfiguration.forword[4].Wpolarity = H;
+	motorPhaseConfiguration.backward[4].Upolarity = L;
+	motorPhaseConfiguration.backward[4].Vpolarity = D;
+	motorPhaseConfiguration.backward[4].Wpolarity = H;
 
 
-	motorPhaseConfiguration.forword[5].Upolarity = L;
-	motorPhaseConfiguration.forword[5].Vpolarity = H;
-	motorPhaseConfiguration.forword[5].Wpolarity = D;
+	motorPhaseConfiguration.backward[5].Upolarity = L;
+	motorPhaseConfiguration.backward[5].Vpolarity = H;
+	motorPhaseConfiguration.backward[5].Wpolarity = D;
 
 
-	motorPhaseConfiguration.forword[6].Upolarity = D;
-	motorPhaseConfiguration.forword[6].Vpolarity = L;
-	motorPhaseConfiguration.forword[6].Wpolarity = H;
+	motorPhaseConfiguration.backward[6].Upolarity = D;
+	motorPhaseConfiguration.backward[6].Vpolarity = L;
+	motorPhaseConfiguration.backward[6].Wpolarity = H;
 
 
-	motorPhaseConfiguration.forword[7].Upolarity = NA;
-	motorPhaseConfiguration.forword[7].Vpolarity = NA;
-	motorPhaseConfiguration.forword[7].Wpolarity = NA;
-	// ======================= FORWORD CONFIGURATION - END =============================
+	motorPhaseConfiguration.backward[7].Upolarity = NA;
+	motorPhaseConfiguration.backward[7].Vpolarity = NA;
+	motorPhaseConfiguration.backward[7].Wpolarity = NA;
+	// ======================= BACKWARD CONFIGURATION - END =============================
 
 
-	// ======================= BACKWORD CONFIGURATION - START =============================
-	motorPhaseConfiguration.backword[0].Upolarity = NA;
-	motorPhaseConfiguration.backword[0].Vpolarity = NA;
-	motorPhaseConfiguration.backword[0].Wpolarity = NA;
+	// ======================= FORWARD CONFIGURATION - START =============================
+	motorPhaseConfiguration.forward[0].Upolarity = NA;
+	motorPhaseConfiguration.forward[0].Vpolarity = NA;
+	motorPhaseConfiguration.forward[0].Wpolarity = NA;
 
 
-	motorPhaseConfiguration.backword[1].Upolarity = L;
-	motorPhaseConfiguration.backword[1].Vpolarity = H;
-	motorPhaseConfiguration.backword[1].Wpolarity = D;
+	motorPhaseConfiguration.forward[1].Upolarity = D;
+	motorPhaseConfiguration.forward[1].Vpolarity = L;
+	motorPhaseConfiguration.forward[1].Wpolarity = H;
 
 
-	motorPhaseConfiguration.backword[2].Upolarity = D;
-	motorPhaseConfiguration.backword[2].Vpolarity = L;
-	motorPhaseConfiguration.backword[2].Wpolarity = H;
+	motorPhaseConfiguration.forward[2].Upolarity = L;
+	motorPhaseConfiguration.forward[2].Vpolarity = H;
+	motorPhaseConfiguration.forward[2].Wpolarity = D;
 
 
-	motorPhaseConfiguration.backword[3].Upolarity = L;
-	motorPhaseConfiguration.backword[3].Vpolarity = D;
-	motorPhaseConfiguration.backword[3].Wpolarity = H;
+	motorPhaseConfiguration.forward[3].Upolarity = L;
+	motorPhaseConfiguration.forward[3].Vpolarity = D;
+	motorPhaseConfiguration.forward[3].Wpolarity = H;
 
 
-	motorPhaseConfiguration.backword[4].Upolarity = H;
-	motorPhaseConfiguration.backword[4].Vpolarity = D;
-	motorPhaseConfiguration.backword[4].Wpolarity = L;
+	motorPhaseConfiguration.forward[4].Upolarity = H;
+	motorPhaseConfiguration.forward[4].Vpolarity = D;
+	motorPhaseConfiguration.forward[4].Wpolarity = L;
 
 
-	motorPhaseConfiguration.backword[5].Upolarity = D;
-	motorPhaseConfiguration.backword[5].Vpolarity = H;
-	motorPhaseConfiguration.backword[5].Wpolarity = L;
+	motorPhaseConfiguration.forward[5].Upolarity = H;
+	motorPhaseConfiguration.forward[5].Vpolarity = L;
+	motorPhaseConfiguration.forward[5].Wpolarity = D;
 
 
-	motorPhaseConfiguration.backword[6].Upolarity = H;
-	motorPhaseConfiguration.backword[6].Vpolarity = L;
-	motorPhaseConfiguration.backword[6].Wpolarity = D;
+	motorPhaseConfiguration.forward[6].Upolarity = D;
+	motorPhaseConfiguration.forward[6].Vpolarity = H;
+	motorPhaseConfiguration.forward[6].Wpolarity = L;
 
 
-	motorPhaseConfiguration.backword[7].Upolarity = NA;
-	motorPhaseConfiguration.backword[7].Vpolarity = NA;
-	motorPhaseConfiguration.backword[7].Wpolarity = NA;
-	// ======================= BACKWORD CONFIGURATION - END =============================
+	motorPhaseConfiguration.forward[7].Upolarity = NA;
+	motorPhaseConfiguration.forward[7].Vpolarity = NA;
+	motorPhaseConfiguration.forward[7].Wpolarity = NA;
+	// ======================= FORWARD CONFIGURATION - END =============================
 }
 // ==================================== motor Driver Phase Configuration Initialize - END ===================================
 
@@ -302,34 +311,27 @@ void calcHullAdd(EMotor motor)
   motors[motor].hull.prevSequence = motors[motor].hull.currentSequence;
 }
 
-void calcSpeedFromHalls(EMotor motor)
+void calcSpeedFromHulls(EMotor motor)
 {
   // to prevent changes in current time and hall counts during calculation we copy them to local variables
-  uint32_t curentTimeMillis = motors[motor].hull.cnt_last_time_millis;
+  uint32_t curentTimeuSec = motors[motor].hull.cnt_last_time_uSec;
   uint32_t currentHallCnt = motors[motor].hull.cnt;
 
-	if (motors[motor].motorDriveState == DS_STOP)
-  {
-	    motors[motor].speedControler.speedFromHull = 0.0;
-	    motors[motor].speedControler.speedAverage.reset = true;
-	    continuousAverage(&motors[motor].speedControler.speedAverage);
-  }
-
 	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastHullCnt;
-	uint32_t currentDt = curentTimeMillis - motors[motor].speedControler.lastCalcTimeMillis;
+	uint32_t currentDt = curentTimeuSec - motors[motor].speedControler.lastCalcTimeuSec;
 
-	if (currentDt == 0 || currentDeltaCount == 0)
+	if (currentDt == 0)
 	{
-		//do nothing and take the last calculated "speedOut"
+	  motors[motor].speedControler.speedFromHull = 0;
 	  return;
 	}
 
   float motorAngleRotated = currentDeltaCount * RAD_PER_INTERAPT;
-  float dtSec = currentDt/1000.0;
+  float dtSec = currentDt/1000000.0;
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
   motors[motor].speedControler.speedFromHull = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
-	motors[motor].speedControler.lastCalcTimeMillis = curentTimeMillis;
+	motors[motor].speedControler.lastCalcTimeuSec = curentTimeuSec;
 	motors[motor].speedControler.lastHullCnt = currentHallCnt;
 
 	motors[motor].speedControler.speedAverage.courentData = motors[motor].speedControler.speedFromHull;
@@ -341,21 +343,21 @@ void calcSpeedFromHalls(EMotor motor)
 void speedControlHandle(EMotor motor)
 {
   float speedCorrection = PISpeedControl(motor);
-  motors[motor].speedControler.speedCorrected = motors[motor].speedControler.refSpeed + speedCorrection;
-#ifdef DEBUG_SPEED_CONTROL
-  record_motor_data(motor);
-#endif
+  motors[motor].speedControler.correctedSpeed = motors[motor].speedControler.refSpeed + speedCorrection;
+//#ifdef DEBUG_SPEED_CONTROL
+//  record_motor_data(motor);
+//#endif
 }
 
 
 void resetMotorData(EMotor motor)
 {
 	motors[motor].speedControler.speed_I_correction = 0;
-	motors[motor].speedControler.speedCorrected = 0;
+	motors[motor].speedControler.correctedSpeed = 0;
 	motors[motor].speedControler.speedFromHull = 0;
 	motors[motor].speedControler.prevSpeedFromHall = 0;
 	motors[motor].speedControler.refSpeed = 0;
-	motors[motor].speedControler.speedCorrected = 0;
+	motors[motor].speedControler.correctedSpeed = 0;
 	motors[motor].speedControler.speedAverage.reset = true;
 	setMotorDriveState(motor);
 }
@@ -363,7 +365,7 @@ void resetMotorData(EMotor motor)
 
 void resetAllDriveMotorsData(void)
 {
-  for(EMotor motor = left; motor < endOfMotors; motor++)
+  for(EMotor motor = right; motor < endOfMotors; motor++)
   {
     resetMotorData(motor);
   }
@@ -374,12 +376,12 @@ void resetAllDriveMotorsData(void)
 void calcPWMpercent(EMotor motor)
 {
   // calculate the motor needed voltage after PI controller
-  float refMotorSpeedRPM = fabs(motors[motor].speedControler.speedCorrected) * GEAR_RATIO * RPS_TO_RPM;
-  float commandVrms = (refMotorSpeedRPM / MOTOR_SPEED_CONSTANT) / MOTOR_EFFICIENCY;
+  float motorSpeedCommandRPM = fabs(motors[motor].speedControler.correctedSpeed) * GEAR_RATIO * RadPS_TO_RPM;
+  float commandVrms = (motorSpeedCommandRPM / MOTOR_SPEED_CONSTANT) / MOTOR_EFFICIENCY + STARTING_VOLTAGE;
   motors[motor].PWMCommand = (commandVrms/POWER_SUPPLY_VOLTAGE)*100.0;
 
 #ifdef DEBUG_SPEED_CONTROL
-  record_refMotorSpeedRPM(motor, refMotorSpeedRPM);
+  record_motorSpeedCommandRPM(motor, motorSpeedCommandRPM);
   record_commandVrms(motor, commandVrms);
 #endif
   return;
@@ -389,7 +391,7 @@ void calcPWMpercent(EMotor motor)
 
 void sendPWMCommadToAllMotors(void)
 {
-  for(EMotor motor = left; motor < endOfMotors; motor++)
+  for(EMotor motor = right; motor < endOfMotors; motor++)
   {
       sendCommandToDriver(motor);
   }

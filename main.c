@@ -35,6 +35,7 @@
 #include "generalPurposeFunctions.h"
 #include "motorControlStateMachine.h"
 #include "callBacks.h"
+#include "motorDriverMain.h"
 
 
 #include "tests/test_pwm.h"
@@ -42,6 +43,7 @@
 #include "tests/read_hulls.h"
 #include "tests/test_no_hulls.h"
 
+extern SMotorsData motors[NUM_OF_MOTORS];
 
 int main(void)
 {
@@ -51,7 +53,7 @@ int main(void)
   RTCDRV_Init();
 
   // Initialization of the USTIMER driver.
-  USTIMER_Init();
+//  USTIMER_Init();
 
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by
@@ -60,29 +62,31 @@ int main(void)
 
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
-  app_init();
+//  app_init();
 
 
   // Initialize Timers
-//  setTimedCallBacksDB();
-//  init_callbacks_timed();
+  setTimedCallBacksDB();
+  init_callbacks_timed();
 
   setIntCallBacksDB();
   init_callbacks_GPIO();
-//  test_gpio_init();
 
+  motors[left].speedControler.refSpeed = 20.0; // [Rad/sec]
 
 // Test functions for Debug
+//  test_gpio_init();
 //  test_pwm();
 //  read_hulls();
 //  test_motors_handle();
-  runMotorNoHulls(left);
+//  runMotorNoHulls(left);
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
+//      callback_motor_handle();
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.
 //    sl_system_process_action();

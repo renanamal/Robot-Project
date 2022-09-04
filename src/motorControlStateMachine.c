@@ -1,26 +1,24 @@
 #include "motorControlStateMachine.h"
 
-static e_motorControlStates motorControlState[NUM_OF_MOTORS];
+e_motorControlStates motorControlState[NUM_OF_MOTORS];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
-
 void handleMotors(void)
 {
-	for(EMotor motor = left; motor < endOfMotors; motor++)
+	for(EMotor motor = right; motor < endOfMotors; motor++)
 	{
-    calcSpeedFromHalls(motor);
+    calcSpeedFromHulls(motor);
     continuousAverage(&motors[motor].speedControler.speedAverage);
     setMotorDriveState(motor);
-    setMotorControlState(motor);
-    motors[motor].isRunning |= motorControlSatetExct(motor);
-
-    if(motors[motor].isRunning)
-    {
-      setMotorDriveState(motor);
-//      calcMotorPWMCommand(motor);
-      calcPWMpercent(motor);
-    }
+//    if(!motors[motor].isRunning)
+//    {
+      setMotorControlState(motor);
+      motors[motor].isRunning |= motorControlSatetExct(motor);
+//    }
+#ifdef DEBUG_SPEED_CONTROL
+	    record_motor_data(motor);
+#endif
 	}
 	return;
 }
@@ -32,7 +30,7 @@ void setMotorControlState(EMotor motor)
 
 
 	//==================================================== check if robot and at stop - START ==========================================================
-	if (motors[motor].motorDriveState == DS_STOP)
+	if (IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
 	{
 		motorControlState[motor] = MCS_HALT;
 	}
@@ -43,7 +41,7 @@ void setMotorControlState(EMotor motor)
 	switch (motorControlState[motor])
 	{
 	case MCS_HALT:
-		if (motors[motor].motorDriveState != DS_STOP)
+		if (!IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
     {
 			startRuningHallCnt[motor] = motors[motor].hull.cnt;
 			motorControlState[motor] = MCS_START_RUNING;
@@ -85,7 +83,6 @@ bool motorControlSatetExct(EMotor motor)
 	case MCS_HALT  :
 		resetMotorData(motor);
 		speedControlHandle(motor);
-//		calcMotorPWMCommand(motor);
 		calcPWMpercent(motor);
 		sendCommandToDriver(motor);
 		break;
@@ -96,7 +93,6 @@ bool motorControlSatetExct(EMotor motor)
 		getHullSequence(motor);
 		speedControlHandle(motor);
 		setMotorDriveState(motor);
-//		calcMotorPWMCommand(motor);
 		calcPWMpercent(motor);
 		sendCommandToDriver(motor);
 		motorRunning = true;
@@ -105,6 +101,8 @@ bool motorControlSatetExct(EMotor motor)
 	case MCS_RUNING :
 		motorRunning = true;
 		speedControlHandle(motor);
+    calcPWMpercent(motor);
+    sendCommandToDriver(motor);
 		break;
 
 

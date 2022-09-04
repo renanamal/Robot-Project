@@ -1,7 +1,5 @@
 #include "generalPurposeFunctions.h"
-#include "rtcdriver.h"
-#include <stddef.h>
-#include "rail.h"
+
 
 void delay_ms(uint32_t mDelay)
 {
@@ -13,14 +11,6 @@ void delay_us(uint32_t uDelay)
   USTIMER_Delay(uDelay);
 }
 
-/* The Cortex-M33 has a faster execution of the hw loop
- * with the same arm instructions. */
-#if defined(__CORTEX_M) && (__CORTEX_M == 33U)
-  #define HW_LOOP_CYCLE  3
-#else
-  #define HW_LOOP_CYCLE  4
-#endif
-
 RAIL_Time_t getuSec(void)
 {
   return RAIL_GetTime();
@@ -28,13 +18,15 @@ RAIL_Time_t getuSec(void)
 
 uint32_t getMillis(void)
 {
-  return RTCDRV_TicksToMsec(RTCDRV_GetWallClockTicks32());
+  return getuSec()/1000.0;
+//  return RTCDRV_TicksToMsec(RTCDRV_GetWallClockTicks32());
 }
 
 
 uint32_t getSec(void)
 {
-  return RTCDRV_TicksToSec(RTCDRV_GetWallClockTicks32());
+  return getuSec()/1000000.0;
+//  return RTCDRV_TicksToSec(RTCDRV_GetWallClockTicks32());
 }
 
 void continuousAverage(SContinuousAverage * dataIn)

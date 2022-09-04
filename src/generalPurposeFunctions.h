@@ -3,6 +3,9 @@
 
 #include "ustimer.h"
 #include "stdbool.h"
+#include "rtcdriver.h"
+#include <stddef.h>
+#include "rail.h"
 
 typedef struct SContinuousAverage
 {
@@ -18,5 +21,6 @@ void delay_us(uint32_t uDelay);
 void continuousAverage(SContinuousAverage * dataIn);
 uint32_t getMillis(void);
 uint32_t getSec(void);
+RAIL_Time_t getuSec(void);
 
 #endif /* INC_GENERALPURPOSEFUNCTIONS_H_ */

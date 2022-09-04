@@ -2,6 +2,7 @@
 #include "motorDriverMain.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
+extern uint32_t pinCounter[16];
 
 SDBGMainDBG mainDBG;
 
@@ -11,13 +12,12 @@ void record_motor_data(EMotor motor)
   // ========================================================== DEBUG - START ========================================================================
   mainDBG.speedControl[motor].counter++;
   uint32_t ind = mainDBG.speedControl[motor].counter;
-  getHullsDBG(motor);
   mainDBG.speedControl[motor].commutation[ind] = motors[motor].commutation;
   mainDBG.speedControl[motor].PI_correction[ind] = motors[motor].speedControler.speed_I_correction;
   mainDBG.speedControl[motor].PWMpercent[ind] =  motors[motor].PWMCommand;
   mainDBG.speedControl[motor].speedFromHull[ind] = motors[motor].speedControler.speedFromHull;
   mainDBG.speedControl[motor].speedAverage[ind] = motors[motor].speedControler.speedAverage.AverageData;
-  mainDBG.speedControl[motor].correcteddSpeed[ind] = motors[motor].speedControler.speedCorrected;
+  mainDBG.speedControl[motor].correcteddSpeed[ind] = motors[motor].speedControler.correctedSpeed;
   if (mainDBG.speedControl[motor].counter > (speedControlDbgArraySize - 1))
   {
     DEBUG_BREAK;
@@ -46,9 +46,9 @@ void record_speed_I_correction(EMotor motor, float speed_I_correction)
   mainDBG.speedControl[motor].speed_I_correction[mainDBG.speedControl[motor].counter] = speed_I_correction;
 }
 
-void record_refMotorSpeedRPM(EMotor motor, float refMotorSpeedRPM)
+void record_motorSpeedCommandRPM(EMotor motor, float refMotorSpeedRPM)
 {
-  mainDBG.speedControl[motor].refMotorSpeedRPM[mainDBG.speedControl[motor].counter] = refMotorSpeedRPM;
+  mainDBG.speedControl[motor].motorSpeedCommandRPM[mainDBG.speedControl[motor].counter] = refMotorSpeedRPM;
 }
 
 void record_commandVrms(EMotor motor, float commandVrms)
@@ -59,8 +59,7 @@ void record_commandVrms(EMotor motor, float commandVrms)
 
 void record_hull(EMotor motor)
 {
-  uint8_t ind = mainDBG.hullCounter[motor].counter;
-  mainDBG.hullCounter[motor].hull[ind] = motors[motor].hull;
+  mainDBG.hullCounter[motor].hull[mainDBG.hullCounter[motor].counter] = motors[motor].hull;
   mainDBG.hullCounter[motor].counter++;
   if (mainDBG.hullCounter[motor].counter > (hullCounterDbgArraySize - 1))
   {
@@ -88,6 +87,14 @@ void getHullsDBG(EMotor motor)
 
     default:
       ERROR_BREAK
+  }
+  mainDBG.hullCounter[motor].motorsRealHulls[ind].currentSequence = ((mainDBG.hullCounter[motor].motorsRealHulls[ind].HullU << 2) | (mainDBG.hullCounter[motor].motorsRealHulls[ind].HullV << 1) | (mainDBG.hullCounter[motor].motorsRealHulls[ind].HullW)) & 0x7;
+  mainDBG.hullCounter[motor].motorsRealHulls[ind].currentSequence -= 1;
+  mainDBG.hullCounter[motor].counter++;
+  if (mainDBG.hullCounter[motor].counter > (hullCounterDbgArraySize - 1))
+  {
+    DEBUG_BREAK;
+    while (1);
   }
   return;
 }
