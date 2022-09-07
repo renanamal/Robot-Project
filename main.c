@@ -72,7 +72,7 @@ int main(void)
   setIntCallBacksDB();
   init_callbacks_GPIO();
 
-  motors[left].speedControler.refSpeed = 20.0; // [Rad/sec]
+  motors[left].speedControler.refSpeed = 60.0; // [Rad/sec]
 
 // Test functions for Debug
 //  test_gpio_init();

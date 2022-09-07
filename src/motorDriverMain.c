@@ -169,20 +169,31 @@ void GPIO_motorPinPWMoutLow(sl_pwm_instance_t *motor_pwm_ch, EMotor motor){
 // ==================================== set Motor Drive State - START ===================================
 void setMotorDriveState(EMotor motor)
 {
-	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull) && motors[motor].motorDriveState != DS_STOP)
-	{
-		motors[motor].motorDriveState = DS_STOP;
-    motors[motor].speedControler.speedFromHull = 0.0;
-    motors[motor].speedControler.speedAverage.reset = true;
-    continuousAverage(&motors[motor].speedControler.speedAverage);
-	}
-//	else if (motors[motor].speedControler.speedFromHull > 0)
-  else if (motors[motor].speedControler.refSpeed < 0)
+//	if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull) && motors[motor].motorDriveState != DS_STOP)
+//	{
+//		motors[motor].motorDriveState = DS_STOP;
+//    motors[motor].speedControler.speedFromHull = 0.0;
+//    motors[motor].speedControler.speedAverage.reset = true;
+//    continuousAverage(&motors[motor].speedControler.speedAverage);
+//	}
+	if(motors[motor].motorDriveState == DS_STOP && !IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
+  {
+    if (motors[motor].speedControler.refSpeed < 0)
+    {
+      motors[motor].motorDriveState = DS_CCW;
+    }
+    else if (motors[motor].speedControler.refSpeed > 0)
+    {
+      motors[motor].motorDriveState = DS_CW;
+    }
+  }
+	else if (motors[motor].speedControler.correctedSpeed < 0)
+//  else if (motors[motor].speedControler.refSpeed < 0)
 	{
 		motors[motor].motorDriveState = DS_CCW;
 	}
-//	else if (motors[motor].speedControler.speedFromHull < 0)
-  else if (motors[motor].speedControler.refSpeed > 0)
+	else if (motors[motor].speedControler.correctedSpeed >= 0)
+//  else if (motors[motor].speedControler.refSpeed > 0)
 	{
 		motors[motor].motorDriveState = DS_CW;
 	}
