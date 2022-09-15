@@ -113,7 +113,7 @@ float PISpeedControl(EMotor motor)
 	float SpeedError = motors[motor].speedControler.refSpeed - motors[motor].speedControler.speedAverage.AverageData; // TODO - speedAverage or speedFromHall
 
 	float Pcorrection = KP * SpeedError;
-	float speed_I_correction = KI * SpeedError + motors[motor].speedControler.speed_I_correction;
+	float speed_I_correction = KI * SpeedError + motors[motor].speedControler.speed_I_correction; // TODO need to add dt to the integration
 
 
 	if (speed_I_correction > PI_ANTIWINDUP) // unti-windup

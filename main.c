@@ -38,10 +38,10 @@
 #include "motorDriverMain.h"
 
 
-#include "tests/test_pwm.h"
-#include "tests/test_gpio_int.h"
-#include "tests/read_hulls.h"
-#include "tests/test_no_hulls.h"
+//#include "tests/test_pwm.h"
+//#include "tests/test_gpio_int.h"
+//#include "tests/read_hulls.h"
+//#include "tests/test_no_hulls.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 

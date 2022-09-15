@@ -32,6 +32,7 @@ typedef struct{
 
 typedef enum{
   motorHandle = 0,
+  changeDir,
   endOfTimedCallbacksFuncList,
 }ETimedCallBacksdFunctions;
 
@@ -71,6 +72,8 @@ void init_callbacks_GPIO(void);
 
 void encoderHandle(EMotor motor);
 void hullHandle(EMotor motor);
+
+void callback_change_dir(RTCDRV_TimerID_t id, void * user);
 
 void callback_pin1(uint8_t intNo);
 void callback_pin2(uint8_t intNo);

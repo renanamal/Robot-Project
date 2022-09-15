@@ -26,13 +26,18 @@ static SIntCallBacks intCallBacksDB[endOfIntCallbacksFuncList];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
-uint32_t pinCounter[16];
+//uint32_t pinCounter[16];
 
 void setTimedCallBacksDB(void)
 {
   timedCallBacksDB[0].func = callback_motor_handle;
   timedCallBacksDB[0].millis = 1.0/MOTOR_SPEED_CONTROLLER_HZ*1000.0;
   timedCallBacksDB[0].id = motorHandle;
+
+//  timedCallBacksDB[1].func = callback_change_dir;
+//  timedCallBacksDB[1].millis = 1.0/CHANGE_DIR_HZ*1000.0;
+//  timedCallBacksDB[1].id = changeDir;
+
 }
 
 void setIntCallBacksDB(void)
@@ -131,84 +136,78 @@ void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
 void callback_pin1(uint8_t intNo) // pin I1
 {
   (void) intNo; // not in use
-  pinCounter[1]++;
-  encoderHandle(left);
+//  pinCounter[1]++;
 }
 
 void callback_pin2(uint8_t intNo) // pin I2
 {
   (void) intNo; // not in use
-  pinCounter[2]++;
-  encoderHandle(left);
+//  pinCounter[2]++;
 }
 
 void callback_pin3(uint8_t intNo) // pin I3
 {
   (void) intNo; // not in use
-  pinCounter[3]++;
-  encoderHandle(left);
+//  pinCounter[3]++;
 }
 
 void callback_pin4(uint8_t intNo) // pin C4
 {
   (void) intNo; // not in use
-  pinCounter[4]++;
-  encoderHandle(right);
+//  pinCounter[4]++;
 }
 
 void callback_pin5(uint8_t intNo) // pin C5
 {
   (void) intNo; // not in use
-  pinCounter[5]++;
-  encoderHandle(right);
+//  pinCounter[5]++;
 }
 
 void callback_pin6(uint8_t intNo) // pin A6
 {
   (void) intNo; // not in use
-  pinCounter[6]++;
+//  pinCounter[6]++;
   hullHandle(left);
 }
 
 void callback_pin7(uint8_t intNo) // pin A7
 {
   (void) intNo; // not in use
-  pinCounter[7]++;
+//  pinCounter[7]++;
   hullHandle(left);
 }
 
 void callback_pin8(uint8_t intNo) // pin D8
 {
   (void) intNo; // not in use
-  pinCounter[8]++;
+//  pinCounter[8]++;
   hullHandle(left);
 }
 
 void callback_pin9(uint8_t intNo) // pin B9
 {
   (void) intNo; // not in use
-  pinCounter[9]++;
-  encoderHandle(right);
+//  pinCounter[9]++;
 }
 
 void callback_pin13(uint8_t intNo) // pin F13
 {
   (void) intNo; // not in use
-  pinCounter[13]++;
+//  pinCounter[13]++;
   hullHandle(right);
 }
 
 void callback_pin14(uint8_t intNo) // pin F14
 {
   (void) intNo; // not in use
-  pinCounter[14]++;
+//  pinCounter[14]++;
   hullHandle(right);
 }
 
 void callback_pin15(uint8_t intNo) // pin F15
 {
   (void) intNo; // not in use
-  pinCounter[15]++;
+//  pinCounter[15]++;
   hullHandle(right);
 }
 
@@ -238,8 +237,9 @@ void hullHandle(EMotor motor)
 #endif
 }
 
-void encoderHandle(EMotor motor)
+void callback_change_dir(RTCDRV_TimerID_t id, void * user)
 {
-  (void) motor;
-  return;
+// (void) user;
+//  motors[left].speedControler.refSpeed *= -1;
+//  RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[changeDir].millis, timedCallBacksDB[changeDir].func, NULL );
 }
