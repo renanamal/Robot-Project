@@ -120,10 +120,25 @@ void init_callbacks_GPIO(void)
   }
 }
 
+
+//int times[700];
+//int delta_times[700];
+//int times_count = 0;
 // definition of the Callback functions
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
 {
   (void) user;
+//  times[times_count] = getuSec();
+//  times_count+=1;
+//  if(times_count >= 700)
+//  {
+//    for(int i=1; i<700;i++)
+//    {
+//        delta_times[i] = times[i] - times[i-1];
+//    }
+//    DEBUG_BREAK;
+//    while(1){}
+//  }
   handleMotors();
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[motorHandle].millis, timedCallBacksDB[motorHandle].func, NULL );
 }
@@ -163,6 +178,7 @@ void callback_pin6(uint8_t intNo) // pin A6
 {
   (void) intNo; // not in use
 //  pinCounter[6]++;
+  motors[left].hull.HullV^=1;
   hullHandle(left);
 }
 
@@ -170,6 +186,7 @@ void callback_pin7(uint8_t intNo) // pin A7
 {
   (void) intNo; // not in use
 //  pinCounter[7]++;
+  motors[left].hull.HullW^=1;
   hullHandle(left);
 }
 
@@ -177,6 +194,7 @@ void callback_pin8(uint8_t intNo) // pin D8
 {
   (void) intNo; // not in use
 //  pinCounter[8]++;
+  motors[left].hull.HullU^=1;
   hullHandle(left);
 }
 
@@ -209,21 +227,10 @@ void callback_pin15(uint8_t intNo) // pin F15
 
 void hullHandle(EMotor motor)
 {
-  getMotorHulls(motor);
+//  getMotorHulls(motor);
   motorPhaseConfigurationHandle(motor);
   getHullSequence(motor);
-  if(motors[motor].hull.currentSequence > 5) // not a legal  sequence
-  {
-      ERROR_BREAK
-  }
-
   calcHullAdd(motor);
-
-//  if(motors[motor].hull.prevHullAdded != motors[motor].hull.hullAdd)
-//  {
-//    motors[motor].hull.prevHullAdded = motors[motor].hull.hullAdd;
-//  }
-
   motors[motor].hull.cnt_last_time_uSec = getuSec();
   motors[motor].hull.cnt += motors[motor].hull.hullAdd;
   sendCommandToDriver(motor);

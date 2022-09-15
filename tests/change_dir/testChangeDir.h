@@ -2,8 +2,8 @@
 #define TESTS_CHANGE_DIR_TESTCHANGEDIR_H_
 
 #include "callBacks.h"
-
-#define CHANGE_DIR_HZ (30.0)
+#define QUATER_SPEED_STEPS 5
+#define CHANGE_DIR_HZ (30 * QUATER_SPEED_STEPS * 4)
 
 void init_test_callbacks_timed(void);
 void setTestTimedCallBacksDB(void);

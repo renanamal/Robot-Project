@@ -2,10 +2,10 @@
 #define SRC_GENERALDEFINES_H_
 
 //Debug
-//#define DEBUG_SPEED_CONTROL
+#define DEBUG_SPEED_CONTROL
 //#define DEBUG_HULLS
 
-//#define SPEED_CONTROL_ON
+#define SPEED_CONTROL_ON
 
 
 // Units conversion

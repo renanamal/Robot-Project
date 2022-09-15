@@ -13,9 +13,11 @@
 // control gains
 // TODO - if needed define KI, KP for each motor
 #define KI (0.1)
-#define KP (5.0)
+#define KP (1.0)
 
 
-#define MOTOR_SPEED_CONTROLLER_HZ (100.0) // TODO - change to the correct Hz
+#define MOTOR_SPEED_CONTROLLER_HZ (50.0) // TODO - change to the correct Hz
+//#define QUATER_SPEED_STEPS 5
+//#define CHANGE_DIR_HZ (30 * QUATER_SPEED_STEPS * 4)
 
 #endif /* SRC_MOTORSCHARACTERSDB_H_ */

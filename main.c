@@ -42,7 +42,9 @@
 //#include "tests/gpio_int/test_gpio_int.h"
 //#include "tests/read_hulls/read_hulls.h"
 //#include "tests/no_hulls/test_no_hulls.h"
-#include "tests/change_dir/testChangeDir.h"
+//#include "tests/change_dir/testChangeDir.h"
+//#include "tests/movingAverage/testMovingAverage.h"
+
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
@@ -66,12 +68,10 @@ int main(void)
 //  app_init();
 
 
-  // Initialize Timers
+  // Initialize callbacks
   init_callbacks_timed();
-
   init_callbacks_GPIO();
 
-  init_test_callbacks_timed();
 
 
   motors[left].speedControler.refSpeed = 60.0; // [Rad/sec]
@@ -82,6 +82,8 @@ int main(void)
 //  read_hulls();
 //  test_motors_handle();
 //  runMotorNoHulls(left);
+//  init_test_callbacks_timed();
+//  test_moving_average();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.

@@ -8,7 +8,7 @@ void handleMotors(void)
 {
 	for(EMotor motor = right; motor < endOfMotors; motor++)
 	{
-    calcSpeedFromHulls(motor);
+    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);

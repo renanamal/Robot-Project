@@ -22,7 +22,8 @@ typedef struct SMovingAverage
   float bufferData[WINDOW_SIZE];
   float popData;
   float currentData;
-  int64_t counter;
+  uint8_t counter;
+  bool arrayFull;
   bool reset;
 }SMovingAverage;
 
