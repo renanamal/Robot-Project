@@ -9,11 +9,11 @@
 #define GEAR_RATIO (15.0)
 #define INV_GEAR_RATIO (1.0/GEAR_RATIO)
 #define POWER_SUPPLY_VOLTAGE (3.3)
-#define STARTING_VOLTAGE (1.0)
+#define STARTING_VOLTAGE (0.5)
 // control gains
 // TODO - if needed define KI, KP for each motor
 #define KI (0.1)
-#define KP (1.0)
+#define KP (5.0)
 
 
 #define MOTOR_SPEED_CONTROLLER_HZ (100.0) // TODO - change to the correct Hz

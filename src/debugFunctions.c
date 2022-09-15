@@ -2,7 +2,7 @@
 #include "motorDriverMain.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
-extern uint32_t pinCounter[16];
+//extern uint32_t pinCounter[16];
 
 SDBGMainDBG mainDBG;
 
