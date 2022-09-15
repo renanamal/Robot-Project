@@ -9,13 +9,9 @@ void handleMotors(void)
 	for(EMotor motor = right; motor < endOfMotors; motor++)
 	{
     calcSpeedFromHulls(motor);
-    continuousAverage(&motors[motor].speedControler.speedAverage);
     setMotorDriveState(motor);
-//    if(!motors[motor].isRunning)
-//    {
-      setMotorControlState(motor);
-      motors[motor].isRunning |= motorControlSatetExct(motor);
-//    }
+    setMotorControlState(motor);
+    motors[motor].isRunning |= motorControlSatetExct(motor);
 #ifdef DEBUG_SPEED_CONTROL
 	    record_motor_data(motor);
 #endif

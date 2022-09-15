@@ -340,19 +340,20 @@ void calcSpeedFromHulls(EMotor motor)
 	motors[motor].speedControler.lastCalcTimeuSec = curentTimeuSec;
 	motors[motor].speedControler.lastHullCnt = currentHallCnt;
 
-	motors[motor].speedControler.speedAverage.courentData = motors[motor].speedControler.speedFromHull;
-  continuousAverage(&motors[motor].speedControler.speedAverage);
+	motors[motor].speedControler.speedAverage.currentData = motors[motor].speedControler.speedFromHull;
+  movingAverage(&motors[motor].speedControler.speedAverage);
 	return;
 }
 
 
 void speedControlHandle(EMotor motor)
 {
+#ifdef SPEED_CONTROL_ON
   float speedCorrection = PISpeedControl(motor);
   motors[motor].speedControler.correctedSpeed = motors[motor].speedControler.refSpeed + speedCorrection;
-//#ifdef DEBUG_SPEED_CONTROL
-//  record_motor_data(motor);
-//#endif
+#else
+  motors[motor].speedControler.correctedSpeed = motors[motor].speedControler.refSpeed;
+#endif
 }
 
 

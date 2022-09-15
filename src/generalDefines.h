@@ -2,8 +2,10 @@
 #define SRC_GENERALDEFINES_H_
 
 //Debug
-#define DEBUG_SPEED_CONTROL
+//#define DEBUG_SPEED_CONTROL
 //#define DEBUG_HULLS
+
+//#define SPEED_CONTROL_ON
 
 
 // Units conversion
@@ -12,6 +14,8 @@
 #define PI_ANTIWINDUP (100.0)
 #define IS_ZERO_FLOAT(dataIn) ((dataIn < 0.00001 && dataIn > -0.00001)?true:false)
 #define RadPS_TO_RPM (60.0/(2.0*PI))
+
+#define WINDOW_SIZE  (5) // moving average window size
 
 #define NUM_OF_MOTORS (2)
 

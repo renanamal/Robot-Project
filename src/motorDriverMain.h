@@ -76,7 +76,7 @@ typedef struct {
   uint64_t            lastCalcTimeuSec;
   int64_t             lastHullCnt;
   float               refSpeed;
-  SContinuousAverage  speedAverage;
+  SMovingAverage  speedAverage;
 }SPIspeedContorl;
 
 typedef struct{

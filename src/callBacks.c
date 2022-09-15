@@ -97,6 +97,7 @@ void setIntCallBacksDB(void)
 
 void init_callbacks_timed(void)
 {
+  setTimedCallBacksDB();
   for(ETimedCallBacksdFunctions ind = 0; ind < endOfTimedCallbacksFuncList; ind++)
   {
       // Reserve a timer.
@@ -108,6 +109,7 @@ void init_callbacks_timed(void)
 
 void init_callbacks_GPIO(void)
 {
+  setIntCallBacksDB();
   // Initialization of the GPIOINT driver.
   GPIOINT_Init();
 
@@ -120,15 +122,9 @@ void init_callbacks_GPIO(void)
 
 // definition of the Callback functions
 void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
-//void callback_motor_handle(void)
 {
   (void) user;
-//  static uint32_t prevCallTime = 0;
-//  if(getMillis() - prevCallTime > 1.0/MOTOR_SPEED_CONTROLLER_HZ*1000.0)
-//  {
-//      prevCallTime = getMillis();
-      handleMotors();
-//  }
+  handleMotors();
   RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[motorHandle].millis, timedCallBacksDB[motorHandle].func, NULL );
 }
 
@@ -239,7 +235,8 @@ void hullHandle(EMotor motor)
 
 void callback_change_dir(RTCDRV_TimerID_t id, void * user)
 {
-// (void) user;
+  (void) id;
+ (void) user;
 //  motors[left].speedControler.refSpeed *= -1;
 //  RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[changeDir].millis, timedCallBacksDB[changeDir].func, NULL );
 }

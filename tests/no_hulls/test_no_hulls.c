@@ -1,7 +1,7 @@
 #include "test_no_hulls.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
-extern e_motorControlStates motorControlState[NUM_OF_MOTORS];
+//extern e_motorControlStates motorControlState[NUM_OF_MOTORS];
 extern int8_t hallIrqCntAdevanceMatrix[6][6];
 
 uint32_t millis = 10;

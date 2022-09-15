@@ -38,10 +38,11 @@
 #include "motorDriverMain.h"
 
 
-//#include "tests/test_pwm.h"
-//#include "tests/test_gpio_int.h"
-//#include "tests/read_hulls.h"
-//#include "tests/test_no_hulls.h"
+//#include "tests/pwm/test_pwm.h"
+//#include "tests/gpio_int/test_gpio_int.h"
+//#include "tests/read_hulls/read_hulls.h"
+//#include "tests/no_hulls/test_no_hulls.h"
+#include "tests/change_dir/testChangeDir.h"
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
@@ -66,11 +67,12 @@ int main(void)
 
 
   // Initialize Timers
-  setTimedCallBacksDB();
   init_callbacks_timed();
 
-  setIntCallBacksDB();
   init_callbacks_GPIO();
+
+  init_test_callbacks_timed();
+
 
   motors[left].speedControler.refSpeed = 60.0; // [Rad/sec]
 
