@@ -36,4 +36,6 @@ uint32_t getMillis(void);
 uint32_t getSec(void);
 RAIL_Time_t getuSec(void);
 
+#define CALLBACK_uS(hz) (1.0/((float)hz)*1000000.0)
+
 #endif /* INC_GENERALPURPOSEFUNCTIONS_H_ */

@@ -8,16 +8,23 @@ void handleMotors(void)
 {
 	for(EMotor motor = right; motor < endOfMotors; motor++)
 	{
+	    handleMotor(motor);
+	}
+	return;
+}
+
+void handleMotor(EMotor motor)
+{
     calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);
 #ifdef DEBUG_SPEED_CONTROL
-	    record_motor_data(motor);
+      record_motor_data(motor);
 #endif
-	}
-	return;
+  return;
 }
+
 
 
 void setMotorControlState(EMotor motor)

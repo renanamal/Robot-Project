@@ -69,8 +69,9 @@ int main(void)
 
 
   // Initialize callbacks
-  init_callbacks_timed();
-  init_callbacks_GPIO();
+//  init_callbacks_timed();
+//  setTimedCallBacksDB();
+//  init_callbacks_GPIO();
 
 
 
@@ -90,7 +91,9 @@ int main(void)
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
-//      callback_motor_handle();
+//      executeTimedFunctionsTest();
+      executeTimedFunctions();
+
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.
 //    sl_system_process_action();

@@ -1,9 +1,9 @@
 #include "testChangeDir.h"
 static STimedCallBacks testTimedCallBacksDB;
 
-extern SMotorsData motors[NUM_OF_MOTORS];
+//extern SMotorsData motors[NUM_OF_MOTORS];
 
-static uint8_t counter = 0;
+//static uint8_t counter = 0;
 float speedTable[QUATER_SPEED_STEPS * 4] = {0};
 
 void testInitSpeedTable()
@@ -25,25 +25,37 @@ void testInitSpeedTable()
 
 void setTestTimedCallBacksDB(void)
 {
-  testTimedCallBacksDB.func = testCallbackChangeDir;
-  testTimedCallBacksDB.millis = 1.0/((float)CHANGE_DIR_HZ)*1000.0;
-  testTimedCallBacksDB.id = 1;
-
+  testTimedCallBacksDB.func = handleMotors;
+  testTimedCallBacksDB.us = CALLBACK_uS(CHANGE_DIR_HZ);
+  testTimedCallBacksDB.prevTimeCall = getuSec();
 }
 
-void init_test_callbacks_timed(void)
+void init_test_callbacks_timed()
 {
-  setTestTimedCallBacksDB();
   testInitSpeedTable();
-  // Reserve a timer.
-  RTCDRV_AllocateTimer( &testTimedCallBacksDB.id );
-  RTCDRV_StartTimer( testTimedCallBacksDB.id, rtcdrvTimerTypeOneshot, testTimedCallBacksDB.millis, testTimedCallBacksDB.func, NULL );
+  setTestTimedCallBacksDB();
 }
 
-void testCallbackChangeDir(RTCDRV_TimerID_t id, void * user)
+uint64_t times[200];
+uint64_t deltaTimes[200];
+uint8_t counter = 0;
+void executeTimedFunctionsTest(void)
 {
- (void) user;
-  motors[left].speedControler.refSpeed = speedTable[counter];
-  counter = (counter+1)%(QUATER_SPEED_STEPS*4);
-  RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, testTimedCallBacksDB.millis, testTimedCallBacksDB.func, NULL );
+    uint64_t currentTime = getuSec();
+    if(currentTime - testTimedCallBacksDB.prevTimeCall >= testTimedCallBacksDB.us)
+    {
+        times[counter] = currentTime;
+        counter++;
+        testTimedCallBacksDB.prevTimeCall = currentTime;
+        (*testTimedCallBacksDB.func)();
+    }
+    if(counter >= 200)
+    {
+        for(int i=1; i<200; i++)
+        {
+            deltaTimes[i] = times[i] - times[i-1];
+        }
+      DEBUG_BREAK
+      while(1){}
+    }
 }

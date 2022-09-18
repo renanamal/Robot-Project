@@ -21,12 +21,12 @@
 #include "sl_emlib_gpio_init_PD8_config.h"
 #include "debugFunctions.h"
 
-typedef void(*timedCallbackFctPtr)(RTCDRV_TimerID_t, void *);
+typedef void(*timedCallbackFctPtr)(void);
 
 typedef struct{
   timedCallbackFctPtr func;
-  uint32_t millis;
-  RTCDRV_TimerID_t id;
+  uint32_t us;
+  uint64_t prevTimeCall;
 }STimedCallBacks;
 
 
@@ -65,7 +65,8 @@ void callback_motor_handle(RTCDRV_TimerID_t id, void * user);
 //void callback_motor_handle(void);
 
 void setTimedCallBacksDB(void);
-void init_callbacks_timed(void);
+//void init_callbacks_timed(void);
+void executeTimedFunctions(void);
 
 void setIntCallBacksDB(void);
 void init_callbacks_GPIO(void);
@@ -73,7 +74,7 @@ void init_callbacks_GPIO(void);
 void encoderHandle(EMotor motor);
 void hullHandle(EMotor motor);
 
-void callback_change_dir(RTCDRV_TimerID_t id, void * user);
+void callback_change_dir(EMotor motor);
 
 void callback_pin1(uint8_t intNo);
 void callback_pin2(uint8_t intNo);

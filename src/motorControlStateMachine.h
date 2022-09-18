@@ -15,6 +15,7 @@ typedef enum{
 
 // function proto
 void handleMotors(void);
+void handleMotor(EMotor motor);
 void setMotorControlState(EMotor motor);
 bool motorControlSatetExct(EMotor motor);
 void calcMotorPWMCommand(EMotor motor);

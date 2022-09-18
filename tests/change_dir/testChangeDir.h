@@ -7,5 +7,5 @@
 
 void init_test_callbacks_timed(void);
 void setTestTimedCallBacksDB(void);
-void testCallbackChangeDir(RTCDRV_TimerID_t id, void * user);
+void executeTimedFunctionsTest(void);
 #endif /* TESTS_CHANGE_DIR_TESTCHANGEDIR_H_ */

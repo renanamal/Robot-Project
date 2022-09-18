@@ -30,9 +30,9 @@ extern SMotorsData motors[NUM_OF_MOTORS];
 
 void setTimedCallBacksDB(void)
 {
-  timedCallBacksDB[0].func = callback_motor_handle;
-  timedCallBacksDB[0].millis = 1.0/MOTOR_SPEED_CONTROLLER_HZ*1000.0;
-  timedCallBacksDB[0].id = motorHandle;
+  timedCallBacksDB[0].func = handleMotors;
+  timedCallBacksDB[0].us = CALLBACK_uS(MOTOR_SPEED_CONTROLLER_HZ);
+  timedCallBacksDB[0].prevTimeCall = getuSec();
 
 //  timedCallBacksDB[1].func = callback_change_dir;
 //  timedCallBacksDB[1].millis = 1.0/CHANGE_DIR_HZ*1000.0;
@@ -95,15 +95,18 @@ void setIntCallBacksDB(void)
   intCallBacksDB[motor2EncI].port = SL_EMLIB_GPIO_INIT_PC5_PORT;
 }
 
-void init_callbacks_timed(void)
+
+void executeTimedFunctions(void)
 {
-  setTimedCallBacksDB();
   for(ETimedCallBacksdFunctions ind = 0; ind < endOfTimedCallbacksFuncList; ind++)
-  {
-      // Reserve a timer.
-      RTCDRV_AllocateTimer( &timedCallBacksDB[ind].id );
-      RTCDRV_StartTimer( timedCallBacksDB[ind].id, rtcdrvTimerTypeOneshot, timedCallBacksDB[ind].millis, timedCallBacksDB[ind].func, NULL );
-  }
+    {
+      uint64_t currentTime = getuSec();
+      if(currentTime - timedCallBacksDB[ind].prevTimeCall >= timedCallBacksDB[ind].us)
+      {
+          timedCallBacksDB[ind].prevTimeCall = currentTime;
+          (*timedCallBacksDB[ind].func)();
+      }
+    }
 }
 
 
@@ -118,29 +121,6 @@ void init_callbacks_GPIO(void)
       GPIOINT_CallbackRegister(intCallBacksDB[ind].pin, intCallBacksDB[ind].func);
       GPIO_ExtIntConfig(intCallBacksDB[ind].port, intCallBacksDB[ind].pin, intCallBacksDB[ind].pin, true, true, true);
   }
-}
-
-
-//int times[700];
-//int delta_times[700];
-//int times_count = 0;
-// definition of the Callback functions
-void callback_motor_handle(RTCDRV_TimerID_t id, void * user)
-{
-  (void) user;
-//  times[times_count] = getuSec();
-//  times_count+=1;
-//  if(times_count >= 700)
-//  {
-//    for(int i=1; i<700;i++)
-//    {
-//        delta_times[i] = times[i] - times[i-1];
-//    }
-//    DEBUG_BREAK;
-//    while(1){}
-//  }
-  handleMotors();
-  RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[motorHandle].millis, timedCallBacksDB[motorHandle].func, NULL );
 }
 
 
@@ -240,10 +220,7 @@ void hullHandle(EMotor motor)
 #endif
 }
 
-void callback_change_dir(RTCDRV_TimerID_t id, void * user)
+void callback_change_dir(EMotor motor)
 {
-  (void) id;
- (void) user;
-//  motors[left].speedControler.refSpeed *= -1;
-//  RTCDRV_StartTimer( id, rtcdrvTimerTypeOneshot, timedCallBacksDB[changeDir].millis, timedCallBacksDB[changeDir].func, NULL );
+
 }
