@@ -14,6 +14,12 @@
  * sections of the MSLA applicable to Source Code.
  *
  ******************************************************************************/
+
+
+//TODO - need to change the project debug setting and optimization level when
+// switching to operational code
+
+
 #include "sl_component_catalog.h"
 #include "sl_system_init.h"
 #include "app.h"
@@ -28,7 +34,6 @@
 
 #include "stdbool.h"
 #include "ustimer.h"
-#include "rtcdriver.h"
 #include <stddef.h>
 
 #include "generalDefines.h"
@@ -53,7 +58,7 @@ int main(void)
   motorDriverPhaseConfigurationInit();
 
   // Initialization of the RTCDRV driver.
-  RTCDRV_Init();
+//  RTCDRV_Init();
 
   // Initialization of the USTIMER driver.
 //  USTIMER_Init();
@@ -69,9 +74,8 @@ int main(void)
 
 
   // Initialize callbacks
-//  init_callbacks_timed();
-//  setTimedCallBacksDB();
-//  init_callbacks_GPIO();
+  setTimedCallBacksDB();
+  init_callbacks_GPIO();
 
 
 

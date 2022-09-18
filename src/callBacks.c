@@ -35,7 +35,7 @@ void setTimedCallBacksDB(void)
   timedCallBacksDB[0].prevTimeCall = getuSec();
 
 //  timedCallBacksDB[1].func = callback_change_dir;
-//  timedCallBacksDB[1].millis = 1.0/CHANGE_DIR_HZ*1000.0;
+//  timedCallBacksDB[1].millis = CALLBACK_uS(CHANGE_DIR_HZ);
 //  timedCallBacksDB[1].id = changeDir;
 
 }
@@ -222,5 +222,5 @@ void hullHandle(EMotor motor)
 
 void callback_change_dir(EMotor motor)
 {
-
+  (void) motor;
 }

@@ -3,7 +3,6 @@
 
 #include "ustimer.h"
 #include "stdbool.h"
-#include "rtcdriver.h"
 #include <stddef.h>
 #include "rail.h"
 #include "generalDefines.h"

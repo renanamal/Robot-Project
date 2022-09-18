@@ -2,7 +2,6 @@
 #define SRC_CALLBACKS_H_
 
 #include "generalDefines.h"
-#include "rtcdriver.h"
 #include <stddef.h>
 #include "em_gpio.h"
 #include "motorControlStateMachine.h"
@@ -61,11 +60,7 @@ typedef struct{
 }SIntCallBacks;
 
 // function protos
-void callback_motor_handle(RTCDRV_TimerID_t id, void * user);
-//void callback_motor_handle(void);
-
 void setTimedCallBacksDB(void);
-//void init_callbacks_timed(void);
 void executeTimedFunctions(void);
 
 void setIntCallBacksDB(void);

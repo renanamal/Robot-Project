@@ -8,8 +8,15 @@ uint32_t millis = 10;
 RTCDRV_TimerID_t id = 1;
 EMotor motor = left;
 
+bool firstCall = false;
+
 void runMotorNoHulls(EMotor motor)
 {
+  if(!firstCall)
+  {
+    firstCall = true;
+    RTCDRV_Init();
+  }
   motors[motor].speedControler.refSpeed = 1.0; // 3 [rad/sec]
   getMotorHulls(motor);
 //  motors[motor].hull.HullU = 0;
