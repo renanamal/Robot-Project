@@ -33,6 +33,8 @@ component:
 - {id: EFR32FG12P433F1024GL125}
 - instance: [motor1, motor2]
   id: pwm
+- instance: [encoder_counter]
+  id: spidrv_usart
 - {id: device_init}
 - {id: brd4253a}
 - {id: gpiointerrupt}

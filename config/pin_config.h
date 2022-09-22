@@ -132,6 +132,26 @@
 // [USART1]$
 
 // $[USART2]
+// USART2 CLK on PF8
+#define USART2_CLK_PORT                          gpioPortF
+#define USART2_CLK_PIN                           8
+#define USART2_CLK_LOC                           19
+
+// USART2 CS on PF9
+#define USART2_CS_PORT                           gpioPortF
+#define USART2_CS_PIN                            9
+#define USART2_CS_LOC                            19
+
+// USART2 RX on PF10
+#define USART2_RX_PORT                           gpioPortF
+#define USART2_RX_PIN                            10
+#define USART2_RX_LOC                            22
+
+// USART2 TX on PF11
+#define USART2_TX_PORT                           gpioPortF
+#define USART2_TX_PIN                            11
+#define USART2_TX_LOC                            24
+
 // [USART2]$
 
 // $[USART3]

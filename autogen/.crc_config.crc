@@ -1,6 +1,7 @@
 #CRC Codes for initially generated config files -- do not modify!
 FreeRTOSConfig.h=2036023119
 app_assert_config.h=1351236558
+dmadrv_config.h=145163010
 emlib_core_debug_config.h=-551881347
 iot_pwm_cfg_fff.h=-957625431
 rtcdrv_config.h=-562573095
@@ -47,4 +48,6 @@ sl_rail_util_init_rail_init_config.h=-1735794332
 sl_rail_util_protocol_config.h=-119702097
 sl_simple_rgb_pwm_led_tmp_config.h=1712067383
 sl_sleeptimer_config.h=-1879962229
+sl_spidrv_usart_encoder_counter_config.h=696470203
+spidrv_config.h=112055036
 ustimer_config.h=2106674886

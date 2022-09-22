@@ -1,6 +1,6 @@
 /***************************************************************************//**
  * @file
- * @brief USTIMER configuration file.
+ * @brief SPIDRV configuration file.
  *******************************************************************************
  * # License
  * <b>Copyright 2018 Silicon Laboratories Inc. www.silabs.com</b>
@@ -27,25 +27,17 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  ******************************************************************************/
-#ifndef __SILICON_LABS_USTIMER_CONFIG_H__
-#define __SILICON_LABS_USTIMER_CONFIG_H__
+#ifndef __SILICON_LABS_SPIDRV_CONFIG_H__
+#define __SILICON_LABS_SPIDRV_CONFIG_H__
 
 /***************************************************************************//**
- * @addtogroup ustimer
+ * @addtogroup spidrv
  * @{
  ******************************************************************************/
 
-// <<< sl:start pin_tool >>>
-// <timer> USTIMER
-// $[TIMER_USTIMER]
-#define USTIMER_PERIPHERAL                       TIMER0
-#define USTIMER_PERIPHERAL_NO                    0
-// [TIMER_USTIMER]$
+/// SPIDRV configuration option. Use this define to include the slave part of the SPIDRV API.
+#define EMDRV_SPIDRV_INCLUDE_SLAVE
 
-// <<< sl:end pin_tool >>>
+/** @} (end addtogroup spidrv) */
 
-#define USTIMER_TIMER USTIMER_PERIPHERAL_NO
-
-/** @} (end addtogroup ustimer) */
-
-#endif /* __SILICON_LABS_USTIMER_CONFIG_H__ */
+#endif /* __SILICON_LABS_SPIDRV_CONFIG_H__ */

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="ASCII"?>
-<device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/ss/hwconfig/document/device.ecore" name="pin_tool.EFR32FG12P433F1024GL125" partId="mcu.arm.efr32.fg12.efr32fg12p433f1024gl125" contextId="com.silabs.sdk.stack.super:4.1.1._1198244892">
+<device:XMLDevice xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:device="http://www.silabs.com/ss/hwconfig/document/device.ecore" name="pin_tool.EFR32FG12P433F1024GL125" partId="mcu.arm.efr32.fg12.efr32fg12p433f1024gl125" contextId="com.silabs.sdk.stack.super:4.1.1._1298676625">
   <mode name="DefaultMode">
     <property object="DBG" propertyId="ABModule.selectedRequirement" value="dbg%T%SL_DEBUG%T%sl_debug_swo_config.h"/>
     <property object="DBG" propertyId="ABPeripheral.included" value="true"/>
@@ -75,7 +75,15 @@
     <property object="PORTIO" propertyId="portio.timer0.location.cc2" value="17"/>
     <property object="PORTIO" propertyId="portio.timer1.enable.cc0" value="Enabled"/>
     <property object="PORTIO" propertyId="portio.timer1.location.cc0" value="20"/>
-    <property object="TIMER0" propertyId="ABModule.selectedRequirement" value="timer%T%USTIMER%T%ustimer_config.h"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.clk" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.cs" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.rx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.enable.tx" value="Enabled"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.clk" value="19"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.cs" value="19"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.rx" value="22"/>
+    <property object="PORTIO" propertyId="portio.usart2.location.tx" value="24"/>
+    <property object="TIMER0" propertyId="ABModule.selectedRequirement" value="timer%T%SL_PWM_MOTOR1%T%sl_pwm_init_motor1_config.h"/>
     <property object="TIMER0" propertyId="ABPeripheral.included" value="true"/>
     <property object="TIMER0" propertyId="channel.0.name" value=""/>
     <property object="TIMER0" propertyId="channel.1.name" value=""/>
@@ -87,6 +95,8 @@
     <property object="TIMER1" propertyId="channel.1.name" value="OUTPUT"/>
     <property object="TIMER1" propertyId="channel.2.name" value="OUTPUT"/>
     <property object="TIMER1" propertyId="peripheral.name" value=""/>
+    <property object="USART2" propertyId="ABModule.selectedRequirement" value="usart%T%SL_SPIDRV_ENCODER_COUNTER%T%sl_spidrv_usart_encoder_counter_config.h"/>
+    <property object="USART2" propertyId="ABPeripheral.included" value="true"/>
   </mode>
   <modeTransition>
     <property object="RESET &#x2192; DefaultMode" propertyId="modeTransition.source" value="RESET"/>
