@@ -29,16 +29,14 @@ component:
 - {id: brd4001a}
 - instance: [rail_init]
   id: rail_util_init
-- {id: rtcdrv}
 - {id: EFR32FG12P433F1024GL125}
 - instance: [motor1, motor2]
   id: pwm
-- instance: [encoder_counter]
-  id: spidrv_usart
 - {id: device_init}
 - {id: brd4253a}
 - {id: gpiointerrupt}
-- {id: ustimer}
+- instance: [encoderSPI]
+  id: spidrv
 define:
 - {name: DEBUG_EFM}
 ui_hints: {}

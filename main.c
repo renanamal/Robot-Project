@@ -33,7 +33,6 @@
 #endif // SL_CATALOG_KERNEL_PRESENT
 
 #include "stdbool.h"
-#include "ustimer.h"
 #include <stddef.h>
 
 #include "generalDefines.h"
@@ -56,12 +55,6 @@ extern SMotorsData motors[NUM_OF_MOTORS];
 int main(void)
 {
   motorDriverPhaseConfigurationInit();
-
-  // Initialization of the RTCDRV driver.
-//  RTCDRV_Init();
-
-  // Initialization of the USTIMER driver.
-//  USTIMER_Init();
 
   // Initialize Silicon Labs device, system, service(s) and protocol stack(s).
   // Note that if the kernel is present, processing task(s) will be created by

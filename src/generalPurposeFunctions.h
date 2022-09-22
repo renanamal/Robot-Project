@@ -1,7 +1,6 @@
 #ifndef INC_GENERALPURPOSEFUNCTIONS_H_
 #define INC_GENERALPURPOSEFUNCTIONS_H_
 
-#include "ustimer.h"
 #include "stdbool.h"
 #include <stddef.h>
 #include "rail.h"

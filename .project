@@ -346,16 +346,6 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emdrv/gpiointerrupt/src/gpiointerrupt.c</locationURI>
 		</link>
 		<link>
-			<name>gecko_sdk_4.1.1/platform/emdrv/rtcdrv/inc/rtcdriver.h</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/emdrv/rtcdrv/inc/rtcdriver.h</locationURI>
-		</link>
-		<link>
-			<name>gecko_sdk_4.1.1/platform/emdrv/rtcdrv/src/rtcdriver.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/emdrv/rtcdrv/src/rtcdriver.c</locationURI>
-		</link>
-		<link>
 			<name>gecko_sdk_4.1.1/platform/emdrv/spidrv/inc/spidrv.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emdrv/spidrv/inc/spidrv.h</locationURI>
@@ -364,16 +354,6 @@
 			<name>gecko_sdk_4.1.1/platform/emdrv/spidrv/src/spidrv.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emdrv/spidrv/src/spidrv.c</locationURI>
-		</link>
-		<link>
-			<name>gecko_sdk_4.1.1/platform/emdrv/ustimer/inc/ustimer.h</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/emdrv/ustimer/inc/ustimer.h</locationURI>
-		</link>
-		<link>
-			<name>gecko_sdk_4.1.1/platform/emdrv/ustimer/src/ustimer.c</name>
-			<type>1</type>
-			<locationURI>STUDIO_SDK_LOC/platform/emdrv/ustimer/src/ustimer.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/init/gpio_simple/sl_emlib_gpio_simple_init.h</name>
