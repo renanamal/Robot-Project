@@ -63,7 +63,7 @@ int main(void)
 
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
-//  app_init();
+  app_init();
 
 
   // Initialize callbacks
