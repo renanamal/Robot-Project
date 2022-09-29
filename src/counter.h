@@ -8,6 +8,8 @@
 
 // use SPI handle for EXP header (configured in project settings)
 #define SPI_HANDLE                  sl_spidrv_encoderSPI_handle
+
+#define BUFFER_SIZE 4
 // -------------------------------------------------------------- PUBLIC MACROS 
 ///**
 // * \defgroup macros Macros
@@ -211,7 +213,7 @@ extern "C"{
  * @description This function initializes click configuration structure to init state.
  * @note All used pins will be set to unconnected state.
  */
-void counter_cfg_setup ( counter_cfg_t *cfg );
+//void counter_cfg_setup ( counter_cfg_t *cfg );
 
 /**
  * @brief Initialization function.
@@ -220,7 +222,7 @@ void counter_cfg_setup ( counter_cfg_t *cfg );
  * 
  * @description This function initializes all necessary pins and peripherals used for this click.
  */
-COUNTER_RETVAL counter_init ( counter_t *ctx, counter_cfg_t *cfg );
+//COUNTER_RETVAL counter_init ( counter_t *ctx, counter_cfg_t *cfg );
 
 /**
  * @brief Click Default Configuration function.
@@ -229,7 +231,7 @@ COUNTER_RETVAL counter_init ( counter_t *ctx, counter_cfg_t *cfg );
  *
  * @description This function executes default configuration for Counter click.
  */
-void counter_default_cfg ( counter_t *ctx );
+//void counter_default_cfg ( counter_t *ctx );
 
 /**
  * @brief Generic transfer function.
@@ -242,19 +244,18 @@ void counter_default_cfg ( counter_t *ctx );
  *
  * @description Generic SPI transfer, for sending and receiving packages
  */
-void counter_generic_transfer 
-( 
-    counter_t *ctx, 
-    uint8_t *wr_buf, 
-    uint16_t wr_len, 
-    uint8_t *rd_buf, 
-    uint16_t rd_len 
-);
+//void counter_generic_transfer
+//(
+//    counter_t *ctx,
+//    uint8_t *wr_buf,
+//    uint16_t wr_len,
+//    uint8_t *rd_buf,
+//    uint16_t rd_len
+//);
 
 /**
  * @brief Writes data into MDR0
  *
- * @param ctx          Click object.
  * @param settings     MDR0 settings.
  * 
  * @note The MDR0 (Mode Register 0) is an 8-bit read/write register that sets up the
@@ -262,12 +263,11 @@ void counter_generic_transfer
  *
  * @description This function writes data into MDR0, using click object.
  */
-void counter_write_mdr0 ( counter_t *ctx, uint8_t settings );
+void counter_write_mdr0 ( uint8_t settings );
 
 /**
  * @brief Writes data into MDR1
  *
- * @param ctx          Click object.
  * @param settings     MDR1 settings.
  * 
  * @note The MDR1 (Mode Register 1) is an 8-bit read/write register which is appended
@@ -275,12 +275,11 @@ void counter_write_mdr0 ( counter_t *ctx, uint8_t settings );
  *
  * @description This function writes data into MDR1, using click object.
  */
-void counter_write_mdr1 ( counter_t *ctx, uint8_t settings );
+void counter_write_mdr1 ( uint8_t settings );
 
 /**
  * @brief Writes data into DTR
  * 
- * @param ctx          Click object.
  * @param buffer       Data to be written into DTR.
  *
  * @note The DTR is a software configurable 8, 16, 24 or 32-bit input data register
@@ -290,7 +289,7 @@ void counter_write_mdr1 ( counter_t *ctx, uint8_t settings );
  *
  * @description This function writes data into DTR, using click object.
  */
-void counter_write_dtr ( counter_t *ctx, uint8_t* buffer );
+void counter_write_dtr ( uint8_t buffer_size, uint8_t* buffer );
 
 /**
  * @brief Loads CNTR from DTR
@@ -304,12 +303,11 @@ void counter_write_dtr ( counter_t *ctx, uint8_t* buffer );
  *
  * @description This function loads CNTR from DTR, using click object.
  */
-void counter_load_cntr ( counter_t *ctx );
+void counter_load_cntr ( );
 
 /**
  * @brief Loads OTR from CNTR
  *
- * @param ctx          Click object.
  * 
  * @note The OTR is a software configuration 8, 16, 24 or 32-bit register which can be
  * read back on the MISO output. Since instantaneous CNTR value is often needed
@@ -319,27 +317,25 @@ void counter_load_cntr ( counter_t *ctx );
  * 
  * @description This function loads OTR from CNTR, using click object.
  */
-void counter_load_otr ( counter_t *ctx );
+void counter_load_otr ( );
 
 /**
  * @brief Reads MDR0
  * 
- * @param ctx          Click object.
  * @returns            Data from MDR0.
  * 
  * @description This function reads MDR0, using click object.
  */
-uint8_t counter_read_mdr0 ( counter_t *ctx );
+uint8_t counter_read_mdr0 ( );
 
 /**
  * @brief Reads MDR1
  * 
- * @param ctx          Click object.
  * @returns            Data from MDR1.
  * 
  * @description This function reads MDR1, using click object.
  */
-uint8_t counter_read_mdr1 ( counter_t *ctx );
+uint8_t counter_read_mdr1 ( );
 
 /**
  * @brief Reads OTR
@@ -349,17 +345,16 @@ uint8_t counter_read_mdr1 ( counter_t *ctx );
  * 
  * @description This function reads OTR, using click object.
  */
-int32_t counter_read_otr ( counter_t *ctx );
+int32_t counter_read_otr ( uint8_t buffer_size );
 
 /**
  * @brief Reads CNTR
  *
- * @param ctx          Click object.
  * @returns            CNTR register data.
  * 
  * @description This function reads CNTR, using click object.
  */
-int32_t counter_read_cntr ( counter_t *ctx );
+int32_t counter_read_cntr ( );
 
 /**
  * @brief Reads DTR
@@ -369,12 +364,11 @@ int32_t counter_read_cntr ( counter_t *ctx );
  * 
  * @description This function reads DTR, using click object.
  */
-int32_t counter_read_dtr ( counter_t *ctx );
+int32_t counter_read_dtr ( );
 
 /**
  * @brief Reads STR
  *
- * @param ctx          Click object.
  * @returns            Status register data.
  * 
  * @note
@@ -394,40 +388,32 @@ int32_t counter_read_dtr ( counter_t *ctx );
  * 
  * @description This function reads STR, using click object.
  */
-uint8_t counter_read_str ( counter_t *ctx );
+uint8_t counter_read_str ( );
 
 /**
  * @brief Clears MDR0
  * 
- * @param ctx          Click object.
- * 
  * @description This function clears MDR0.
  */
-void counter_clear_mrd0 ( counter_t *ctx );
+void counter_clear_mrd0 ( );
 
 /**
  * @brief Clears MDR1
  * 
- * @param ctx          Click object.
- * 
  * @description This function clears MDR1.
  */
-void counter_clead_mrd1 ( counter_t *ctx );
+void counter_clead_mrd1 ( );
 
 /**
  * @brief Clears CNTR
  * 
- * @param ctx          Click object.
- * 
  * @description This function clears CNTR.
  */
-void counter_clear_cntr ( counter_t *ctx );
+void counter_clear_cntr ( );
 
 /**
  * @brief Clears STR
  *
- * @param ctx          Click object.
- * 
  * @note
  * <pre>
  * Resets all status bits except CEN and U/D. In quadrature mode, if the
@@ -442,12 +428,10 @@ void counter_clear_cntr ( counter_t *ctx );
  * 
  * @description This function clears STR
  */
-void counter_clear_str ( counter_t *ctx );
+void counter_clear_str ( );
 
 /**
  * @brief Initialisation of click board with default settings.
- *
- * @param ctx          Click object.
  * 
  * @note
  * <pre>
@@ -465,64 +449,53 @@ void counter_clear_str ( counter_t *ctx );
  * 
  * @description This function initialize of click board with default settings.
  */
-void counter_initialisation ( counter_t *ctx );
+void counter_initialisation ( );
 
 /**
  * @brief Initialisation of click board with specific settings.
- *
- * @param ctx          Click object.
  * @param mdr0_set     Settings for mdr0.
  * @param mdr1_set     Settings for mdr1.
  * 
  * @description This function initialize of click board with specific settings.
  */
-void counter_init_advanced ( counter_t *ctx, uint8_t mdr0_set, uint8_t mdr1_set );
+uint8_t counter_init_advanced ( uint8_t mdr0_set, uint8_t mdr1_set );
 
 /**
  * @brief Enables counting ( Software mode )
  * 
- * @param ctx          Click object.
- * 
  * @description This function enables counting in software mode.
  */
-void counter_enable ( counter_t *ctx );
+void counter_enable ( );
 
 /**
  * @brief Disables counting ( Software mode )
  * 
- * @param ctx          Click object.
- * 
  * @description This function disables counting in software mode.
  */
-void counter_disable ( counter_t *ctx );
+void counter_disable ( );
 
 /**
  * @brief Enables counting ( Hardware mode )
  * 
- * @param ctx          Click object.
- * 
  * @description This function enables counting in hardware mode.
  */
-void counter_chip_enable ( counter_t *ctx );
+//void counter_chip_enable ( );
 
 /**
  * @brief Disables counting ( Hardware mode )
  * 
- * @param ctx          Click object.
- * 
  * @description This function disables counting in hardware mode.
  */
-void counter_chip_disable ( counter_t *ctx );
+//void counter_chip_disable ( );
 
 /**
  * @brief Function for get int-pin state
  * 
- * @param ctx          Click object.
  * @returns            Int pin state.
  * 
  * @description This function gets int-pin state.
  */
-uint8_t get_int_state ( counter_t *ctx );
+//uint8_t get_int_state ( );
 
 
 #ifdef __cplusplus

@@ -138,14 +138,14 @@ uint8_t counter_read_mdr1 ( )
 
 int32_t counter_read_otr ( uint8_t buffer_size )
 {
-    uint8_t data_buf[ 4 ];
+    uint8_t data_buf[ BUFFER_SIZE ];
     uint32_t result;
 
     counter_read_data( COUNTER_CMD_RD | COUNTER_OTR, data_buf );
     
     result = data_buf[ 0 ];
     
-    for ( uint8_t cnt = 1; cnt < buffer_size; cnt++ )
+    for ( uint8_t cnt = 1; cnt < BUFFER_SIZE; cnt++ )
     {
         result <<= 8;
         result |= data_buf[ cnt ];
@@ -154,16 +154,16 @@ int32_t counter_read_otr ( uint8_t buffer_size )
     return result;
 }
 
-int32_t counter_read_cntr ( counter_t *ctx )
+int32_t counter_read_cntr ( )
 {
-    uint8_t data_buf[ 4 ];
+    uint8_t data_buf[ BUFFER_SIZE ];
     uint32_t result;
 
-    counter_read_data( ctx, COUNTER_CMD_RD | COUNTER_CNTR, data_buf, ctx->buffer_size );
+    counter_read_data( COUNTER_CMD_RD | COUNTER_CNTR, data_buf, BUFFER_SIZE );
 
     result = data_buf[ 0 ];
     
-    for ( uint8_t cnt = 1; cnt < ctx->buffer_size; cnt++ )
+    for ( uint8_t cnt = 1; cnt < BUFFER_SIZE; cnt++ )
     {
         result <<= 8;
         result |= data_buf[ cnt ];
@@ -172,16 +172,16 @@ int32_t counter_read_cntr ( counter_t *ctx )
     return result;
 }
 
-int32_t counter_read_dtr ( counter_t *ctx )
+int32_t counter_read_dtr ( )
 {
-    uint8_t data_buf[ 4 ];
+    uint8_t data_buf[ BUFFER_SIZE ];
     uint32_t result;
 
-    counter_read_data( ctx, COUNTER_CMD_RD | COUNTER_DTR, data_buf, ctx->buffer_size );
+    counter_read_data( COUNTER_CMD_RD | COUNTER_DTR, data_buf );
 
     result = data_buf[ 0 ];
     
-    for ( uint8_t cnt = 1; cnt < ctx->buffer_size; cnt++ )
+    for ( uint8_t cnt = 1; cnt < BUFFER_SIZE; cnt++ )
     {
         result <<= 8;
         result |= data_buf[ cnt ];
@@ -190,23 +190,23 @@ int32_t counter_read_dtr ( counter_t *ctx )
     return result;
 }
 
-uint8_t counter_read_str ( counter_t *ctx )
+uint8_t counter_read_str ( )
 {
     uint8_t result;
 
-    result = counter_read_register( ctx, COUNTER_CMD_RD | COUNTER_STR );
+    result = counter_read_register( COUNTER_CMD_RD | COUNTER_STR );
 
     return result;
 }
 
-void counter_clear_mrd0 ( counter_t *ctx )
+void counter_clear_mrd0 ( )
 {
-    counter_write_command( ctx, COUNTER_CMD_CLR | COUNTER_MDR0 );
+    counter_write_command( COUNTER_CMD_CLR | COUNTER_MDR0 );
 }
 
-void counter_clead_mrd1 ( counter_t *ctx )
+void counter_clead_mrd1 ( )
 {
-    counter_write_command( ctx, COUNTER_CMD_CLR | COUNTER_MDR1 );
+    counter_write_command( COUNTER_CMD_CLR | COUNTER_MDR1 );
 }
 
 void counter_clear_cntr ( )
@@ -214,21 +214,21 @@ void counter_clear_cntr ( )
     counter_write_command( COUNTER_CMD_CLR | COUNTER_CNTR );
 }
 
-void counter_clear_str ( counter_t *ctx )
+void counter_clear_str ( )
 {
-    counter_write_command( ctx, COUNTER_CMD_CLR | COUNTER_STR );
+    counter_write_command( COUNTER_CMD_CLR | COUNTER_STR );
 }
 
-void counter_initialisation ( counter_t *ctx )
+void counter_initialisation ( )
 {
     uint8_t mdr0_set = COUNTER_4X_QUAD | COUNTER_FREE_RUN | COUNTER_INDEX_DISABLED
                        | COUNTER_FILTER_CLOCK_DIV1;
     uint8_t mdr1_set = COUNTER_MODE_32 | COUNTER_DISABLE | COUNTER_FLAG_DISABLE;
 
-    ctx->buffer_size = 4;
-    digital_out_high( &ctx->en );
-    counter_write_mdr0( ctx, mdr0_set );
-    counter_write_mdr1( ctx, mdr1_set );
+//    ctx->buffer_size = 4;
+//    digital_out_high( &ctx->en );
+    counter_write_mdr0( mdr0_set );
+    counter_write_mdr1( mdr1_set );
 }
 
 uint8_t counter_init_advanced ( uint8_t mdr0_set, uint8_t mdr1_set )
@@ -344,7 +344,7 @@ static void counter_read_data ( uint8_t command, uint8_t *data_buff )
     
     tx_buff[ 0 ] = command;
     SPIDRV_MTransmitB(SPI_HANDLE, &tx_buff, 1);
-    SPIDRV_MReceiveB(SPI_HANDLE, data_buff, 4);
+    SPIDRV_MReceiveB(SPI_HANDLE, data_buff, BUFFER_SIZE);
 //    SPIDRV_MTransferB(SPI_HANDLE, &tx_buff, data_buff, 1);
 //    counter_generic_transfer ( ctx, &tx_buff, 1, rx_buff, count );
     
