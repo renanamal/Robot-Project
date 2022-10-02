@@ -18,9 +18,13 @@ void test_counter_spi()
   uint8_t rx_buff[ 4 ];
 
   tx_buff[ 0 ] = 0xAA;
-  Ecode_t error = SPIDRV_MTransferB(SPI_HANDLE, (void *)tx_buff, (void *)rx_buff, 1);
-  if(error != ECODE_EMDRV_SPIDRV_OK)
+  while(true)
   {
-    ERROR_BREAK
+      Ecode_t error = SPIDRV_MTransferB(SPI_HANDLE, (void *)tx_buff, (void *)rx_buff, 1);
+      if(error != ECODE_EMDRV_SPIDRV_OK)
+      {
+          ERROR_BREAK
+      }
+      delay_ms(1000);
   }
 }
