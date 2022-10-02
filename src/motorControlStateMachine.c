@@ -4,6 +4,8 @@ e_motorControlStates motorControlState[NUM_OF_MOTORS];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
+static int32_t count;
+
 void handleMotors(void)
 {
 	for(EMotor motor = right; motor < endOfMotors; motor++)
@@ -15,6 +17,7 @@ void handleMotors(void)
 
 void handleMotor(EMotor motor)
 {
+    count = counter_read_cntr( );
     calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);

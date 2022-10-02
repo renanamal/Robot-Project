@@ -25,7 +25,7 @@
 
 // <o SL_SPIDRV_ENCODERSPI_BITRATE> SPI bitrate
 // <i> Default: 1000000
-#define SL_SPIDRV_ENCODERSPI_BITRATE           1000000
+#define SL_SPIDRV_ENCODERSPI_BITRATE           100000
 
 // <o SL_SPIDRV_ENCODERSPI_FRAME_LENGTH> SPI frame length <4-16>
 // <i> Default: 8

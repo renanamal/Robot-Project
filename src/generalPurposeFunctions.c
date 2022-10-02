@@ -3,12 +3,20 @@
 
 void delay_ms(uint32_t mDelay)
 {
-  USTIMER_Delay(mDelay*1000.0);
+  uint32_t start_time = getuSec();
+  while(getuSec() - start_time < (mDelay*1000))
+    {
+      // wait
+    }
 }
 
 void delay_us(uint32_t uDelay)
 {
-  USTIMER_Delay(uDelay);
+  uint32_t start_time = getuSec();
+  while(getuSec() - start_time < uDelay)
+    {
+      // wait
+    }
 }
 
 RAIL_Time_t getuSec(void)

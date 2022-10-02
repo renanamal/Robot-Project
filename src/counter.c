@@ -2,7 +2,7 @@
 
 // ------------------------------------------------------------- PRIVATE MACROS 
 
-#define COUNTER_DUMMY 0
+//#define COUNTER_DUMMY 0
 
 // ---------------------------------------------- PRIVATE FUNCTION DECLARATIONS 
 
@@ -68,9 +68,11 @@
 //    return COUNTER_OK;
 //}
 
+
+
 void counter_default_cfg ( void )
 {
-    uint8_t tmp[ 4 ] = { 0 };
+    uint8_t tmp[ BUFFER_SIZE ] = { 0 };
     uint8_t buffer_size = counter_init_advanced( COUNTER_4X_QUAD | COUNTER_FREE_RUN | COUNTER_INDEX_DISABLED | COUNTER_FILTER_CLOCK_DIV1,
                                 COUNTER_MODE_32 | COUNTER_ENABLE | COUNTER_FLAG_DISABLE );
     counter_write_dtr( buffer_size, tmp );
@@ -136,7 +138,7 @@ uint8_t counter_read_mdr1 ( )
     return result;
 }
 
-int32_t counter_read_otr ( uint8_t buffer_size )
+int32_t counter_read_otr ( )
 {
     uint8_t data_buf[ BUFFER_SIZE ];
     uint32_t result;
@@ -159,7 +161,7 @@ int32_t counter_read_cntr ( )
     uint8_t data_buf[ BUFFER_SIZE ];
     uint32_t result;
 
-    counter_read_data( COUNTER_CMD_RD | COUNTER_CNTR, data_buf, BUFFER_SIZE );
+    counter_read_data( COUNTER_CMD_RD | COUNTER_CNTR, data_buf );
 
     result = data_buf[ 0 ];
     
@@ -297,7 +299,7 @@ void counter_disable ( )
 
 // ----------------------------------------------- PRIVATE FUNCTION DEFINITIONS
 
-static void counter_write_command ( uint8_t command )
+void counter_write_command ( uint8_t command )
 {
     uint8_t temp[ 1 ];
     temp[ 0 ] = command;
@@ -305,23 +307,29 @@ static void counter_write_command ( uint8_t command )
 //    spi_master_select_device( ctx->chip_select );
 //    spi_master_write( &ctx->spi, &command, 1 );
 //    spi_master_deselect_device( ctx->chip_select );
-    SPIDRV_MTransmitB(SPI_HANDLE, &command, 1);
+    Ecode_t error = SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, 1);
+    if(error != ECODE_EMDRV_SPIDRV_OK)
+    {
+      ERROR_BREAK
+    }
 }
 
-static uint8_t counter_read_register ( uint8_t command )
+uint8_t counter_read_register ( uint8_t command )
 {   
     uint8_t tx_buff[ 1 ];
     uint8_t rx_buff[ 1 ];
     
     tx_buff[ 0 ] = command;
 
-//    counter_generic_transfer ( ctx, &tx_buff, 1, rx_buff, 1 );
-    
-    SPIDRV_MTransferB(SPI_HANDLE, &tx_buff, &rx_buff, 1);
+    Ecode_t error = SPIDRV_MTransferB(SPI_HANDLE, (void *)tx_buff, (void *)rx_buff, 1);
+    if(error != ECODE_EMDRV_SPIDRV_OK)
+    {
+      ERROR_BREAK
+    }
     return rx_buff[ 0 ];
 }
 
-static void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count)
+void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count)
 {
     uint8_t cmnd[ 1 ];
     uint8_t temp[ 4 ];
@@ -329,29 +337,33 @@ static void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t cou
     cmnd[ 0 ] = command;
     memcpy( temp, data_buff, count );
 
-//    spi_master_select_device( ctx->chip_select );
-//    spi_master_write( &ctx->spi, &command, 1 );
-//    spi_master_write( &ctx->spi, temp, count );
-//    spi_master_deselect_device( ctx->chip_select );
-    SPIDRV_MTransmitB(SPI_HANDLE, &command, 1);
-    SPIDRV_MTransmitB(SPI_HANDLE, temp, count);
+    Ecode_t error = SPIDRV_MTransmitB(SPI_HANDLE, (void *)cmnd, 1);
+    if(error != ECODE_EMDRV_SPIDRV_OK)
+    {
+      ERROR_BREAK
+    }
+    error = SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, count);
+    if(error != ECODE_EMDRV_SPIDRV_OK)
+    {
+      ERROR_BREAK
+    }
 }
 
-static void counter_read_data ( uint8_t command, uint8_t *data_buff )
+void counter_read_data ( uint8_t command, uint8_t *data_buff )
 {
     uint8_t tx_buff[ 1 ];
-//    uint8_t rx_buff[ 4 ];
+    uint8_t rx_buff[ BUFFER_SIZE ];
     
     tx_buff[ 0 ] = command;
-    SPIDRV_MTransmitB(SPI_HANDLE, &tx_buff, 1);
-    SPIDRV_MReceiveB(SPI_HANDLE, data_buff, BUFFER_SIZE);
-//    SPIDRV_MTransferB(SPI_HANDLE, &tx_buff, data_buff, 1);
-//    counter_generic_transfer ( ctx, &tx_buff, 1, rx_buff, count );
-    
-//    for ( uint8_t cnt = 0; cnt < count; cnt++ )
-//    {
-//        data_buff[ cnt ] = rx_buff[ cnt ];
-//    }
+    Ecode_t error = SPIDRV_MTransferB(SPI_HANDLE, (void *)tx_buff, (void *)rx_buff, 1);
+    if(error != ECODE_EMDRV_SPIDRV_OK)
+    {
+      ERROR_BREAK
+    }
+    for ( uint8_t cnt = 0; cnt < BUFFER_SIZE; cnt++ )
+    {
+        data_buff[ cnt ] = rx_buff[ cnt ];
+    }
 
 }
 

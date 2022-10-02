@@ -48,6 +48,7 @@
 //#include "tests/no_hulls/test_no_hulls.h"
 //#include "tests/change_dir/testChangeDir.h"
 //#include "tests/movingAverage/testMovingAverage.h"
+#include "tests/SPI/test_spi.h"
 
 
 extern SMotorsData motors[NUM_OF_MOTORS];
@@ -63,7 +64,7 @@ int main(void)
 
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
-  app_init();
+//  app_init();
 
 
   // Initialize callbacks
@@ -82,6 +83,8 @@ int main(void)
 //  runMotorNoHulls(left);
 //  init_test_callbacks_timed();
 //  test_moving_average();
+  test_counter_spi();
+
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -89,7 +92,16 @@ int main(void)
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
 //      executeTimedFunctionsTest();
-      executeTimedFunctions();
+
+
+
+
+//      executeTimedFunctions();
+
+
+
+
+
 
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.

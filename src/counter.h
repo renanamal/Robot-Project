@@ -1,15 +1,9 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 
-#include <string.h>
-#include <stdio.h>
-#include "spidrv.h"
-#include "sl_spidrv_instances.h"
+#include "my_spi.h.old"
 
-// use SPI handle for EXP header (configured in project settings)
-#define SPI_HANDLE                  sl_spidrv_encoderSPI_handle
 
-#define BUFFER_SIZE 4
 // -------------------------------------------------------------- PUBLIC MACROS 
 ///**
 // * \defgroup macros Macros
@@ -227,11 +221,9 @@ extern "C"{
 /**
  * @brief Click Default Configuration function.
  *
- * @param ctx  Click object.
- *
  * @description This function executes default configuration for Counter click.
  */
-//void counter_default_cfg ( counter_t *ctx );
+void counter_default_cfg ( void );
 
 /**
  * @brief Generic transfer function.
@@ -345,7 +337,7 @@ uint8_t counter_read_mdr1 ( );
  * 
  * @description This function reads OTR, using click object.
  */
-int32_t counter_read_otr ( uint8_t buffer_size );
+int32_t counter_read_otr ( );
 
 /**
  * @brief Reads CNTR
@@ -497,6 +489,12 @@ void counter_disable ( );
  */
 //uint8_t get_int_state ( );
 
+
+
+uint8_t counter_read_register( uint8_t command );
+void counter_read_data ( uint8_t command, uint8_t *data_buff );
+void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count);
+void counter_write_command ( uint8_t command );
 
 #ifdef __cplusplus
 }

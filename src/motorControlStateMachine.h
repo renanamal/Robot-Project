@@ -5,6 +5,7 @@
 #include "generalDefines.h"
 #include <math.h>
 #include "motorDriverMain.h"
+#include "counter.h"
 
 typedef enum{
 	MCS_HALT = 0,
