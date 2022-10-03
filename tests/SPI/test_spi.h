@@ -3,6 +3,7 @@
 
 #include "counter.h"
 
+void test_arduino_spi();
 void test_counter_spi();
 
 #endif /* TESTS_SPI_TEST_SPI_H_ */

@@ -84,6 +84,7 @@ int main(void)
 //  init_test_callbacks_timed();
 //  test_moving_average();
   test_counter_spi();
+//  test_arduino_spi();
 
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)

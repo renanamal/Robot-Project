@@ -1,28 +1,15 @@
 #ifndef COUNTER_H
 #define COUNTER_H
 
-#include "my_spi.h.old"
+#include <string.h>
+#include <stdio.h>
+#include "spidrv.h"
+#include "em_core.h"
+#include "sl_spidrv_instances.h"
+#include "generalDefines.h"
 
-
-// -------------------------------------------------------------- PUBLIC MACROS 
-///**
-// * \defgroup macros Macros
-// * \{
-// */
-//
-///**
-// * \defgroup map_mikrobus MikroBUS
-// * \{
-// */
-//
-//#define COUNTER_MAP_MIKROBUS( cfg, mikrobus ) \
-//   cfg.miso    = MIKROBUS( mikrobus, MIKROBUS_MISO ); \
-//   cfg.mosi    = MIKROBUS( mikrobus, MIKROBUS_MOSI ); \
-//   cfg.sck     = MIKROBUS( mikrobus, MIKROBUS_SCK ); \
-//   cfg.cs      = MIKROBUS( mikrobus, MIKROBUS_CS ); \
-//   cfg.en      = MIKROBUS( mikrobus, MIKROBUS_RST ); \
-//   cfg.int_pin = MIKROBUS( mikrobus, MIKROBUS_INT )
-///** \} */
+// use SPI handle for EXP header (configured in project settings)
+#define SPI_HANDLE                  sl_spidrv_encoderSPI_handle
 
 /**
  * \defgroup error_code Error Code
@@ -492,7 +479,7 @@ void counter_disable ( );
 
 
 uint8_t counter_read_register( uint8_t command );
-void counter_read_data ( uint8_t command, uint8_t *data_buff );
+void counter_read_data ( uint8_t command, uint8_t *data_buff, uint8_t count );
 void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count);
 void counter_write_command ( uint8_t command );
 
