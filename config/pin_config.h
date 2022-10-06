@@ -117,11 +117,6 @@
 #define USART2_CLK_PIN                           8
 #define USART2_CLK_LOC                           19
 
-// USART2 CS on PF9
-#define USART2_CS_PORT                           gpioPortF
-#define USART2_CS_PIN                            9
-#define USART2_CS_LOC                            19
-
 // USART2 RX on PF10
 #define USART2_RX_PORT                           gpioPortF
 #define USART2_RX_PIN                            10

@@ -222,11 +222,9 @@ void counter_write_command ( uint8_t command )
 //    spi_master_select_device( ctx->chip_select );
 //    spi_master_write( &ctx->spi, &command, 1 );
 //    spi_master_deselect_device( ctx->chip_select );
+    GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     Ecode_t error = SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, 1);
-    if(error != ECODE_EMDRV_SPIDRV_OK)
-    {
-      ERROR_BREAK
-    }
+    GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 }
 
 uint8_t counter_read_register ( uint8_t command )
@@ -235,8 +233,9 @@ uint8_t counter_read_register ( uint8_t command )
     uint8_t rx_buff[ 1 ];
     
     tx_buff[ 0 ] = command;
-
+    GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     SPIDRV_MTransferB(SPI_HANDLE, (void *)tx_buff, (void *)rx_buff, 1);
+    GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     return rx_buff[ 0 ];
 }
 
@@ -247,12 +246,13 @@ void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count)
     
     cmnd[ 0 ] = command;
     memcpy( temp, data_buff, count );
-
+    GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     SPIDRV_MTransmitB(SPI_HANDLE, (void *)cmnd, 1);
     for(int i = 0; i < count; i++)
     {
         SPIDRV_MTransmitB(SPI_HANDLE, (void *)&temp[i], 1);
     }
+    GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 }
 
 void counter_read_data ( uint8_t command, uint8_t *data_buff, uint8_t count )
@@ -261,11 +261,13 @@ void counter_read_data ( uint8_t command, uint8_t *data_buff, uint8_t count )
     uint8_t rx_buff[ 1 ];
     
     tx_buff[ 0 ] = command;
+    GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     for(int i = 0; i < count; i++)
     {
         SPIDRV_MTransferB(SPI_HANDLE, (void *)&tx_buff[i], (void *)rx_buff, 1);
         data_buff[ i ] = rx_buff[ 0 ];
     }
+    GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 //    if(error != ECODE_EMDRV_SPIDRV_OK)
 //    {
 //      ERROR_BREAK

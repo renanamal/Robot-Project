@@ -82,10 +82,6 @@
 #define SL_SPIDRV_ENCODERSPI_CLK_PIN             8
 #define SL_SPIDRV_ENCODERSPI_CLK_LOC             19
 
-// USART2 CS on PF9
-#define SL_SPIDRV_ENCODERSPI_CS_PORT             gpioPortF
-#define SL_SPIDRV_ENCODERSPI_CS_PIN              9
-#define SL_SPIDRV_ENCODERSPI_CS_LOC              19
 // [USART_SL_SPIDRV_ENCODERSPI]$
 // <<< sl:end pin_tool >>>
 

@@ -29,6 +29,7 @@ sl_emlib_gpio_init_PC11_config.h=-2139806246
 sl_emlib_gpio_init_PC4_config.h=1853989440
 sl_emlib_gpio_init_PC5_config.h=1806348393
 sl_emlib_gpio_init_PD8_config.h=-558991523
+sl_emlib_gpio_init_PF9_config.h=1804704116
 sl_emlib_gpio_init_pin0_config.h=1601723991
 sl_emlib_gpio_init_pinInit_config.h=-1506091897
 sl_i2cspm_sensor_config.h=2027331384
