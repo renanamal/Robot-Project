@@ -11,6 +11,7 @@
 #include "sl_emlib_gpio_init_PC4_config.h"
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
+#include "sl_emlib_gpio_init_PF12_config.h"
 #include "sl_emlib_gpio_init_PF9_config.h"
 #include "em_gpio.h"
 #include "em_cmu.h"
@@ -77,6 +78,11 @@ void sl_emlib_gpio_simple_init(void)
                   SL_EMLIB_GPIO_INIT_PD8_PIN,
                   SL_EMLIB_GPIO_INIT_PD8_MODE,
                   SL_EMLIB_GPIO_INIT_PD8_DOUT);
+
+  GPIO_PinModeSet(SL_EMLIB_GPIO_INIT_PF12_PORT,
+                  SL_EMLIB_GPIO_INIT_PF12_PIN,
+                  SL_EMLIB_GPIO_INIT_PF12_MODE,
+                  SL_EMLIB_GPIO_INIT_PF12_DOUT);
 
   GPIO_PinModeSet(SL_EMLIB_GPIO_INIT_PF9_PORT,
                   SL_EMLIB_GPIO_INIT_PF9_PIN,

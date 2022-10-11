@@ -3,6 +3,7 @@ static uint8_t buffer_size = 1;
 
 void counter_default_cfg ( void )
 {
+    GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF12_PORT, SL_EMLIB_GPIO_INIT_PF12_PIN);
     uint8_t tmp[ 4 ] = { 0 };
     buffer_size = counter_init_advanced( COUNTER_4X_QUAD | COUNTER_FREE_RUN | COUNTER_INDEX_DISABLED | COUNTER_FILTER_CLOCK_DIV1,
                                 COUNTER_MODE_32 | COUNTER_ENABLE | COUNTER_FLAG_DISABLE );
@@ -223,7 +224,7 @@ void counter_write_command ( uint8_t command )
 //    spi_master_write( &ctx->spi, &command, 1 );
 //    spi_master_deselect_device( ctx->chip_select );
     GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
-    Ecode_t error = SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, 1);
+    SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, 1);
     GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 }
 
@@ -242,15 +243,16 @@ uint8_t counter_read_register ( uint8_t command )
 void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count)
 {
     uint8_t cmnd[ 1 ];
-    uint8_t temp[ 4 ];
+    uint8_t temp[ 1 ];
     
     cmnd[ 0 ] = command;
-    memcpy( temp, data_buff, count );
+//    memcpy( temp, data_buff, count );
     GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     SPIDRV_MTransmitB(SPI_HANDLE, (void *)cmnd, 1);
     for(int i = 0; i < count; i++)
     {
-        SPIDRV_MTransmitB(SPI_HANDLE, (void *)&temp[i], 1);
+        temp[0] = data_buff[i];
+        SPIDRV_MTransmitB(SPI_HANDLE, (void *)temp, 1);
     }
     GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 }
@@ -259,12 +261,14 @@ void counter_read_data ( uint8_t command, uint8_t *data_buff, uint8_t count )
 {
     uint8_t tx_buff[ 4 ] = {0};
     uint8_t rx_buff[ 1 ];
+    uint8_t temp[ 1 ];
     
     tx_buff[ 0 ] = command;
     GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
     for(int i = 0; i < count; i++)
     {
-        SPIDRV_MTransferB(SPI_HANDLE, (void *)&tx_buff[i], (void *)rx_buff, 1);
+        temp[0] = tx_buff[i];
+        SPIDRV_MTransferB(SPI_HANDLE, (void *)temp, (void *)rx_buff, 1);
         data_buff[ i ] = rx_buff[ 0 ];
     }
     GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);

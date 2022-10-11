@@ -8,6 +8,7 @@
 #include "sl_spidrv_instances.h"
 #include "generalDefines.h"
 #include "sl_emlib_gpio_init_PF9_config.h"
+#include "sl_emlib_gpio_init_PF12_config.h"
 
 // use SPI handle for EXP header (configured in project settings)
 #define SPI_HANDLE                  sl_spidrv_encoderSPI_handle

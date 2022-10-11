@@ -68,6 +68,7 @@ int main(void)
 
 
   // Initialize callbacks
+  GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
   setTimedCallBacksDB();
   init_callbacks_GPIO();
 
