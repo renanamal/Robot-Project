@@ -10,7 +10,8 @@
 
 // Units conversion
 #define PI (3.1415926535897932384626433832795)
-#define RAD_PER_INTERAPT (PI/3.0)
+#define RAD_PER_HULL_INT (PI/3.0)
+#define RAD_PER_ENCODER_INT (PI/512.0) // TODO - need to check that the encoder gives 1024 interapt per rev
 #define PI_ANTIWINDUP (100.0)
 #define IS_ZERO_FLOAT(dataIn) ((dataIn < 0.00001 && dataIn > -0.00001)?true:false)
 #define RadPS_TO_RPM (60.0/(2.0*PI))

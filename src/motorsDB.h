@@ -8,15 +8,15 @@
 #define MOTOR_EFFICIENCY (0.63 * MOTOR_GEAR_EFFICIENCY)
 #define GEAR_RATIO (15.0)
 #define INV_GEAR_RATIO (1.0/GEAR_RATIO)
-#define POWER_SUPPLY_VOLTAGE (3.3)
-#define STARTING_VOLTAGE (0.5)
+#define POWER_SUPPLY_VOLTAGE (5.0)
+#define STARTING_VOLTAGE (0.6)
 // control gains
 // TODO - if needed define KI, KP for each motor
-#define KI (0.1)
+#define KI (0.01)
 #define KP (1.0)
 
 
-#define MOTOR_SPEED_CONTROLLER_HZ (600) // TODO - change to the correct Hz
+#define MOTOR_SPEED_CONTROLLER_HZ (300) // TODO - change to the correct Hz
 
 //#define QUATER_SPEED_STEPS 5
 //#define CHANGE_DIR_HZ (30 * QUATER_SPEED_STEPS * 4)

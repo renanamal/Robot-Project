@@ -61,6 +61,14 @@ typedef struct
   int8_t    hullAdd;
 }SGDComutation;
 
+
+typedef struct
+{
+  int32_t   cnt;
+  uint64_t  cnt_last_time_uSec;
+}SGDEncoder;
+
+
 typedef enum{
   DS_STOP = 0,
   DS_CW,
@@ -72,15 +80,19 @@ typedef struct {
   float               speed_I_correction;
   float               correctedSpeed;     // [Rad/sec]
   float               speedFromHull;      // [Rad/sec]
-  float               prevSpeedFromHall;  // [Rad/sec]
-  uint64_t            lastCalcTimeuSec;
-  int64_t             lastHullCnt;
+  float               speedFromEncoder;   // [rad/sec]
+  float               currentSpeed;       // [rad/sec]
+  uint64_t            lastHullCalcTimeuSec;
+  uint64_t            lastEncoderCalcTimeuSec;
+  int32_t             lastHullCnt;
+  int32_t             lastEncoderCnt;
   float               refSpeed;
   SMovingAverage  speedAverage;
 }SPIspeedContorl;
 
 typedef struct{
   SGDComutation                 hull;
+  SGDEncoder                 encoder;
   S_motorPhaseConfiguration     commutation;
   float                         payloadAngle;
   e_driveState                  motorDriveState;
@@ -104,6 +116,7 @@ void setAllMotorsDriveState(void);
 void motorDriverPhaseConfigurationInit(void);
 void getHullSequence(EMotor motor);
 void calcSpeedFromHulls(EMotor motor);
+void calcSpeedFromEncoder(EMotor motor);
 void speedControlHandle(EMotor motor);
 void resetMotorData(EMotor motor);
 void resetAllDriveMotorsData(void);

@@ -4,7 +4,7 @@ e_motorControlStates motorControlState[NUM_OF_MOTORS];
 
 extern SMotorsData motors[NUM_OF_MOTORS];
 
-static int32_t count;
+//static int32_t count;
 
 void handleMotors(void)
 {
@@ -17,8 +17,9 @@ void handleMotors(void)
 
 void handleMotor(EMotor motor)
 {
-    count = counter_read_cntr( );
-    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
+    counter_read_cntr(motor);
+    calcSpeedFromEncoder(motor);
+//    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);
@@ -50,14 +51,14 @@ void setMotorControlState(EMotor motor)
 		break;
 
 	case MCS_START_RUNING:
-	  if(!IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
+	  if(!IS_ZERO_FLOAT(motors[motor].speedControler.currentSpeed))
     {
 			motorControlState[motor] = MCS_RUNING;
     }
 		break;
 
 	case MCS_RUNING:
-	  if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
+	  if (IS_ZERO_FLOAT(motors[motor].speedControler.currentSpeed))
 	  {
 	    motorControlState[motor] = MCS_START_RUNING;
 	  }

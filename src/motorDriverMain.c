@@ -327,7 +327,7 @@ void calcSpeedFromHulls(EMotor motor)
   uint32_t currentHallCnt = motors[motor].hull.cnt;
 
 	int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastHullCnt;
-	uint32_t currentDt = curentTimeuSec - motors[motor].speedControler.lastCalcTimeuSec;
+	uint32_t currentDt = curentTimeuSec - motors[motor].speedControler.lastHullCalcTimeuSec;
 
 	if (currentDt == 0)
 	{
@@ -335,17 +335,48 @@ void calcSpeedFromHulls(EMotor motor)
 	  return;
 	}
 
-  float motorAngleRotated = currentDeltaCount * RAD_PER_INTERAPT;
+  float motorAngleRotated = currentDeltaCount * RAD_PER_HULL_INT;
   float dtSec = currentDt/1000000.0;
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
   motors[motor].speedControler.speedFromHull = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
-	motors[motor].speedControler.lastCalcTimeuSec = curentTimeuSec;
+	motors[motor].speedControler.lastHullCalcTimeuSec = curentTimeuSec;
 	motors[motor].speedControler.lastHullCnt = currentHallCnt;
 
-	motors[motor].speedControler.speedAverage.currentData = motors[motor].speedControler.speedFromHull;
+	motors[motor].speedControler.currentSpeed = motors[motor].speedControler.speedFromHull;
+	motors[motor].speedControler.speedAverage.currentData = motors[motor].speedControler.currentSpeed;
   movingAverage(&motors[motor].speedControler.speedAverage);
 	return;
+}
+
+
+void calcSpeedFromEncoder(EMotor motor)
+{
+  // to prevent changes in current time and hall counts during calculation we copy them to local variables
+  uint32_t curentTimeuSec = motors[motor].encoder.cnt_last_time_uSec;
+  uint32_t currentHallCnt = motors[motor].encoder.cnt;
+
+  int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastEncoderCnt;
+  uint32_t currentDt = curentTimeuSec - motors[motor].speedControler.lastEncoderCalcTimeuSec;
+
+  if (currentDt == 0)
+  {
+    motors[motor].speedControler.speedFromEncoder = 0;
+    return;
+  }
+
+  float motorAngleRotated = currentDeltaCount * RAD_PER_ENCODER_INT;
+  float dtSec = currentDt/1000000.0;
+  float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
+  motors[motor].speedControler.speedFromEncoder = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
+
+  motors[motor].speedControler.lastEncoderCalcTimeuSec = curentTimeuSec;
+  motors[motor].speedControler.lastEncoderCnt = currentHallCnt;
+
+  motors[motor].speedControler.currentSpeed = motors[motor].speedControler.speedFromEncoder;
+  motors[motor].speedControler.speedAverage.currentData = motors[motor].speedControler.currentSpeed;
+  movingAverage(&motors[motor].speedControler.speedAverage);
+  return;
 }
 
 
@@ -365,7 +396,8 @@ void resetMotorData(EMotor motor)
 	motors[motor].speedControler.speed_I_correction = 0;
 	motors[motor].speedControler.correctedSpeed = 0;
 	motors[motor].speedControler.speedFromHull = 0;
-	motors[motor].speedControler.prevSpeedFromHall = 0;
+	motors[motor].speedControler.speedFromEncoder = 0;
+	motors[motor].speedControler.currentSpeed = 0;
 	motors[motor].speedControler.refSpeed = 0;
 	motors[motor].speedControler.correctedSpeed = 0;
 	motors[motor].speedControler.speedAverage.reset = true;
@@ -388,7 +420,15 @@ void calcPWMpercent(EMotor motor)
   // calculate the motor needed voltage after PI controller
   float motorSpeedCommandRPM = fabs(motors[motor].speedControler.correctedSpeed) * GEAR_RATIO * RadPS_TO_RPM;
   float commandVrms = (motorSpeedCommandRPM / MOTOR_SPEED_CONSTANT) / MOTOR_EFFICIENCY + STARTING_VOLTAGE;
-  motors[motor].PWMCommand = (commandVrms/POWER_SUPPLY_VOLTAGE)*100.0;
+  uint32_t tmp = (commandVrms/POWER_SUPPLY_VOLTAGE)*100.0;
+  if(tmp > 100.0)
+  {
+      motors[motor].PWMCommand = 100.0;
+  }
+  else
+  {
+      motors[motor].PWMCommand = tmp;
+  }
 
 #ifdef DEBUG_SPEED_CONTROL
   record_motorSpeedCommandRPM(motor, motorSpeedCommandRPM);

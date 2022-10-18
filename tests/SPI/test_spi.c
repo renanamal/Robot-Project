@@ -28,7 +28,6 @@ void test_counter_spi()
         str = counter_read_str();
         mdr0 = counter_read_mdr0();
         mdr1 = counter_read_mdr1();
-        count = counter_read_cntr( );
         otr = counter_read_otr();
     }
 }
@@ -40,6 +39,5 @@ void test_counter_spi_once()
     str = counter_read_str();
     mdr0 = counter_read_mdr0();
     mdr1 = counter_read_mdr1();
-    count = counter_read_cntr( );
     otr = counter_read_otr();
 }

@@ -9,6 +9,7 @@
 #include "generalDefines.h"
 #include "sl_emlib_gpio_init_PF9_config.h"
 #include "sl_emlib_gpio_init_PF12_config.h"
+#include "motorDriverMain.h"
 
 // use SPI handle for EXP header (configured in project settings)
 #define SPI_HANDLE                  sl_spidrv_encoderSPI_handle
@@ -335,7 +336,7 @@ int32_t counter_read_otr ( );
  * 
  * @description This function reads CNTR, using click object.
  */
-int32_t counter_read_cntr ( );
+void counter_read_cntr ( EMotor motor);
 
 /**
  * @brief Reads DTR

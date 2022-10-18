@@ -1,5 +1,6 @@
 #include "counter.h"
 static uint8_t buffer_size = 1;
+extern SMotorsData motors[NUM_OF_MOTORS];
 
 void counter_default_cfg ( void )
 {
@@ -74,7 +75,10 @@ int32_t counter_read_otr ( )
     return result;
 }
 
-int32_t counter_read_cntr ( )
+static int32_t dbg[100] = {0};
+static uint8_t dbgcnt = 0;
+
+void counter_read_cntr ( EMotor motor)
 {
     uint8_t data_buf[ 4 ];
     uint32_t result;
@@ -89,7 +93,15 @@ int32_t counter_read_cntr ( )
         result |= data_buf[ cnt ];
     }
     
-    return result;
+    dbgcnt++;
+    dbg[dbgcnt] = result;
+    if(dbgcnt >= 100)
+    {
+        DEBUG_BREAK;
+        while(1);
+    }
+    motors[motor].encoder.cnt = result;
+    motors[motor].encoder.cnt_last_time_uSec = getuSec();
 }
 
 int32_t counter_read_dtr ( )
