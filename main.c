@@ -35,6 +35,7 @@
 #include "stdbool.h"
 #include <stddef.h>
 
+
 #include "generalDefines.h"
 #include "generalPurposeFunctions.h"
 #include "motorControlStateMachine.h"
@@ -48,7 +49,7 @@
 //#include "tests/no_hulls/test_no_hulls.h"
 //#include "tests/change_dir/testChangeDir.h"
 //#include "tests/movingAverage/testMovingAverage.h"
-#include "tests/SPI/test_spi.h"
+//#include "tests/SPI/test_spi.h"
 
 
 extern SMotorsData motors[NUM_OF_MOTORS];
@@ -71,6 +72,8 @@ int main(void)
   GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
   setTimedCallBacksDB();
   init_callbacks_GPIO();
+  counter_default_cfg( );
+  delay_ms(300);
 
 
 
@@ -84,9 +87,9 @@ int main(void)
 //  runMotorNoHulls(left);
 //  init_test_callbacks_timed();
 //  test_moving_average();
-  test_counter_spi();
+//  test_counter_spi();
 //  test_arduino_spi();
-
+//  test_counter_spi_once();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
@@ -95,16 +98,7 @@ int main(void)
   while (1) {
 //      executeTimedFunctionsTest();
 
-
-
-
-//      executeTimedFunctions();
-
-
-
-
-
-
+      executeTimedFunctions();
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.
 //    sl_system_process_action();

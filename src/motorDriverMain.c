@@ -172,11 +172,7 @@ void setMotorDriveState(EMotor motor)
 
   if(motors[motor].motorDriveState == DS_STOP)
   {
-    if(IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
-    {
-        motors[motor].motorDriveState = DS_STOP;
-    }
-    else if(motors[motor].speedControler.refSpeed < 0)
+    if(motors[motor].speedControler.refSpeed < 0)
     {
         motors[motor].motorDriveState = DS_CCW;
     }
@@ -185,15 +181,22 @@ void setMotorDriveState(EMotor motor)
         motors[motor].motorDriveState = DS_CW;
     }
   }
-  else
+  else // motor at drive mode
   {
-      if (motors[motor].speedControler.correctedSpeed < 0)
+      if(IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
       {
-          motors[motor].motorDriveState = DS_CCW;
+          motors[motor].motorDriveState = DS_STOP;
       }
       else
       {
-          motors[motor].motorDriveState = DS_CW;
+        if (motors[motor].speedControler.correctedSpeed < 0)
+        {
+            motors[motor].motorDriveState = DS_CCW;
+        }
+        else
+        {
+            motors[motor].motorDriveState = DS_CW;
+        }
       }
   }
 }

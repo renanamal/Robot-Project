@@ -33,41 +33,34 @@ void handleMotor(EMotor motor)
 void setMotorControlState(EMotor motor)
 {
 	// this function handle and set the needed state machine for the motor control
+//	static int32_t startRuningHallCnt[NUM_OF_MOTORS];
 
-
-	//==================================================== check if robot and at stop - START ==========================================================
 	if (IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
 	{
 		motorControlState[motor] = MCS_HALT;
 	}
-	//==================================================== check if robot and at stop - END ============================================================
 
-
-	static int32_t startRuningHallCnt[NUM_OF_MOTORS];
 	switch (motorControlState[motor])
 	{
 	case MCS_HALT:
 		if (!IS_ZERO_FLOAT(motors[motor].speedControler.refSpeed))
     {
-			startRuningHallCnt[motor] = motors[motor].hull.cnt;
 			motorControlState[motor] = MCS_START_RUNING;
 		}
 		break;
 
 	case MCS_START_RUNING:
-
-		if (startRuningHallCnt[motor] != motors[motor].hull.cnt)
-		{
+	  if(!IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
+    {
 			motorControlState[motor] = MCS_RUNING;
-		}
+    }
 		break;
 
 	case MCS_RUNING:
-		if (startRuningHallCnt[motor] == motors[motor].hull.cnt)
-		{
-			motorControlState[motor] = MCS_START_RUNING;
-		}
-		startRuningHallCnt[motor] = motors[motor].hull.cnt;
+	  if (IS_ZERO_FLOAT(motors[motor].speedControler.speedFromHull))
+	  {
+	    motorControlState[motor] = MCS_START_RUNING;
+	  }
 		break;
 
 

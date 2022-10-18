@@ -25,10 +25,21 @@ void test_counter_spi()
     delay_ms(300);
     while(1)
     {
-//        str = counter_read_str();
+        str = counter_read_str();
         mdr0 = counter_read_mdr0();
-//        mdr1 = counter_read_mdr1();
-//        count = counter_read_cntr( );
-//        otr = counter_read_otr();
+        mdr1 = counter_read_mdr1();
+        count = counter_read_cntr( );
+        otr = counter_read_otr();
     }
+}
+
+void test_counter_spi_once()
+{
+//    counter_default_cfg( );
+//    delay_ms(300);
+    str = counter_read_str();
+    mdr0 = counter_read_mdr0();
+    mdr1 = counter_read_mdr1();
+    count = counter_read_cntr( );
+    otr = counter_read_otr();
 }
