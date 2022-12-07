@@ -158,7 +158,7 @@ void callback_pin6(uint8_t intNo) // pin A6
 {
   (void) intNo; // not in use
 //  pinCounter[6]++;
-  motors[left].hull.HullV ^= 1;
+//  motors[left].hull.HullV ^= 1;
   hullHandle(left);
 }
 
@@ -166,7 +166,7 @@ void callback_pin7(uint8_t intNo) // pin A7
 {
   (void) intNo; // not in use
 //  pinCounter[7]++;
-  motors[left].hull.HullW ^= 1;
+//  motors[left].hull.HullW ^= 1;
   hullHandle(left);
 }
 
@@ -174,7 +174,7 @@ void callback_pin8(uint8_t intNo) // pin D8
 {
   (void) intNo; // not in use
 //  pinCounter[8]++;
-  motors[left].hull.HullU ^= 1;
+//  motors[left].hull.HullU ^= 1;
   hullHandle(left);
 }
 
@@ -188,7 +188,7 @@ void callback_pin13(uint8_t intNo) // pin F13
 {
   (void) intNo; // not in use
 //  pinCounter[13]++;
-  motors[right].hull.HullU ^= 1;
+//  motors[right].hull.HullU ^= 1;
   hullHandle(right);
 }
 
@@ -196,7 +196,7 @@ void callback_pin14(uint8_t intNo) // pin F14
 {
   (void) intNo; // not in use
 //  pinCounter[14]++;
-  motors[right].hull.HullW ^= 1;
+//  motors[right].hull.HullW ^= 1;
   hullHandle(right);
 }
 
@@ -204,13 +204,13 @@ void callback_pin15(uint8_t intNo) // pin F15
 {
   (void) intNo; // not in use
 //  pinCounter[15]++;
-  motors[right].hull.HullV ^= 1;
+//  motors[right].hull.HullV ^= 1;
   hullHandle(right);
 }
 
 void hullHandle(EMotor motor)
 {
-//  getMotorHulls(motor);
+  getMotorHulls(motor);
   motorPhaseConfigurationHandle(motor);
   getHullSequence(motor);
   calcHullAdd(motor);

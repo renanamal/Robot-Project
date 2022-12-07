@@ -18,8 +18,8 @@ void handleMotors(void)
 void handleMotor(EMotor motor)
 {
     counter_read_cntr(motor);
-    calcSpeedFromEncoder(motor);
-//    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
+//    calcSpeedFromEncoder(motor);
+    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);

@@ -8,6 +8,8 @@ void counter_default_cfg ( void )
     uint8_t tmp[ 4 ] = { 0 };
     buffer_size = counter_init_advanced( COUNTER_4X_QUAD | COUNTER_FREE_RUN | COUNTER_INDEX_DISABLED | COUNTER_FILTER_CLOCK_DIV1,
                                 COUNTER_MODE_32 | COUNTER_ENABLE | COUNTER_FLAG_DISABLE );
+//    uint8_t mdr0 = counter_read_mdr0();
+//    uint8_t mdr1 = counter_read_mdr1();
     counter_write_dtr( buffer_size, tmp );
     counter_clear_cntr ( );
     counter_load_cntr( );
@@ -75,11 +77,11 @@ int32_t counter_read_otr ( )
     return result;
 }
 
-static int32_t dbg[100] = {0};
-static uint8_t dbgcnt = 0;
 
 void counter_read_cntr ( EMotor motor)
 {
+//    static int32_t dbg[100] = {0};
+//    static uint8_t dbgcnt = 0;
     uint8_t data_buf[ 4 ];
     uint32_t result;
 
@@ -93,13 +95,14 @@ void counter_read_cntr ( EMotor motor)
         result |= data_buf[ cnt ];
     }
     
-    dbgcnt++;
-    dbg[dbgcnt] = result;
-    if(dbgcnt >= 100)
-    {
-        DEBUG_BREAK;
-        while(1);
-    }
+//    dbgcnt++;
+//    dbg[dbgcnt] = result;
+//    if(dbgcnt >= 100)
+//    {
+//        dbgcnt = 0;
+//        DEBUG_BREAK;
+//        while(1);
+//    }
     motors[motor].encoder.cnt = result;
     motors[motor].encoder.cnt_last_time_uSec = getuSec();
 }
@@ -273,17 +276,20 @@ void counter_write_data (uint8_t command, uint8_t *data_buff, uint8_t count)
 
 void counter_read_data ( uint8_t command, uint8_t *data_buff, uint8_t count )
 {
-    uint8_t tx_buff[ 4 ] = {0};
+    uint8_t tx_buff[ 5 ] = {0};
     uint8_t rx_buff[ 1 ];
     uint8_t temp[ 1 ];
     
     tx_buff[ 0 ] = command;
     GPIO_PinOutClear(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
-    for(int i = 0; i < count; i++)
+    for(int i = 0; i < count+1; i++)
     {
         temp[0] = tx_buff[i];
         SPIDRV_MTransferB(SPI_HANDLE, (void *)temp, (void *)rx_buff, 1);
-        data_buff[ i ] = rx_buff[ 0 ];
+        if (i > 0)
+        {
+            data_buff[i - 1] = rx_buff[ 0 ];
+        }
     }
     GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
 //    if(error != ECODE_EMDRV_SPIDRV_OK)

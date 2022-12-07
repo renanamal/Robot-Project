@@ -20,9 +20,9 @@ void record_motor_data(EMotor motor)
   mainDBG.speedControl[motor].correcteddSpeed[ind] = motors[motor].speedControler.correctedSpeed;
   if (mainDBG.speedControl[motor].counter > (speedControlDbgArraySize - 1))
   {
-//    DEBUG_BREAK;
-//    while (1);
-      mainDBG.speedControl[motor].counter = 0;
+    DEBUG_BREAK;
+    while (1);
+//    mainDBG.speedControl[motor].counter = 0;
   }
   // ========================================================== DEBUG - END ==========================================================================
 }

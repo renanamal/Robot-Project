@@ -12,11 +12,11 @@
 #define STARTING_VOLTAGE (0.6)
 // control gains
 // TODO - if needed define KI, KP for each motor
-#define KI (0.01)
+#define KI (0.05)
 #define KP (1.0)
 
 
-#define MOTOR_SPEED_CONTROLLER_HZ (300) // TODO - change to the correct Hz
+#define MOTOR_SPEED_CONTROLLER_HZ (50) // TODO - change to the correct Hz
 
 //#define QUATER_SPEED_STEPS 5
 //#define CHANGE_DIR_HZ (30 * QUATER_SPEED_STEPS * 4)
