@@ -34,9 +34,9 @@ void setTimedCallBacksDB(void)
   timedCallBacksDB[0].us = CALLBACK_uS(MOTOR_SPEED_CONTROLLER_HZ);
   timedCallBacksDB[0].prevTimeCall = getuSec();
 
-//  timedCallBacksDB[1].func = callback_change_dir;
-//  timedCallBacksDB[1].millis = CALLBACK_uS(CHANGE_DIR_HZ);
-//  timedCallBacksDB[1].id = changeDir;
+  timedCallBacksDB[1].func = callback_change_dir;
+  timedCallBacksDB[1].us = CALLBACK_uS(CHANGE_DIR_HZ);
+  timedCallBacksDB[1].prevTimeCall = getuSec();
 
 }
 
@@ -203,8 +203,6 @@ void callback_pin14(uint8_t intNo) // pin F14
 void callback_pin15(uint8_t intNo) // pin F15
 {
   (void) intNo; // not in use
-//  pinCounter[15]++;
-//  motors[right].hull.HullV ^= 1;
   hullHandle(right);
 }
 
@@ -225,5 +223,6 @@ void hullHandle(EMotor motor)
 
 void callback_change_dir(EMotor motor)
 {
-  (void) motor;
+
+  motors[left].speedControler.refSpeed *= 1;
 }

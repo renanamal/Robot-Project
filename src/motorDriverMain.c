@@ -353,25 +353,26 @@ void calcSpeedFromHulls(EMotor motor)
 void calcSpeedFromEncoder(EMotor motor)
 {
   // to prevent changes in current time and hall counts during calculation we copy them to local variables
+  uint32_t currentEncoderCnt = motors[motor].encoder.cnt;
   uint32_t curentTimeuSec = motors[motor].encoder.cnt_last_time_uSec;
-  uint32_t currentHallCnt = motors[motor].encoder.cnt;
 
-  int currentDeltaCount = currentHallCnt - motors[motor].speedControler.lastEncoderCnt;
+  int currentDeltaCount = currentEncoderCnt - motors[motor].speedControler.lastEncoderCnt;
   uint32_t currentDt = curentTimeuSec - motors[motor].speedControler.lastEncoderCalcTimeuSec;
 
   if (currentDt == 0)
   {
-    motors[motor].speedControler.speedFromEncoder = 0;
+    motors[motor].speedControler.speedFromEncoder = 0; //TODO - zero order hold the last speed
     return;
   }
 
-  float motorAngleRotated = currentDeltaCount * RAD_PER_ENCODER_INT;
+  float motorAngleRotated = COUNTER_TO_RAD(currentDeltaCount);
   float dtSec = currentDt/1000000.0;
   float motorSpeedBeforeGearRadSec = motorAngleRotated/dtSec;
+
   motors[motor].speedControler.speedFromEncoder = motorSpeedBeforeGearRadSec * INV_GEAR_RATIO;
 
   motors[motor].speedControler.lastEncoderCalcTimeuSec = curentTimeuSec;
-  motors[motor].speedControler.lastEncoderCnt = currentHallCnt;
+  motors[motor].speedControler.lastEncoderCnt = currentEncoderCnt;
 
   motors[motor].speedControler.currentSpeed = motors[motor].speedControler.speedFromEncoder;
   motors[motor].speedControler.speedAverage.currentData = motors[motor].speedControler.currentSpeed;

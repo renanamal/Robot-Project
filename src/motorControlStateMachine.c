@@ -15,11 +15,13 @@ void handleMotors(void)
 	return;
 }
 
+
+
 void handleMotor(EMotor motor)
 {
     counter_read_cntr(motor);
-//    calcSpeedFromEncoder(motor);
-    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
+    calcSpeedFromEncoder(motor);
+//    calcSpeedFromHulls(motor); // TODO need to change to speed from encoder
     setMotorDriveState(motor);
     setMotorControlState(motor);
     motors[motor].isRunning |= motorControlSatetExct(motor);
@@ -90,7 +92,7 @@ bool motorControlSatetExct(EMotor motor)
 	case MCS_START_RUNING :
 		getMotorHulls(motor);
 		motorPhaseConfigurationHandle(motor);
-		getHullSequence(motor);
+//		getHullSequence(motor);
 		speedControlHandle(motor);
 		setMotorDriveState(motor);
 		calcPWMpercent(motor);

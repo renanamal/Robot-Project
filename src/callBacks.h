@@ -31,7 +31,7 @@ typedef struct{
 
 typedef enum{
   motorHandle = 0,
-//  changeDir,
+  changeDir,
   endOfTimedCallbacksFuncList,
 }ETimedCallBacksdFunctions;
 
