@@ -111,6 +111,7 @@ int main(void)
       -30,
       30,
       35,
+      0,
       0
 
 
@@ -132,7 +133,7 @@ int main(void)
     while (currentTime - OuterStartTime < 10000000){
         uint64_t InnerStartTime = getuSec();
 //      executeTimedFunctionsTest();
-        motors[left].speedControler.refSpeed =speeds[j%17];
+        motors[left].speedControler.refSpeed =speeds[j%18];
 
         while (getuSec() - InnerStartTime < 1000000){
             // do nothing
@@ -160,7 +161,8 @@ int main(void)
           //sl_power_manager_sleep();
       #endif
   }
-
+  motors[left].speedControler.refSpeed = 0;
+  executeTimedFunctions();
   while (1) {
         getuSec() ;
     }
