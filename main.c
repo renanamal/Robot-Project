@@ -41,8 +41,7 @@
 #include "motorControlStateMachine.h"
 #include "callBacks.h"
 #include "motorDriverMain.h"
-#include<unistd.h>
-#include "stdio.h"
+
 
 //#include "tests/pwm/test_pwm.h"
 //#include "tests/gpio_int/test_gpio_int.h"
@@ -66,7 +65,7 @@ int main(void)
 
   // Initialize the application. For example, create periodic timer(s) or
   // task(s) if the kernel is present.
-  // app_init();
+//  app_init();
 
 
   // Initialize callbacks
@@ -77,66 +76,40 @@ int main(void)
   delay_ms(300);
 
 
-  // Test functions for Debug
-  //  test_gpio_init();
-  //  test_pwm();
-  //  read_hulls();
-  //  test_motors_handle();
-  //  runMotorNoHulls(left);
-  //  init_test_callbacks_timed();
-  //  test_moving_average();
-  //  test_counter_spi();
-  //  test_arduino_spi();
-  //  test_counter_spi_once();
-  // int iter =100;
-  float real_speeds[100] = {-1};
-//  float real_times[100] = {0};
-  float loc[100] = {0};
-  float speeds[4] = {30,-30,30,-30};//[rad/sec],
-  float speed = 30;
 
+  motors[left].speedControler.refSpeed = 60.0; // [Rad/sec]
+
+// Test functions for Debug
+//  test_gpio_init();
+//  test_pwm();
+//  read_hulls();
+//  test_motors_handle();
+//  runMotorNoHulls(left);
+//  init_test_callbacks_timed();
+//  test_moving_average();
+//  test_counter_spi();
+//  test_arduino_spi();
+//  test_counter_spi_once();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
-  uint64_t OuterStartTime = getuSec();
-  uint64_t currentTime = getuSec();
-  int i = 0;
-  int run_sec = 10;
-  while (currentTime - OuterStartTime < 10000000){
-      uint64_t InnerStartTime = getuSec();
-      // executeTimedFunctionsTest();
-      motors[left].speedControler.refSpeed =speed;
-       speed *= -1;
-//      while (getuSec() - InnerStartTime < 2000000){
-//          // do nothing
-//      }
+  while (1) {
+//      executeTimedFunctionsTest();
+
       executeTimedFunctions();
-      real_speeds[i] = motors[left].speedControler.speedFromEncoder;
-//      real_times[i] = currentTime - OuterStartTime;
-      loc[i] = motors[left].speedControler.lastEncoderCnt;
-      i++;
-      currentTime = getuSec();
-      // Do not remove this call: Silicon Labs components process action
-      // routine must be called from the super loop:
-      // sl_system_process_action();
-      // Application process.
-      // app_process_action();
-    #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
-        // Let the CPU go to sleep if the system allows it.
-        //sl_power_manager_sleep();
-    #endif
+    // Do not remove this call: Silicon Labs components process action routine
+    // must be called from the super loop.
+//    sl_system_process_action();
+
+    // Application process.
+//    app_process_action();
+
+#if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
+    // Let the CPU go to sleep if the system allows it.
+    sl_power_manager_sleep();
+#endif
   }
-
-while (1) {
-      getuSec() ;
-  }
-
-
-    //return 0;
-      //motors[left].PWMCommand=0
-    //sendPWMCommadToAllMotors()
-
 #endif // SL_CATALOG_KERNEL_PRESENT
 }
