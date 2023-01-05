@@ -77,7 +77,7 @@ int main(void)
 
 
 
-  motors[left].speedControler.refSpeed = 60.0; // [Rad/sec]
+//  = 60.0; // [Rad/sec]
 
 // Test functions for Debug
 //  test_gpio_init();
@@ -96,9 +96,21 @@ int main(void)
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
-//      executeTimedFunctionsTest();
+      float speeds[3] = {30,60,90};
 
-      executeTimedFunctions();
+      for (int i =0; i< 3; i++){
+          motors[left].speedControler.refSpeed = speeds[i];
+          uint64_t start_time = getuSec();
+          uint64_t curr_time = getuSec();
+          uint64_t window_size = 5000000; // 5 seconds
+          while (curr_time < start_time + window_size){
+              executeTimedFunctions();
+               curr_time = getuSec();
+          }
+      }
+      int x = 2;
+
+
     // Do not remove this call: Silicon Labs components process action routine
     // must be called from the super loop.
 //    sl_system_process_action();
