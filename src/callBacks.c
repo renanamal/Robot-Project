@@ -224,5 +224,5 @@ void hullHandle(EMotor motor)
 void callback_change_dir(EMotor motor)
 {
 
-  motors[left].speedControler.refSpeed *= 1;
+  motors[left].speedControler.refSpeed *= -1;
 }

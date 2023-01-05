@@ -89,11 +89,11 @@ int main(void)
   //  test_arduino_spi();
   //  test_counter_spi_once();
   // int iter =100;
-
   float real_speeds[100] = {-1};
 //  float real_times[100] = {0};
   float loc[100] = {0};
-  float speeds[4] = {30,30,30,30};//[rad/sec],
+  float speeds[4] = {30,-30,30,-30};//[rad/sec],
+  float speed = 30;
 
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
@@ -107,11 +107,11 @@ int main(void)
   while (currentTime - OuterStartTime < 10000000){
       uint64_t InnerStartTime = getuSec();
       // executeTimedFunctionsTest();
-      motors[left].speedControler.refSpeed =speeds[i%4];
-
-      while (getuSec() - InnerStartTime < 1000000){
-          // do nothing
-      }
+      motors[left].speedControler.refSpeed =speed;
+       speed *= -1;
+//      while (getuSec() - InnerStartTime < 2000000){
+//          // do nothing
+//      }
       executeTimedFunctions();
       real_speeds[i] = motors[left].speedControler.speedFromEncoder;
 //      real_times[i] = currentTime - OuterStartTime;
@@ -127,6 +127,10 @@ int main(void)
         // Let the CPU go to sleep if the system allows it.
         //sl_power_manager_sleep();
     #endif
+  }
+
+while (1) {
+      getuSec() ;
   }
 
 
