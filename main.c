@@ -77,8 +77,6 @@ int main(void)
 
 
 
-//  = 60.0; // [Rad/sec]
-
 // Test functions for Debug
 //  test_gpio_init();
 //  test_pwm();
@@ -91,23 +89,37 @@ int main(void)
 //  test_arduino_spi();
 //  test_counter_spi_once();
 
+
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
-      float speeds[3] = {30,60,90};
+      float real_speeds[15] = {0};
+      float counts_encouder[15] = {0};
+      float frequencies[3] = {1,5,10}; // Hz
+      float speeds[3] = {30,50,70}; // Rad/Sec
+      uint64_t window_size = 5000000; // 5 seconds
 
-      for (int i =0; i< 3; i++){
-          motors[left].speedControler.refSpeed = speeds[i];
-          uint64_t start_time = getuSec();
-          uint64_t curr_time = getuSec();
-          uint64_t window_size = 5000000; // 5 seconds
-          while (curr_time < start_time + window_size){
-              executeTimedFunctions();
-               curr_time = getuSec();
+      for (int j=0; j<3; j++){
+          // set frequency here !
+
+          for (int i = 0; i< 3; i++){
+
+              motors[left].speedControler.refSpeed = speeds[i];
+
+              uint64_t start_time = getuSec();
+              uint64_t curr_time = getuSec();
+
+              while (curr_time < start_time + window_size){
+                  executeTimedFunctions();
+                   curr_time = getuSec();
+              }
+          real_speeds[3*j+i]=motors[left].speedControler.speedFromEncoder;
+          counts_encouder[3*j+i]=motors[left].speedControler.lastEncoderCnt;
           }
       }
+
       int x = 2;
 
 
