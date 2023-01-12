@@ -449,4 +449,21 @@ void sendPWMCommadToAllMotors(void)
 }
 
 // ======================= LOCATION CONTROLLER =============================
-// TODO: CONVERT CNT TO X
+//
+//void velocuty_commend(){
+//    float dt=300.0;
+//    int n =100; // number of locations
+//    float x[n]={0}; // arrey of locations
+//    for ( int i=0; i<n ;i++){
+//        // TO DO : convert from abs counts to relative
+//        float cnt = motors[left].speedControler.lastEncoderCnt;
+//        float real_x= convert_cnt (cnt);
+//        float v_ref=(x[i]-real_x)/dt;
+//        motors[left].speedControler.refSpeed = v_ref;
+//    }
+//}
+//
+//float convert_cnt (counts){
+//
+//}
+//}

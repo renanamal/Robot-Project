@@ -70,7 +70,7 @@ int main(void)
 
   // Initialize callbacks
   GPIO_PinOutSet(SL_EMLIB_GPIO_INIT_PF9_PORT, SL_EMLIB_GPIO_INIT_PF9_PIN);
-  setTimedCallBacksDB();
+  setTimedCallBacksDB(1);
   init_callbacks_GPIO();
   counter_default_cfg( );
   delay_ms(300);
@@ -95,26 +95,34 @@ int main(void)
   sl_system_kernel_start();
 #else // SL_CATALOG_KERNEL_PRESENT
   while (1) {
+      motors[left].speedControler.refSpeed = 70.0;
+      for (int n =0; n < 1000000; n ++){
+          executeTimedFunctions();
+      }
+
       float real_speeds[15] = {0};
       float counts_encouder[15] = {0};
-      float frequencies[3] = {1,5,10}; // Hz
-      float speeds[3] = {30,50,70}; // Rad/Sec
+      float frequencies[3] = {1.0,5.0,10.0}; // Hz
+      float speeds[3] = {30.0, 50.0, 70.0}; // Rad/Sec
       uint64_t window_size = 5000000; // 5 seconds
+
 
       for (int j=0; j<3; j++){
           // set frequency here !
 
-          for (int i = 0; i< 3; i++){
+          setTimedCallBacksDB(frequencies[j]);
 
+          for (int i = 0; i< 3; i++){
               motors[left].speedControler.refSpeed = speeds[i];
 
               uint64_t start_time = getuSec();
               uint64_t curr_time = getuSec();
 
               while (curr_time < start_time + window_size){
-                  executeTimedFunctions();
+                   executeTimedFunctions();
                    curr_time = getuSec();
               }
+
           real_speeds[3*j+i]=motors[left].speedControler.speedFromEncoder;
           counts_encouder[3*j+i]=motors[left].speedControler.lastEncoderCnt;
           }
