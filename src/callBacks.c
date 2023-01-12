@@ -28,18 +28,26 @@ extern SMotorsData motors[NUM_OF_MOTORS];
 
 //uint32_t pinCounter[16];
 
-void setTimedCallBacksDB(float hz)
+void setTimedCallBacksDB(void)
 {
   timedCallBacksDB[0].func = handleMotors;
   timedCallBacksDB[0].us = CALLBACK_uS(MOTOR_SPEED_CONTROLLER_HZ);
   timedCallBacksDB[0].prevTimeCall = getuSec();
 
   timedCallBacksDB[1].func = callback_change_dir;
-  timedCallBacksDB[1].us = CALLBACK_uS(hz);
+  timedCallBacksDB[1].us = CALLBACK_uS(CHANGE_DIR_HZ);
   timedCallBacksDB[1].prevTimeCall = getuSec();
 
 }
 
+void setChangeDir(float hz)
+{
+
+
+  timedCallBacksDB[1].us = CALLBACK_uS(hz);
+
+
+}
 void setIntCallBacksDB(void)
 {
   // ====================== Hull motor 1 =================================

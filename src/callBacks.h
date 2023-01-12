@@ -60,7 +60,8 @@ typedef struct{
 }SIntCallBacks;
 
 // function protos
-void setTimedCallBacksDB(float hz);
+void setTimedCallBacksDB(void);
+void setChangeDir(float);
 void executeTimedFunctions(void);
 
 void setIntCallBacksDB(void);
