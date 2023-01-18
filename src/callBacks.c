@@ -40,6 +40,14 @@ void setTimedCallBacksDB(void)
 
 }
 
+void setChangeDir(float hz)
+{
+
+
+  timedCallBacksDB[1].us = CALLBACK_uS(hz);
+
+
+}
 void setIntCallBacksDB(void)
 {
   // ====================== Hull motor 1 =================================

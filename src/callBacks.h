@@ -61,6 +61,7 @@ typedef struct{
 
 // function protos
 void setTimedCallBacksDB(void);
+void setChangeDir(float);
 void executeTimedFunctions(void);
 
 void setIntCallBacksDB(void);
