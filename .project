@@ -51,6 +51,16 @@
 			<locationURI>STUDIO_SDK_LOC/hardware/board/src/sl_board_init.c</locationURI>
 		</link>
 		<link>
+			<name>gecko_sdk_4.1.1/platform/bootloader/driver/btl_driver_delay.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/bootloader/driver/btl_driver_delay.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/bootloader/driver/btl_driver_delay.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/bootloader/driver/btl_driver_delay.h</locationURI>
+		</link>
+		<link>
 			<name>gecko_sdk_4.1.1/platform/common/inc/sl_assert.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/common/inc/sl_assert.h</locationURI>
@@ -141,6 +151,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_ldma.h</locationURI>
 		</link>
 		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_leuart.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_leuart.h</locationURI>
+		</link>
+		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/inc/em_msc.h</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/inc/em_msc.h</locationURI>
@@ -211,6 +226,11 @@
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_ldma.c</locationURI>
 		</link>
 		<link>
+			<name>gecko_sdk_4.1.1/platform/emlib/src/em_leuart.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_leuart.c</locationURI>
+		</link>
+		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_msc.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_msc.c</locationURI>
@@ -239,6 +259,26 @@
 			<name>gecko_sdk_4.1.1/platform/emlib/src/em_usart.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emlib/src/em_usart.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/app/bluetooth/common/simple_com/sl_simple_com.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/app/bluetooth/common/simple_com/sl_simple_com.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/app/bluetooth/common/simple_com/sl_simple_com_usart.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/app/bluetooth/common/simple_com/sl_simple_com_usart.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/app/common/util/app_assert/app_assert.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/app/common/util/app_assert/app_assert.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/app/common/util/app_assert/sl_app_assert.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/app/common/util/app_assert/sl_app_assert.h</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/hardware/driver/configuration_over_swo/inc/sl_cos.h</name>
@@ -354,6 +394,16 @@
 			<name>gecko_sdk_4.1.1/platform/emdrv/spidrv/src/spidrv.c</name>
 			<type>1</type>
 			<locationURI>STUDIO_SDK_LOC/platform/emdrv/spidrv/src/spidrv.c</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emdrv/uartdrv/inc/uartdrv.h</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/uartdrv/inc/uartdrv.h</locationURI>
+		</link>
+		<link>
+			<name>gecko_sdk_4.1.1/platform/emdrv/uartdrv/src/uartdrv.c</name>
+			<type>1</type>
+			<locationURI>STUDIO_SDK_LOC/platform/emdrv/uartdrv/src/uartdrv.c</locationURI>
 		</link>
 		<link>
 			<name>gecko_sdk_4.1.1/platform/emlib/init/gpio_simple/sl_emlib_gpio_simple_init.h</name>

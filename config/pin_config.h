@@ -130,6 +130,16 @@
 // [USART2]$
 
 // $[USART3]
+// USART3 RX on PB6
+#define USART3_RX_PORT                           gpioPortB
+#define USART3_RX_PIN                            6
+#define USART3_RX_LOC                            9
+
+// USART3 TX on PB7
+#define USART3_TX_PORT                           gpioPortB
+#define USART3_TX_PIN                            7
+#define USART3_TX_LOC                            11
+
 // [USART3]$
 
 // $[VDAC0]

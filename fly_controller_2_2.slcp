@@ -1,0 +1,46 @@
+# Silicon Labs Project Configuration Tools: slcp, v0, Component selection file.
+project_name: fly_controller_2_2
+label: fly_controller_2_2
+description: |
+  This example project shows an empty configuration that can be used as a starting point to add components and functionality.
+category: Example|Platform
+filter:
+- name: Device Type
+  value: [SoC]
+- name: MCU
+  value: [32-bit MCU]
+- name: Project Difficulty
+  value: [Beginner]
+package: platform
+quality: production
+source:
+- {path: app.c}
+- {path: main.c}
+include:
+- path: ''
+  file_list:
+  - {path: app.h}
+sdk: {id: gecko_sdk, version: 4.1.1}
+toolchain_settings: []
+component:
+- instance: [F13, F14, F15, I1, I2, I3, PA6, PA7, PB9, PC4, PC5, PD8, PF12, PF9]
+  id: emlib_gpio_simple_init
+- {id: sl_system}
+- {id: brd4001a}
+- instance: [rail_init]
+  id: rail_util_init
+- {id: EFR32FG12P433F1024GL125}
+- {id: simple_com}
+- instance: [motor1, motor2]
+  id: pwm
+- {id: bootloader_delay_driver}
+- {id: device_init}
+- {id: brd4253a}
+- {id: gpiointerrupt}
+- instance: [encoderSPI]
+  id: spidrv
+- {id: uartdrv_core}
+define:
+- {name: DEBUG_EFM}
+ui_hints: {}
+

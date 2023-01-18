@@ -19,6 +19,7 @@
 #include "sl_emlib_gpio_init_PC5_config.h"
 #include "sl_emlib_gpio_init_PD8_config.h"
 #include "debugFunctions.h"
+#include "metryHandle.h"
 
 typedef void(*timedCallbackFctPtr)(void);
 
@@ -32,6 +33,7 @@ typedef struct{
 typedef enum{
   motorHandle = 0,
   changeDir,
+  sendmetry,
   endOfTimedCallbacksFuncList,
 }ETimedCallBacksdFunctions;
 
@@ -70,7 +72,8 @@ void init_callbacks_GPIO(void);
 void encoderHandle(EMotor motor);
 void hullHandle(EMotor motor);
 
-void callback_change_dir(EMotor motor);
+void callback_change_dir();
+void callcabk_send_metry();
 
 void callback_pin1(uint8_t intNo);
 void callback_pin2(uint8_t intNo);

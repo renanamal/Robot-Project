@@ -21,4 +21,6 @@
 //#define QUATER_SPEED_STEPS 5
 #define CHANGE_DIR_HZ (1) // * QUATER_SPEED_STEPS * 4
 
+#define SEND_METRY_HZ (50)
+
 #endif /* SRC_MOTORSCHARACTERSDB_H_ */

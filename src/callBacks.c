@@ -30,21 +30,24 @@ extern SMotorsData motors[NUM_OF_MOTORS];
 
 void setTimedCallBacksDB(void)
 {
-  timedCallBacksDB[0].func = handleMotors;
-  timedCallBacksDB[0].us = CALLBACK_uS(MOTOR_SPEED_CONTROLLER_HZ);
-  timedCallBacksDB[0].prevTimeCall = getuSec();
+  timedCallBacksDB[motorHandle].func = handleMotors;
+  timedCallBacksDB[motorHandle].us = CALLBACK_uS(MOTOR_SPEED_CONTROLLER_HZ);
+  timedCallBacksDB[motorHandle].prevTimeCall = getuSec();
 
-  timedCallBacksDB[1].func = callback_change_dir;
-  timedCallBacksDB[1].us = CALLBACK_uS(CHANGE_DIR_HZ);
-  timedCallBacksDB[1].prevTimeCall = getuSec();
+  timedCallBacksDB[changeDir].func = callback_change_dir;
+  timedCallBacksDB[changeDir].us = CALLBACK_uS(CHANGE_DIR_HZ);
+  timedCallBacksDB[changeDir].prevTimeCall = getuSec();
 
+  timedCallBacksDB[sendmetry].func = callcabk_send_metry;
+  timedCallBacksDB[sendmetry].us = CALLBACK_uS(SEND_METRY_HZ);
+  timedCallBacksDB[sendmetry].prevTimeCall = getuSec();
 }
 
 void setChangeDir(float hz)
 {
 
 
-  timedCallBacksDB[1].us = CALLBACK_uS(hz);
+  timedCallBacksDB[changeDir].us = CALLBACK_uS(hz);
 
 
 }
@@ -233,4 +236,11 @@ void callback_change_dir(EMotor motor)
 {
 
   motors[left].speedControler.refSpeed *= -1;
+}
+
+void callcabk_send_metry()
+{
+  float angle = COUNTER_TO_RAD(motors[left].encoder.cnt)*INV_GEAR_RATIO;
+  MetryDB msg = {0x01, angle, 0x05};
+  sendMetry(&msg);
 }

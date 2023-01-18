@@ -15,7 +15,7 @@
 #define PI_ANTIWINDUP (1000.0)
 #define IS_ZERO_FLOAT(dataIn) ((dataIn < 0.00001 && dataIn > -0.00001)?true:false)
 #define RadPS_TO_RPM (60.0/(2.0*PI))
-#define COUNTER_TO_RAD(x) (((float)x)*2*PI/1024.0f)
+#define COUNTER_TO_RAD(x) (((float)x)*2*PI/(1024.0f*4))
 
 #define WINDOW_SIZE  (5) // moving average window size
 

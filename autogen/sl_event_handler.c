@@ -16,6 +16,8 @@
 #include "gpiointerrupt.h"
 #include "sl_pwm_instances.h"
 #include "sl_spidrv_instances.h"
+#include "sl_uartdrv_instances.h"
+#include "sl_simple_com.h"
 #include "sl_cos.h"
 
 void sl_platform_init(void)
@@ -38,6 +40,7 @@ void sl_driver_init(void)
   GPIOINT_Init();
   sl_pwm_init_instances();
   sl_spidrv_init_instances();
+  sl_uartdrv_init_instances();
   sl_cos_send_config();
 }
 
@@ -54,6 +57,7 @@ void sl_stack_init(void)
 
 void sl_internal_app_init(void)
 {
+  sl_simple_com_init();
 }
 
 void sl_platform_process_action(void)

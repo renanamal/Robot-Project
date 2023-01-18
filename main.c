@@ -50,6 +50,7 @@
 //#include "tests/change_dir/testChangeDir.h"
 //#include "tests/movingAverage/testMovingAverage.h"
 //#include "tests/SPI/test_spi.h"
+//#include <tests/UART/test_uart.h>
 
 
 extern SMotorsData motors[NUM_OF_MOTORS];
@@ -88,7 +89,7 @@ int main(void)
 //  test_counter_spi();
 //  test_arduino_spi();
 //  test_counter_spi_once();
-
+//  send_test_data();
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
   // Start the kernel. Task(s) created in app_init() will start running.
