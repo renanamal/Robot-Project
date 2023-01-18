@@ -1,0 +1,4 @@
+name = "TaskTerminate"
+uuid = "9ebb6c8b-a414-41c6-9415-2aa92ef99212"
+authors = ["kobied2018 <42905696+kobied2018@users.noreply.github.com>"]
+version = "0.1.0"
